@@ -5,12 +5,17 @@
 #include <QFont>
 #include <QString>
 #include <QSettings>
+#include <QMetaObject>
+
+const int DEFAULT_PORT = 31488;
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , settings(new QSettings("config.ini", QSettings::IniFormat))
+    , socketServer(nullptr)
+    , socketServerThread(new QThread(this))
 {
     ui->setupUi(this);
 
@@ -23,15 +28,42 @@ MainWindow::MainWindow(QWidget *parent)
     this->UploadConfig();
 }
 
+void MainWindow::PastInit()
+{
+    // Move server to Thread
+    socketServerThread->start();
+
+    // Run server into the thread by invoking
+    QMetaObject::invokeMethod(this, [this](){
+        socketServer = new IPv6ChatServer(DEFAULT_PORT);
+        socketServer->run();
+    }, Qt::QueuedConnection);
+}
+
 MainWindow::~MainWindow()
 {
     QVariantList sizes;
-    for (int size : ui->splitter->sizes()) {
+    for (int& size : ui->splitter->sizes()) {
         sizes.append(size);
     }
 
     settings->setValue("splitterSizes", sizes);
     settings->sync();
+
+    // To ensure that it will be destroyed in the same thread it is located, we gonna use deleteLater
+    // No need to invoke here, server stops in the destructor (deleteLater calls it)
+    if (socketServer){
+        socketServer->deleteLater();
+        socketServer = nullptr;
+    }
+
+    if (socketServerThread && socketServerThread->isRunning()){
+        socketServerThread->quit();
+        socketServerThread->wait();
+        delete socketServerThread;
+        socketServerThread = nullptr;
+    }
+
     delete settings;
     delete ui;
 }
@@ -40,7 +72,7 @@ void MainWindow::UploadConfig()
 {
     QVariantList  splitterSizes = settings->value("splitterSizes", QVariant::fromValue(ui->splitter->sizes())).toList();
     QList<int> sizes;
-    for (const QVariant &size : splitterSizes) {
+    for (QVariant& size : splitterSizes) {
         sizes.append(size.toInt());
     }
     ui->splitter->setSizes(sizes);

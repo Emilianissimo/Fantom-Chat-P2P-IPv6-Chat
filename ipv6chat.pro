@@ -4,10 +4,14 @@ TARGET = ipv6chat
 TEMPLATE = app
 
 SOURCES += \
+    IPv6ChatClient.cpp \
+    IPv6ChatServer.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    IPv6ChatClient.h \
+    IPv6ChatServer.h \
     mainwindow.h
 
 FORMS += \
@@ -15,22 +19,28 @@ FORMS += \
 
 TRANSLATIONS = ipv6chat_en_US.ts
 
+win64 {
+    OPENSSL_ROOT = C:/msys64/ucrt64
+    ZLIB_ROOT = C:/msys64/ucrt64
+}
+
+macx {
+    OPENSSL_ROOT = /opt/homebrew/opt/openssl@3
+    ZLIB_ROOT = /opt/homebrew/opt/zlib
+}
+
 # Connect OpenSSL
-# Win
-OPENSSL_ROOT = C:/msys64/ucrt64
 INCLUDEPATH += $$OPENSSL_ROOT/include
 LIBS += -L$$OPENSSL_ROOT/lib -lssl -lcrypto
 
 # Connect Zlib
-# Win
-ZLIB_ROOT = C:/msys64/ucrt64
 INCLUDEPATH += $$ZLIB_ROOT/include
 LIBS += $$ZLIB_ROOT/lib/libz.a
 
-# Подключение CURL
+# Connect CURL
 LIBS += -lcurl
 
-# Установка путей при инсталляции
+# Set path for installation
 target.path = $$[QT_INSTALL_BINS]
 INSTALLS += target
 

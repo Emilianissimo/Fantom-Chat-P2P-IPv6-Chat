@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "IPv6ChatServer.h"
+
 #include <QMainWindow>
 #include <QSettings>
 #include <QGridLayout>
@@ -22,6 +24,7 @@ public:
     void UploadConfig();
     void HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid);
     void ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid);
+    void PastInit();
 
 private slots:
     void on_splitter_splitterMoved(int pos, int index);
@@ -29,5 +32,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QSettings *settings;
+    IPv6ChatServer *socketServer;
+    QThread *socketServerThread;
 };
 #endif // MAINWINDOW_H

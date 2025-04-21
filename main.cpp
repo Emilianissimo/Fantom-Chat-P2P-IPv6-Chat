@@ -5,7 +5,6 @@
 #include <QLocale>
 #include <QTranslator>
 
-
 fa::QtAwesome* awesome = nullptr;
 
 
@@ -27,6 +26,8 @@ int main(int argc, char *argv[])
     awesome->initFontAwesome();
 
     MainWindow w;
+    w.PastInit();
     w.show();
+
     return a.exec();
 }
