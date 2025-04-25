@@ -7,6 +7,8 @@
 #include <QSettings>
 #include <QGridLayout>
 
+const int DEFAULT_SERVER_PORT = 31488;
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -22,12 +24,16 @@ public:
     ~MainWindow();
 
     void UploadConfig();
-    void HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid);
-    void ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid);
-    void PastInit();
+    void HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid);
+    void ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid);
+    void InitServer(int serverPort = DEFAULT_SERVER_PORT);
 
 private slots:
     void on_splitter_splitterMoved(int pos, int index);
+
+    void on_start_server_button_clicked();
+
+    void on_port_input_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;

@@ -2,8 +2,6 @@
 #include <QDebug>
 #include <QTcpServer>
 
-#include "IPv6ChatClient.h"
-
 IPv6ChatServer::IPv6ChatServer(int port, QObject* parent)
     : QObject(parent), server(nullptr), port(port) {}
 
@@ -24,10 +22,6 @@ void IPv6ChatServer::run() {
     }
 
     qDebug() << "Server: started on port: " << port;
-
-    IPv6ChatClient client("::1", 31488);
-
-    client.sendMessage("bitchClient", "hello from client1");
 }
 
 // New client connected

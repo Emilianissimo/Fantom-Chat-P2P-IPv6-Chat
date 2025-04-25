@@ -6,8 +6,7 @@
 #include <QString>
 #include <QSettings>
 #include <QMetaObject>
-
-const int DEFAULT_PORT = 31488;
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -24,18 +23,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->burger_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_bars));
 
+    ui->port_input->setText(QString::number(DEFAULT_SERVER_PORT));
+
     this->showMaximized();
     this->UploadConfig();
 }
 
-void MainWindow::PastInit()
+void MainWindow::InitServer(int serverPort)
 {
     // Move server to Thread
     socketServerThread->start();
 
     // Run server into the thread by invoking
-    QMetaObject::invokeMethod(this, [this](){
-        socketServer = new IPv6ChatServer(DEFAULT_PORT);
+    QMetaObject::invokeMethod(this, [this, serverPort](){
+        socketServer = new IPv6ChatServer(serverPort);
         socketServer->run();
     }, Qt::QueuedConnection);
 }
@@ -79,7 +80,8 @@ void MainWindow::UploadConfig()
     if (sizes[0] < 150){
         QGridLayout *profileGrid = qobject_cast<QGridLayout*>(ui->profile_panel->layout());
         QGridLayout *ipGrid = qobject_cast<QGridLayout*>(ui->ip_panel->layout());
-        this->HideSidebarElements(profileGrid, ipGrid);
+        QGridLayout *startServerGrid = qobject_cast<QGridLayout*>(ui->start_server_panel->layout());
+        this->HideSidebarElements(profileGrid, ipGrid, startServerGrid);
     }
 }
 
@@ -88,27 +90,59 @@ void MainWindow::on_splitter_splitterMoved(int pos, int index)
     int sidebarWidth = ui->sidebar->width();
     QGridLayout *profileGrid = qobject_cast<QGridLayout*>(ui->profile_panel->layout());
     QGridLayout *ipGrid = qobject_cast<QGridLayout*>(ui->ip_panel->layout());
+    QGridLayout *startServerGrid = qobject_cast<QGridLayout*>(ui->start_server_panel->layout());
     if (sidebarWidth < 150){
-        this->HideSidebarElements(profileGrid, ipGrid);
+        this->HideSidebarElements(profileGrid, ipGrid, startServerGrid);
     }else{
-        this->ShowSidebarElements(profileGrid, ipGrid);
+        this->ShowSidebarElements(profileGrid, ipGrid, startServerGrid);
     }
 }
 
-void MainWindow::HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid){
+void MainWindow::HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid){
     ui->search_line->setVisible(false);
     ui->your_ip_label->setVisible(false);
-    profileGrid->setColumnStretch(1,0);
+    ui->port_input->setVisible(false);
+    ui->port_warning->setVisible(false);
+    profileGrid->setColumnStretch(1, 0);
     profileGrid->update();
     ipGrid->setColumnStretch(0, 1);
     ipGrid->update();
+    startServerGrid->setColumnStretch(1, 0);
+    startServerGrid->update();
+
 }
 
-void MainWindow::ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid){
+void MainWindow::ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid){
     ui->search_line->setVisible(true);
     ui->your_ip_label->setVisible(true);
-    profileGrid->setColumnStretch(1,6);
+    ui->port_input->setVisible(true);
+    ui->port_warning->setVisible(true);
+    profileGrid->setColumnStretch(1, 6);
     profileGrid->update();
     ipGrid->setColumnStretch(1, 6);
     ipGrid->update();
+    startServerGrid->setColumnStretch(1, 6);
+    startServerGrid->update();
 }
+
+void MainWindow::on_start_server_button_clicked()
+{
+    bool isValid = true;
+    int port = ui->port_input->text().toInt(&isValid);
+
+    if(30000 > port || port > 65535){
+        isValid = false;
+    }
+
+    if(!isValid){
+        ui->port_input->setStyleSheet("border: 1px solid #dc3545");
+        QMessageBox::warning(this, "Error", "Provide port in range of 30000-65535");
+    }
+}
+
+
+void MainWindow::on_port_input_textChanged(const QString &arg1)
+{
+    ui->port_input->setStyleSheet("border: 1px solid white");
+}
+

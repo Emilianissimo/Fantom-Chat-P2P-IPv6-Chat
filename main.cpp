@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
     awesome->initFontAwesome();
 
     MainWindow w;
-    w.PastInit();
     w.show();
 
     return a.exec();
