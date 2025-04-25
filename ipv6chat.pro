@@ -6,12 +6,14 @@ TEMPLATE = app
 SOURCES += \
     IPv6ChatClient.cpp \
     IPv6ChatServer.cpp \
+    Requests.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     IPv6ChatClient.h \
     IPv6ChatServer.h \
+    Requests.h \
     mainwindow.h
 
 FORMS += \

@@ -8,6 +8,9 @@
 #include <QMetaObject>
 #include <QMessageBox>
 
+#include <curl/curl.h>
+#include <Requests.h>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,6 +30,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->showMaximized();
     this->UploadConfig();
+
+    PastInit();
+}
+
+void MainWindow::PastInit(){
+    QString externalIP = Requests::get("https://api64.ipify.org", true);
+    QHostAddress addr;
+    QString protocolName = "";
+    if (!addr.setAddress(externalIP) || addr.protocol() != QAbstractSocket::IPv6Protocol){
+        QMessageBox::warning(this, "Error", "Your connection does not provide IPv6 address. Connection is unavailable.");
+        // return;
+    }
+    if (addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv4Protocol){
+        protocolName = "/IPv4";
+    }else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
+        protocolName = "/IPv6";
+    }
+    ui->ip_text->setText(externalIP + protocolName);
 }
 
 void MainWindow::InitServer(int serverPort)

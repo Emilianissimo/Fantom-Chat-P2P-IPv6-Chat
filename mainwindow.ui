@@ -175,7 +175,7 @@
           <item row="0" column="0">
            <widget class="QPushButton" name="start_server_button">
             <property name="text">
-             <string>Start Server</string>
+             <string>start_server</string>
             </property>
            </widget>
           </item>
