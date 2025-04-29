@@ -4,12 +4,14 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <curl/curl.h>
 
 fa::QtAwesome* awesome = nullptr;
 
 
 int main(int argc, char *argv[])
 {
+    curl_global_init(CURL_GLOBAL_DEFAULT);
     QApplication a(argc, argv);
 
     QTranslator translator;

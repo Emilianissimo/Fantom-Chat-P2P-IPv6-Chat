@@ -36,6 +36,9 @@ private slots:
 
     void on_port_input_textChanged(const QString &arg1);
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     QSettings *settings;

@@ -30,8 +30,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->showMaximized();
     this->UploadConfig();
+}
 
-    PastInit();
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+    static bool initialized = false;
+    if (!initialized) {
+        initialized = true;
+        PastInit();
+    }
 }
 
 void MainWindow::PastInit(){

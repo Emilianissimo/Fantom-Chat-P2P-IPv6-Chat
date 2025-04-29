@@ -21,14 +21,16 @@ FORMS += \
 
 TRANSLATIONS = ipv6chat_en_US.ts
 
-win64 {
+win32 {
     OPENSSL_ROOT = C:/msys64/ucrt64
     ZLIB_ROOT = C:/msys64/ucrt64
+    CURL_ROOT = C:/msys64/ucrt64
 }
 
 macx {
     OPENSSL_ROOT = /opt/homebrew/opt/openssl@3
     ZLIB_ROOT = /opt/homebrew/opt/zlib
+    CURL_ROOT =
 }
 
 # Connect OpenSSL
@@ -40,7 +42,20 @@ INCLUDEPATH += $$ZLIB_ROOT/include
 LIBS += $$ZLIB_ROOT/lib/libz.a
 
 # Connect CURL
-LIBS += -lcurl
+INCLUDEPATH += $$CURL_ROOT/include
+
+win32 {
+    LIBS += -L$$CURL_ROOT/lib -lcurl -lws2_32 -lwsock32 -lcrypt32
+    # set needed DLLs
+    BAT_PATH = $$PWD/copy_dlls.bat
+    QMAKE_POST_LINK += call \"$$BAT_PATH\" \"$$OUT_PWD\"
+}
+
+macx {
+    LIBS += -L$$CURL_ROOT/lib -lcurl
+}
+
+
 
 # Set path for installation
 target.path = $$[QT_INSTALL_BINS]
@@ -50,4 +65,5 @@ CONFIG+=fontAwesomeFree
 include(QtAwesome/QtAwesome.pri)
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    copy_dlls.bat

@@ -13,6 +13,8 @@ public:
     }
 
     static QString get(char* url, bool ipv6mode = true);
+private:
+    static bool hasIPv6(const QString &hostname);
 };
 
 #endif // REQUESTS_H
