@@ -43,19 +43,29 @@ void MainWindow::showEvent(QShowEvent *event)
 }
 
 void MainWindow::PastInit(){
+#if !USE_LOCAL_IPV6
     QString externalIP = Requests::get("https://api64.ipify.org", true);
     QHostAddress addr;
     QString protocolName = "";
-    if (!addr.setAddress(externalIP) || addr.protocol() != QAbstractSocket::IPv6Protocol){
+    if (!addr.setAddress(externalIP)) {
+        QMessageBox::warning(this, "Error", "Invalid IP address received: " + externalIP);
+        return;
+    }
+
+    if (addr.protocol() != QAbstractSocket::IPv6Protocol){
         QMessageBox::warning(this, "Error", "Your connection does not provide IPv6 address. Connection is unavailable.");
         // return;
     }
-    if (addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv4Protocol){
+    else if (addr.protocol() == QAbstractSocket::IPv4Protocol){
         protocolName = "/IPv4";
-    }else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
+    } else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
         protocolName = "/IPv6";
     }
     ui->ip_text->setText(externalIP + protocolName);
+    this->selfHostAddress = addr;
+#else
+    this->selfHostAddress = QHostAddress("::1");
+#endif
 }
 
 void MainWindow::InitServer(int serverPort)
@@ -65,7 +75,7 @@ void MainWindow::InitServer(int serverPort)
 
     // Run server into the thread by invoking
     QMetaObject::invokeMethod(this, [this, serverPort](){
-        socketServer = new IPv6ChatServer(serverPort);
+        socketServer = new IPv6ChatServer(this->addr, serverPort);
         socketServer->run();
     }, Qt::QueuedConnection);
 }
@@ -166,7 +176,10 @@ void MainWindow::on_start_server_button_clicked()
     if(!isValid){
         ui->port_input->setStyleSheet("border: 1px solid #dc3545");
         QMessageBox::warning(this, "Error", "Provide port in range of 30000-65535");
+        return;
     }
+
+    InitServer(port);
 }
 
 

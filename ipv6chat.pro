@@ -67,3 +67,13 @@ include(QtAwesome/QtAwesome.pri)
 DISTFILES += \
     .gitignore \
     copy_dlls.bat
+
+# Set on to run on local IPv6 network
+local_network = true
+
+!isEmpty(local_network) {
+    message("🔧 Local IPv6 network mode ENABLED")
+    DEFINES += USE_LOCAL_IPV6
+} else {
+    message("🌐 Remote network mode")
+}

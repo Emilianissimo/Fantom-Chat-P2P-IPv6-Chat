@@ -44,5 +44,6 @@ private:
     QSettings *settings;
     IPv6ChatServer *socketServer;
     QThread *socketServerThread;
+    QHostAddress selfHostAddress;
 };
 #endif // MAINWINDOW_H

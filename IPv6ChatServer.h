@@ -16,10 +16,11 @@ private:
     QMap<QString, QTcpSocket*> clients;
     QMutex clientsMutex;
     QString myClientID;
+    QHostAddress addr;
     int port;
 
 public:
-    explicit IPv6ChatServer(int port, QObject* parent = nullptr);
+    explicit IPv6ChatServer(QHostAddress addr, int port, QObject* parent = nullptr);
     ~IPv6ChatServer();
 
 public slots:
