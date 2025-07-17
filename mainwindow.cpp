@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     , settings(new QSettings("config.ini", QSettings::IniFormat))
     , socketServer(nullptr)
     , socketServerThread(new QThread(this))
+    , request(new Requests)
 {
     ui->setupUi(this);
 
@@ -43,7 +44,7 @@ void MainWindow::showEvent(QShowEvent *event)
 }
 
 void MainWindow::PastInit(){
-    QString externalIP = Requests::get("https://api64.ipify.org", true);
+    QString externalIP = request->get("https://api64.ipify.org", true);
     QHostAddress addr;
     QString protocolName = "";
     if (!addr.setAddress(externalIP) || addr.protocol() != QAbstractSocket::IPv6Protocol){

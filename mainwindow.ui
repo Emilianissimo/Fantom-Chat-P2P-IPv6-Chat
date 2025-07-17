@@ -111,7 +111,7 @@
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">color: black</string>
              </property>
              <property name="text">
               <string/>
@@ -159,6 +159,9 @@
         </item>
         <item>
          <widget class="QLabel" name="port_warning">
+          <property name="styleSheet">
+           <string notr="true">color: black</string>
+          </property>
           <property name="text">
            <string>Please, do not change port if you are not sure what are you doing</string>
           </property>
@@ -174,6 +177,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QPushButton" name="start_server_button">
+            <property name="styleSheet">
+             <string notr="true">color: black</string>
+            </property>
             <property name="text">
              <string>start_server</string>
             </property>
