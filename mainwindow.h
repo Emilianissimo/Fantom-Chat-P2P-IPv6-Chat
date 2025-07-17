@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QSettings>
 #include <QGridLayout>
+#include <Requests.h>
 
 const int DEFAULT_SERVER_PORT = 31488;
 
@@ -45,5 +46,6 @@ private:
     IPv6ChatServer *socketServer;
     QThread *socketServerThread;
     QHostAddress selfHostAddress;
+    Requests *request;
 };
 #endif // MAINWINDOW_H

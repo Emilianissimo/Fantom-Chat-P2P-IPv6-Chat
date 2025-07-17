@@ -7,14 +7,18 @@
 
 class Requests{
 public:
+    Requests();
+    ~Requests();
+    QString get(char* url, bool ipv6mode = true);
+
+private:
+    CURL *curl;
+
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
         ((std::string*)userp)->append((char*)contents, size * nmemb);
         return size * nmemb;
     }
-
-    static QString get(char* url, bool ipv6mode = true);
-private:
-    static bool hasIPv6(const QString &hostname);
+    bool hasIPv6(const QString &hostname);
 };
 
 #endif // REQUESTS_H

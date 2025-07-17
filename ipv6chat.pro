@@ -47,12 +47,13 @@ INCLUDEPATH += $$CURL_ROOT/include
 win32 {
     LIBS += -L$$CURL_ROOT/lib -lcurl -lws2_32 -lwsock32 -lcrypt32
     # set needed DLLs
-    BAT_PATH = $$PWD/copy_dlls.bat
+    BAT_PATH = $$PWD/win32/copy_dlls.bat
     QMAKE_POST_LINK += call \"$$BAT_PATH\" \"$$OUT_PWD\"
 }
 
 macx {
     LIBS += -L$$CURL_ROOT/lib -lcurl
+    QMAKE_POST_LINK +=
 }
 
 
