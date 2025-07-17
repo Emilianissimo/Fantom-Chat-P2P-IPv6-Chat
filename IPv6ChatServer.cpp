@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QTcpServer>
 
-IPv6ChatServer::IPv6ChatServer(int port, QObject* parent)
+IPv6ChatServer::IPv6ChatServer(QHostAddress addr, int port, QObject* parent)
     : QObject(parent), server(nullptr), port(port) {}
 
 IPv6ChatServer::~IPv6ChatServer() {
