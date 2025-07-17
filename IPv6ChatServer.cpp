@@ -3,7 +3,7 @@
 #include <QTcpServer>
 
 IPv6ChatServer::IPv6ChatServer(QHostAddress addr, int port, QObject* parent)
-    : QObject(parent), server(nullptr), port(port) {}
+    : QObject(parent), server(nullptr), addr(addr), port(port) {}
 
 IPv6ChatServer::~IPv6ChatServer() {
     stopServer();
@@ -16,12 +16,13 @@ void IPv6ChatServer::run() {
     server = new QTcpServer(this);
     connect(server, &QTcpServer::newConnection, this, &IPv6ChatServer::onNewConnection);
 
-    if (!server->listen(QHostAddress::AnyIPv6, port)) {
+    // Garbage: QHostAddress::AnyIPv6
+    if (!server->listen(this->addr, port)) {
         qCritical() << "Server: failed to start: " << server->errorString();
         return;
     }
 
-    qDebug() << "Server: started on port: " << port;
+    qDebug() << "Server: started on address: " << "["+ this->addr.toString() + "]:" + QString::number(port);
 }
 
 // New client connected

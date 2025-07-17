@@ -65,6 +65,7 @@ void MainWindow::PastInit(){
     ui->ip_text->setText(externalIP + protocolName);
     this->selfHostAddress = addr;
 #else
+    ui->ip_text->setText("::1/IPv6");
     this->selfHostAddress = QHostAddress("::1");
 #endif
 }
@@ -76,7 +77,7 @@ void MainWindow::InitServer(int serverPort)
 
     // Run server into the thread by invoking
     QMetaObject::invokeMethod(this, [this, serverPort](){
-        socketServer = new IPv6ChatServer(this->addr, serverPort);
+        socketServer = new IPv6ChatServer(this->selfHostAddress, serverPort);
         socketServer->run();
     }, Qt::QueuedConnection);
 }
