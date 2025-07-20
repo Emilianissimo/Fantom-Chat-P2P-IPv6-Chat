@@ -1,4 +1,5 @@
 #include "IPv6ChatServer.h"
+#include "ProtocolUtils.h"
 #include <QDebug>
 #include <QTcpServer>
 
@@ -7,11 +8,11 @@ IPv6ChatServer::IPv6ChatServer(QHostAddress addr, int port, QObject* parent)
 
 IPv6ChatServer::~IPv6ChatServer() {
     stopServer();
-    delete server;
     qDebug() << "Server: Killed server.";
 }
 
 void IPv6ChatServer::run() {
+    // Server initiating and strating to listen the port on self Thread
     if (server) return;
     server = new QTcpServer(this);
     connect(server, &QTcpServer::newConnection, this, &IPv6ChatServer::onNewConnection);
@@ -25,78 +26,93 @@ void IPv6ChatServer::run() {
     qDebug() << "Server: started on address: " << "["+ this->addr.toString() + "]:" + QString::number(port);
 }
 
-// New client connected
 void IPv6ChatServer::onNewConnection() {
-    QTcpSocket* client = server->nextPendingConnection();
-    if (!client) return;
+    // New client connected
+    // Each connected client will be appended to the list of client connections from server side
+    // TODO: parse list of connected clients as address book list as available to send message
+    QTcpSocket* socket = server->nextPendingConnection();
+    if (!socket) return;
 
-    QString clientID = client->peerAddress().toString();
+    QString clientID = QString("%1:%2")
+       .arg(socket->peerAddress().toString())
+       .arg(socket->peerPort());
+
+    QMutexLocker locker(&clientsMutex);
+    clients.insert(clientID, {clientID, socket});
+
+    connect(socket, &QTcpSocket::readyRead, this, &IPv6ChatServer::onReadyRead, Qt::QueuedConnection);
+    connect(socket, &QTcpSocket::disconnected, this, &IPv6ChatServer::onClientDisconnected);
+
     qDebug() << "Server: New client connected: " << clientID;
-
-    clientsMutex.lock();
-    clients[clientID] = client;
-    clientsMutex.unlock();
-
-    connect(client, &QTcpSocket::readyRead, this, &IPv6ChatServer::onReadyRead);
-    connect(client, &QTcpSocket::disconnected, this, &IPv6ChatServer::onClientDisconnected);
 }
 
-// Read message incoming from client
 void IPv6ChatServer::onReadyRead() {
+    // Read message incoming from client
+    // Any message from client will be get and separated by its id
     qDebug() << "Server: ready Read runs";
     QTcpSocket* senderClient = qobject_cast<QTcpSocket*>(sender());
     if (!senderClient) return;
 
-    QByteArray message = senderClient->readAll();
-    QString senderID = senderClient->peerAddress().toString();
-    qDebug() << "Server: Received message from: " << senderID << ":" << message;
+    // We have to ensure, that we get full message and determine client as one for this message
+    QByteArray& buffer = socketBuffers[senderClient];
+    buffer.append(senderClient->readAll());
+    while (buffer.size() >= 4) {
+        quint32 msgLen = readUInt32(buffer.left(4));
+        if (buffer.size() < 4 + msgLen) break;
 
-    QList<QByteArray> parts = message.split(':');
-    if (parts.size() < 2) return;
+        QByteArray fullMessage = buffer.mid(4, msgLen);
+        buffer.remove(0, 4 + msgLen);
+        int sepIndex = fullMessage.indexOf('\0');
+        if (sepIndex == -1) continue;
 
-    QString receiverID = parts[0];
-    QByteArray actualMessage = parts[1];
+        QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
+        QByteArray message = fullMessage.mid(sepIndex + 1);
+        qDebug() << "Server: Received message from: " << clientID << ":" << message;
 
-    sendMessageToSelfClient(receiverID, actualMessage);
+        // TODO: we will send data to UI/DB instead
+        sendMessageToSelfClient(clientID, message);
+    }
 }
 
 void IPv6ChatServer::sendMessageToSelfClient(const QString& clientID, const QByteArray& message) {
-    // Send message to my own client (only UI, not the client actually, I suppose)
+    // Send message to my own client
     // find self client in map (need to understand what identificator to use locally)
-    clientsMutex.lock();
-    if (clients.contains(clientID)){
-        QTcpSocket* targetClient = clients[clientID];
-        targetClient->write(message);
-    }else{
-        qDebug() << "Server: Client not found: " + clientID;
+    QMutexLocker locker(&clientsMutex);
+    auto client = clients.find(clientID);
+    if (client != clients.end()) {
+        client.value().socket->write(message);
+    } else {
+        qDebug() << "Client not found:" << clientID;
     }
-    clientsMutex.unlock();
 }
 
-// Client disconnected
 void IPv6ChatServer::onClientDisconnected() {
-    QTcpSocket* client = qobject_cast<QTcpSocket*>(sender());
-    if (!client) return;
+    // Client disconnected
+    // On disconnection each client, we have to ensure socket delete
+    QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
+    if (!socket) return;
 
-    QString clientID = client->peerAddress().toString();
-    qDebug() << "Server: Client disconnected: " << clientID;
+    QMutexLocker locker(&clientsMutex);
+    auto client = std::find_if(clients.begin(), clients.end(), [&](const PeerConnection& c){
+        return c.socket == socket;
+    });
+    if (client != clients.end()) {
+        qDebug() << "Disconnected:" << client.value().clientID;
+        clients.erase(client);
+    }
 
-    clientsMutex.lock();
-    clients.remove(clientID);
-    clientsMutex.unlock();
-
-    client->deleteLater();
+    socket->deleteLater();
 }
 
-// Server stopping
 void IPv6ChatServer::stopServer() {
+    // Server stopping
+    // Kill the server and clear clients list, not forgetting to disconnect each
     if (server) {
         server->close();
     }
-    clientsMutex.lock();
-    for (QTcpSocket*& client : clients) {
-        client->disconnectFromHost();
+    QMutexLocker locker(&clientsMutex);
+    for (const PeerConnection& client : clients.values()) {
+        client.socket->disconnectFromHost();
     }
     clients.clear();
-    clientsMutex.unlock();
 }

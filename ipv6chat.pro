@@ -13,6 +13,7 @@ SOURCES += \
 HEADERS += \
     IPv6ChatClient.h \
     IPv6ChatServer.h \
+    ProtocolUtils.h \
     Requests.h \
     mainwindow.h
 

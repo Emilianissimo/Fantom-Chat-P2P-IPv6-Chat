@@ -13,11 +13,16 @@ class IPv6ChatServer : public QObject {
 
 private:
     QTcpServer *server;
-    QMap<QString, QTcpSocket*> clients;
     QMutex clientsMutex;
     QString myClientID;
     QHostAddress addr;
     int port;
+    struct PeerConnection {
+        QString clientID;
+        QTcpSocket* socket;
+    };
+    QMap<QString, PeerConnection> clients;
+    QMap<QTcpSocket*, QByteArray> socketBuffers;
 
 public:
     explicit IPv6ChatServer(QHostAddress addr, int port, QObject* parent = nullptr);
