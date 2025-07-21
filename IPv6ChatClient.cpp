@@ -24,6 +24,7 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     socket->connectToHost(address, port);
     if (socket->waitForConnected(3000)){
         qDebug() << "Client: connected to the server: " << address << ":" << port;
+        QMutexLocker locker(&connectionsMutex);
         connections.insert(peerID, {socket, peerID});
     } else {
         qDebug() << "Client: couldn't connect to the server" << address << ":" << port;
@@ -72,6 +73,7 @@ void IPv6ChatClient::onDisconnected() {
         }
     }
     if (!deadPeer.isEmpty()) {
+        QMutexLocker locker(&connectionsMutex);
         qDebug() << "Client: Disconnected from peer" << deadPeer;
         connections.remove(deadPeer);
     }

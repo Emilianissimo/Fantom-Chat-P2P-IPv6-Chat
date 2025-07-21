@@ -2,6 +2,7 @@
 #define IPV6CHATCLIENT_H
 
 #include <QMap>
+#include <QMutex>
 #include <QObject>
 #include <QTcpSocket>
 
@@ -19,6 +20,7 @@ private slots:
     void onDisconnected();
 
 private:
+    QMutex connectionsMutex;
     struct PeerConnection {
         QTcpSocket* socket;
         QString peerID;
