@@ -209,6 +209,13 @@
            <property name="bottomMargin">
             <number>0</number>
            </property>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="client_address_input">
+             <property name="placeholderText">
+              <string>client_address</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="write_to_button">
              <property name="text">
@@ -216,10 +223,10 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="client_address_input">
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="client_port_input">
              <property name="placeholderText">
-              <string>client_address</string>
+              <string>client_port</string>
              </property>
             </widget>
            </item>

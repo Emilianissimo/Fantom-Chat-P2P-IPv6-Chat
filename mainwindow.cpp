@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     , settings(new QSettings("config.ini", QSettings::IniFormat))
     , socketServer(nullptr)
     , socketServerThread(new QThread(this))
+    , socketClient(nullptr)
+    , clientSocketsThread(new QThread(this))
     , request(new Requests)
 {
     ui->setupUi(this);
@@ -76,9 +78,18 @@ void MainWindow::InitServer(int serverPort)
     socketServerThread->start();
 
     // Run server into the thread by invoking
-    QMetaObject::invokeMethod(this, [this, serverPort](){
+    QMetaObject::invokeMethod(socketServerThread, [this, serverPort](){
         socketServer = new IPv6ChatServer(this->selfHostAddress, serverPort);
         socketServer->run();
+    }, Qt::QueuedConnection);
+}
+
+void MainWindow::InitClient()
+{
+    clientSocketsThread->start();
+
+    QMetaObject::invokeMethod(clientSocketsThread, [this](){
+        socketClient = new IPv6ChatClient();
     }, Qt::QueuedConnection);
 }
 
@@ -94,17 +105,31 @@ MainWindow::~MainWindow()
 
     // To ensure that it will be destroyed in the same thread it is located, we gonna use deleteLater
     // No need to invoke here, server stops in the destructor (deleteLater calls it)
+    if (socketServerThread && socketServerThread->isRunning()) {
+        socketServerThread->quit();
+        socketServerThread->wait();
+    }
+
+    if (clientSocketsThread && clientSocketsThread->isRunning()) {
+        clientSocketsThread->quit();
+        clientSocketsThread->wait();
+    }
+
     if (socketServer){
         socketServer->deleteLater();
         socketServer = nullptr;
     }
 
-    if (socketServerThread && socketServerThread->isRunning()){
-        socketServerThread->quit();
-        socketServerThread->wait();
-        delete socketServerThread;
-        socketServerThread = nullptr;
+    if (socketClient){
+        socketClient->deleteLater();
+        socketClient = nullptr;
     }
+
+    delete socketServerThread;
+    socketServerThread = nullptr;
+
+    delete clientSocketsThread;
+    clientSocketsThread = nullptr;
 
     delete settings;
     delete ui;
@@ -182,6 +207,7 @@ void MainWindow::on_start_server_button_clicked()
     }
 
     InitServer(port);
+    InitClient();
 }
 
 
@@ -190,3 +216,38 @@ void MainWindow::on_port_input_textChanged(const QString &arg1)
     ui->port_input->setStyleSheet("border: 1px solid white");
 }
 
+
+void MainWindow::on_write_to_button_clicked()
+{
+    bool isValid = true;
+    int port = ui->port_input->text().toInt(&isValid);
+
+    if(30000 > port || port > 65535){
+        isValid = false;
+    }
+
+    if(!isValid){
+        QMessageBox::warning(this, "Error", "Provide port in range of 30000-65535");
+        return;
+    }
+
+    QHostAddress clientAddress;
+    QString clientIP = ui->client_address_input->text();
+
+    if (clientIP.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Client IP cannot be empty");
+        return;
+    }
+    if (!clientAddress.setAddress(clientIP)) {
+        QMessageBox::warning(this, "Error", "Invalid IP address received: " + clientIP);
+        return;
+    }
+    if (clientAddress.protocol() != QAbstractSocket::IPv6Protocol){
+        QMessageBox::warning(this, "Error", "Address is not IPv6 address. Connection is unavailable.");
+        return;
+    }
+
+    QMetaObject::invokeMethod(clientSocketsThread, [this, clientAddress, port](){
+        socketClient->connectToPeer(clientAddress.toString(), port);
+    }, Qt::QueuedConnection);
+}
