@@ -4,9 +4,8 @@
 #include "qendian.h"
 #include <QByteArray>
 
-// ProtocolUtils.h
 inline quint32 readUInt32(const QByteArray& bytes) {
-    return qFromLittleEndian<quint32>(reinterpret_cast<const uchar*>(bytes.constData()));
+    return qFromBigEndian<quint32>(reinterpret_cast<const uchar*>(bytes.constData()));
 }
 
 inline QByteArray prependLength(const QByteArray& data) {

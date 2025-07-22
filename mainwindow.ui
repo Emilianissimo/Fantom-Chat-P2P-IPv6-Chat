@@ -170,10 +170,10 @@
         <item>
          <layout class="QGridLayout" name="start_server_panel">
           <property name="topMargin">
-           <number>2</number>
+           <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>2</number>
+           <number>0</number>
           </property>
           <item row="0" column="0">
            <widget class="QPushButton" name="start_server_button">
@@ -270,7 +270,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>480</width>
-                <height>741</height>
+                <height>743</height>
                </rect>
               </property>
              </widget>
@@ -299,7 +299,115 @@
             <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
            </property>
           </widget>
-          <widget class="QWidget" name="chat_page"/>
+          <widget class="QWidget" name="chat_page_layout">
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QStackedWidget" name="chat_stacked_widget">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="chat_page">
+               <layout class="QGridLayout" name="gridLayout_9" rowstretch="1,10,1">
+                <item row="1" column="0">
+                 <widget class="QScrollArea" name="scrollArea_2">
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>1105</width>
+                     <height>693</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_10">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QListView" name="listView"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QWidget" name="widget_2" native="true">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QTextEdit" name="send_message_input"/>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="send_message_button">
+                     <property name="styleSheet">
+                      <string notr="true">height: 100%</string>
+                     </property>
+                     <property name="text">
+                      <string>send</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QWidget" name="widget_3" native="true">
+                  <layout class="QGridLayout" name="gridLayout_11">
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="clientID_label">
+                     <property name="text">
+                      <string>PeerID</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="clientID_text">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+               <zorder>widget_2</zorder>
+               <zorder>widget_3</zorder>
+               <zorder>scrollArea_2</zorder>
+              </widget>
+              <widget class="QWidget" name="initial_page">
+               <layout class="QGridLayout" name="gridLayout_8"/>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>

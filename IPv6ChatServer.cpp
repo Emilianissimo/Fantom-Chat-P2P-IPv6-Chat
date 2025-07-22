@@ -69,20 +69,7 @@ void IPv6ChatServer::onReadyRead() {
         QByteArray message = fullMessage.mid(sepIndex + 1);
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
 
-        // TODO: we will send data to UI/DB instead
-        sendMessageToSelfClient(clientID, message);
-    }
-}
-
-void IPv6ChatServer::sendMessageToSelfClient(const QString& clientID, const QByteArray& message) {
-    // Send message to my own client
-    // find self client in map (need to understand what identificator to use locally)
-    QMutexLocker locker(&clientsMutex);
-    auto client = clients.find(clientID);
-    if (client != clients.end()) {
-        client.value().socket->write(message);
-    } else {
-        qDebug() << "Client not found:" << clientID;
+        emit messageArrived(clientID, message);
     }
 }
 

@@ -8,11 +8,11 @@ IPv6ChatClient::IPv6ChatClient(QObject* parent) : QObject(parent) {}
 void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     // Ability to connect to the peer by its address and port
     // UPD: Remmeber, each client - one socket
-    QString peerID = QString("%1:%2")
+    QString clientID = QString("%1:%2")
         .arg(address)
         .arg(port);
-    if (connections.contains(peerID)){
-        qDebug() << "Client: Already connected to peer" << peerID;
+    if (connections.contains(clientID)){
+        qDebug() << "Client: Already connected to peer" << clientID;
         return;
     }
 
@@ -22,32 +22,45 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     connect(socket, &QTcpSocket::disconnected, this, &IPv6ChatClient::onDisconnected);
 
     socket->connectToHost(address, port);
-    if (socket->waitForConnected(3000)){
-        qDebug() << "Client: connected to the server: " << address << ":" << port;
-        QMutexLocker locker(&connectionsMutex);
-        connections.insert(peerID, {socket, peerID});
-    } else {
+    if (!socket->waitForConnected(3000)){
         qDebug() << "Client: couldn't connect to the server" << address << ":" << port;
         socket->deleteLater();
+        return;
     }
+    qDebug() << "Client: connected to the server: " << address << ":" << port;
+    QMutexLocker locker(&connectionsMutex);
+    connections.insert(clientID, {socket, clientID});
+    // Emiting to return clientID outside the thread
+    emit peerConnected(clientID);
 }
 
-void IPv6ChatClient::sendMessage(const QString& peerID, const QByteArray& message) {
+
+
+void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& message) {
     // Sending the message, with ID identifier in the message
     // TODO: use identifier on handshakes
-    if (!connections.contains(peerID)) {
-        qDebug() << "Client: No connection to peer" << peerID;
+    if (!connections.contains(clientID)) {
+        qDebug() << "Client: No connection to peer" << clientID;
         return;
     }
 
-    QByteArray composedMessage = peerID.toUtf8()+ ": " + message;
+    QByteArray composedMessage = clientID.toUtf8() + '\0' + message;
 
-    QTcpSocket* socket = connections[peerID].socket;
+    // Protocol prefix for server to determine length
+    QByteArray lengthPrefix;
+    QDataStream stream(&lengthPrefix, QIODevice::WriteOnly);
+    stream.setByteOrder(QDataStream::BigEndian);
+    stream << static_cast<quint32>(composedMessage.size());
+
+    composedMessage = lengthPrefix + composedMessage;
+
+    QTcpSocket* socket = connections[clientID].socket;
     socket->write(composedMessage);
     if (socket->waitForBytesWritten(3000)){
         qDebug() << "Client: message sent: " << composedMessage;
+        emit messageSent(clientID, composedMessage);
     }else{
-        qDebug() << "Client: message to" << peerID << "not sent";
+        qDebug() << "Client: message to" << clientID << "not sent";
     }
 }
 

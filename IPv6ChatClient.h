@@ -12,7 +12,7 @@ class IPv6ChatClient : public QObject {
 public:
     explicit IPv6ChatClient(QObject* parent = nullptr);
     void connectToPeer(const QString& address, int port);
-    void sendMessage(const QString& peerID, const QByteArray& message);
+    void sendMessage(const QString& clientID, const QByteArray& message);
 
 private slots:
     void onReadyRead();
@@ -23,9 +23,13 @@ private:
     QMutex connectionsMutex;
     struct PeerConnection {
         QTcpSocket* socket;
-        QString peerID;
+        QString clientID;
     };
     QMap<QString, PeerConnection> connections;
+
+signals:
+    void peerConnected(const QString& clientID);
+    void messageSent(const QString& clientID, const QByteArray& message);
 };
 
 #endif // IPV6CHATCLIENT_H

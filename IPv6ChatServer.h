@@ -33,7 +33,9 @@ public slots:
     void onNewConnection();
     void onReadyRead();
     void onClientDisconnected();
-    void sendMessageToSelfClient(const QString& clientID, const QByteArray& message);
     void stopServer();
+
+signals:
+    void messageArrived(const QString& clientID, const QByteArray& message);
 };
 #endif // IPV6CHATSERVER_H
