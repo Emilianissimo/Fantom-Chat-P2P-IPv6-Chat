@@ -5,6 +5,15 @@ Built in C++ using Qt.
 
 ---
 
+## ⚖️ Disclaimer
+
+This software is provided in goodwill and for constructive purposes only.  
+The author is not responsible for any misuse, abuse, or harm resulting from its deployment.  
+
+🧠 Use responsibly.
+
+---
+
 ## 🔧 Features
 
 - ✅ P2P IPv6 support  

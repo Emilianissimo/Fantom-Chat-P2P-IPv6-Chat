@@ -63,6 +63,21 @@ You are responsible for complying with the licenses of these third-party compone
 
 ---
 
+## 6. RESPONSIBILITY OF USE
+
+This software is a tool. Like any tool, it can be used for good or for ill.  
+The author **does not condone**, endorse, or support any unethical, illegal, or harmful use of this software.
+
+You are **solely responsible** for how you use it.  
+If you choose to employ this software for malicious or unlawful purposes — that’s **on you**, not on the author.  
+
+People with bad intentions don’t need permission to do bad things.  
+This license does not legitimize or protect such actions.
+
+🔔 Be decent. Don't weaponize tools made in goodwill.
+
+---
+
 ## TL;DR
 
 - 🧍 **Personal Use**: Free  
