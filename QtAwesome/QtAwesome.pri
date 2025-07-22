@@ -30,4 +30,3 @@ CONFIG( fontAwesomeFree ){
     RESOURCES += $$resourcesForConfig(config)
     !build_pass:message(using font awesome free)
 }
-

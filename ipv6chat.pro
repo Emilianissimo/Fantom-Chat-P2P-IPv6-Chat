@@ -68,7 +68,11 @@ include(QtAwesome/QtAwesome.pri)
 
 DISTFILES += \
     .gitignore \
-    copy_dlls.bat
+    LICENSE.md \
+    README.md \
+    copy_dlls.bat \
+    third_party_licenses/FontAwesome-LICENSE.md \
+    third_party_licenses/Qt-LICENSE.md
 
 # Set on to run on local IPv6 network
 local_network = true
