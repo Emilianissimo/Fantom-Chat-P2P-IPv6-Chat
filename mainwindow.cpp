@@ -11,6 +11,7 @@
 
 #include <curl/curl.h>
 #include <Requests.h>
+#include <ProtocolUtils.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -116,8 +117,9 @@ void MainWindow::PastInit(){
     ui->ip_text->setText(externalIP + protocolName);
     this->selfHostAddress = addr;
 #else
-    ui->ip_text->setText("::1/IPv6");
-    this->selfHostAddress = QHostAddress("::1");
+    QString address = getLocalIPv6Address();
+    ui->ip_text->setText(address + "/IPv6");
+    this->selfHostAddress = QHostAddress(address);
 #endif
 }
 
