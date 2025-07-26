@@ -282,7 +282,7 @@ void MainWindow::on_port_input_textChanged()
 void MainWindow::on_write_to_button_clicked()
 {
     bool isValid = true;
-    int port = ui->port_input->text().toInt(&isValid);
+    int port = ui->client_port_input->text().toInt(&isValid);
 
     if(30000 > port || port > 65535){
         isValid = false;
