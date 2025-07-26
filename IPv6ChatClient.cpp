@@ -19,7 +19,6 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     }
 
     QTcpSocket* socket = new QTcpSocket(this);
-    connect(socket, &QTcpSocket::readyRead, this, &IPv6ChatClient::onReadyRead);
     connect(socket, &QTcpSocket::connected, this, &IPv6ChatClient::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &IPv6ChatClient::onDisconnected);
 
