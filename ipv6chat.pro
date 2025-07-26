@@ -6,6 +6,7 @@ TEMPLATE = app
 SOURCES += \
     IPv6ChatClient.cpp \
     IPv6ChatServer.cpp \
+    MessageListModel.cpp \
     Requests.cpp \
     Structures.h \
     main.cpp \
@@ -14,6 +15,7 @@ SOURCES += \
 HEADERS += \
     IPv6ChatClient.h \
     IPv6ChatServer.h \
+    MessageListModel.h \
     ProtocolUtils.h \
     Requests.h \
     mainwindow.h

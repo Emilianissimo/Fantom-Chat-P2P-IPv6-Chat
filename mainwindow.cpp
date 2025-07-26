@@ -168,16 +168,41 @@ void MainWindow::UploadConfig()
 }
 
 // Chat pages changing handler
-void MainWindow::OpenChatPage(QString clientID)
+void MainWindow::openChatPage(const QString& clientID)
 {
+    // Clear: previous chat models from RAM
+    if (currentMessageModel){
+        ui->chat_list->setModel(nullptr);
+        delete currentMessageModel;
+        currentMessageModel = nullptr;
+    }
+
     if (clientID != currentChatClientID){
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
         ui->status_text->setText("Offline");
         currentChatClientID = clientID;
         ui->clientID_text->setText(clientID);
-        ui->chat_stacked_widget->setCurrentIndex(0);
+        setUpMessagesForChat(clientID);
+
+        // 0 for chat page, initital is 1 (just in case)
+        if(ui->chat_stacked_widget->currentIndex()){
+            ui->chat_stacked_widget->setCurrentIndex(0);
+        }
     }
+}
+
+void MainWindow::setUpMessagesForChat(const QString& clientID)
+{
+    if (!messages.contains(clientID)) {
+        messages[clientID] = QList<Message>();
+    }
+
+    currentMessageModel = new MessageListModel(this);
+    if (messages.contains(clientID))
+        currentMessageModel->setMessages(messages[clientID]);
+
+    ui->chat_list->setModel(currentMessageModel);
 }
 
 // Custom emited thread Signals
@@ -189,19 +214,26 @@ void MainWindow::onPeerConnected(const QString& clientID)
 
     // Save clientID to use later in DB/File/Cache.
     connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);
-    OpenChatPage(clientID);
+    openChatPage(clientID);
 }
 
 
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
+    // TODO: add optional ability to store into DB, for now only RAM
+    messages[clientID].append({clientID, QString::fromUtf8(message), false});
+    currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
+    ui->send_message_input->clear();
 }
 
 //Server
 void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message arrived: " << message << clientID;
+     // TODO: add optional ability to store into DB, for now only RAM
+    messages[clientID].append({clientID, QString::fromUtf8(message), true});
+    currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
 }
 
 void MainWindow::onServerClientConnected(const QString& clientID)

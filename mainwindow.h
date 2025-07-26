@@ -3,6 +3,7 @@
 
 #include "IPv6ChatServer.h"
 #include "IPv6ChatClient.h"
+#include "MessageListModel.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -31,7 +32,6 @@ public:
     void ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid);
     void InitServer(int serverPort = DEFAULT_SERVER_PORT);
     void InitClient();
-    void OpenChatPage(QString clientID);
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -46,7 +46,12 @@ private:
     QHostAddress selfHostAddress;
     Requests *request;
     QString currentChatClientID;
+    QMap<QString, QList<Message>> messages;
     bool isCurrentChatClientOnline = false;
+    MessageListModel* currentMessageModel = nullptr;
+
+    void openChatPage(const QString& clientID);
+    void setUpMessagesForChat(const QString& clientID);
 
 private slots:
     void on_splitter_splitterMoved(int pos, int index);
