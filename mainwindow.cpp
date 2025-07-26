@@ -266,7 +266,8 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
     qDebug() << "Message sent: " << message << clientID;
     // TODO: add optional ability to store into DB, for now only RAM
     messages[clientID].append({clientID, QString::fromUtf8(message), false});
-    currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
+    if (currentMessageModel)
+        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
     ui->send_message_input->clear();
 }
 
@@ -276,7 +277,8 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     qDebug() << "Message arrived: " << message << clientID;
      // TODO: add optional ability to store into DB, for now only RAM
     messages[clientID].append({clientID, QString::fromUtf8(message), true});
-    currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
+    if (currentMessageModel)
+        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
 }
 
 void MainWindow::onServerClientConnected(const QString& clientID)
