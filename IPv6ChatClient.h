@@ -16,7 +16,6 @@ public:
     void sendMessage(const QString& clientID, const QByteArray& message);
 
 private slots:
-    void onReadyRead();
     void onConnected();
     void onDisconnected();
 

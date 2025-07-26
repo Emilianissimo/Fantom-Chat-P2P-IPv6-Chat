@@ -1,6 +1,6 @@
 #include "IPv6ChatClient.h"
 #include <QDebug>
-#ifdef _WIN32
+#ifdef Q_OS_WIN
 #include <winsock2.h>
 #endif
 
@@ -64,14 +64,6 @@ void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& mess
     }else{
         qDebug() << "Client: message to" << clientID << "not sent";
     }
-}
-
-void IPv6ChatClient::onReadyRead() {
-    // Slot for getting incoming data from my server
-    // TODO: may be deleted in case of useless activity. We do not need to store data on client side, only UI/DB
-    auto* socket = qobject_cast<QTcpSocket*>(sender());
-    QByteArray data = socket->readAll();
-    qDebug() << "Client: Received: " + data;
 }
 
 void IPv6ChatClient::onConnected() {
