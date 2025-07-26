@@ -52,6 +52,7 @@ private:
 
     void openChatPage(const QString& clientID);
     void setUpMessagesForChat(const QString& clientID);
+    QString getLocalIPv6Address();
 
 private slots:
     void on_splitter_splitterMoved(int pos, int index);

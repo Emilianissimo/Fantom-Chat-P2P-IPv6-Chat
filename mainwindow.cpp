@@ -118,9 +118,47 @@ void MainWindow::PastInit(){
     this->selfHostAddress = addr;
 #else
     QString address = getLocalIPv6Address();
+    qDebug() << "Local IPv6 IP: " << address;
     ui->ip_text->setText(address + "/IPv6");
     this->selfHostAddress = QHostAddress(address);
 #endif
+}
+
+QString MainWindow::getLocalIPv6Address()
+{
+    const auto interfaces = QNetworkInterface::allInterfaces();
+
+    for (const QNetworkInterface& iface : interfaces) {
+        if (!(iface.flags() & QNetworkInterface::IsUp) ||
+            !(iface.flags() & QNetworkInterface::IsRunning) ||
+            (iface.flags() & QNetworkInterface::IsLoopBack)) {
+            continue;
+        }
+
+        int ifaceIndex = iface.index();
+
+        for (const QNetworkAddressEntry& entry : iface.addressEntries()) {
+            QHostAddress ip = entry.ip();
+
+            if (ip.protocol() == QAbstractSocket::IPv6Protocol && !ip.isLoopback()) {
+                if (!ip.toString().startsWith("fe80"))
+                    continue;
+
+                Q_IPV6ADDR raw = ip.toIPv6Address();
+                QHostAddress cleanAddr(raw);
+                QString addr = cleanAddr.toString();
+
+#ifdef _WIN32
+                addr += "%" + QString::number(ifaceIndex);
+#else
+                addr += "%" + iface.name();
+#endif
+                return addr;
+            }
+        }
+    }
+
+    return "";
 }
 
 

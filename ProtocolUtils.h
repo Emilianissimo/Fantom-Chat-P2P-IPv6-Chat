@@ -17,30 +17,4 @@ inline QByteArray prependLength(const QByteArray& data) {
     return result;
 }
 
-QString getLocalIPv6Address()
-{
-    const auto interfaces = QNetworkInterface::allInterfaces();
-    for (const QNetworkInterface& iface : interfaces) {
-        if (!(iface.flags() & QNetworkInterface::IsUp) ||
-            !(iface.flags() & QNetworkInterface::IsRunning) ||
-            (iface.flags() & QNetworkInterface::IsLoopBack)) {
-            continue;
-        }
-
-        for (const QNetworkAddressEntry& entry : iface.addressEntries()) {
-            const QHostAddress& ip = entry.ip();
-            if (ip.protocol() == QAbstractSocket::IPv6Protocol &&
-                !ip.isLoopback()) {
-
-                if (ip.toString().startsWith("fe80"))
-                    return ip.toString() + "%" + iface.name();
-
-                return ip.toString();
-            }
-        }
-    }
-
-    return "";
-}
-
 #endif // PROTOCOLUTILS_H
