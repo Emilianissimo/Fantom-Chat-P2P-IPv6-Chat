@@ -33,7 +33,8 @@ QVariant MessageListModel::data(const QModelIndex& index, int role) const
 
 void MessageListModel::addMessage(const Message& msg)
 {
-    beginInsertRows(QModelIndex(), m_messages.size(), m_messages.size());
+    int newRow = m_messages.count();
+    beginInsertRows(QModelIndex(), newRow, newRow);
     m_messages.append(msg);
     endInsertRows();
 }
