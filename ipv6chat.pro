@@ -8,7 +8,6 @@ SOURCES += \
     IPv6ChatServer.cpp \
     MessageListModel.cpp \
     Requests.cpp \
-    Structures.h \
     main.cpp \
     mainwindow.cpp
 
@@ -18,6 +17,7 @@ HEADERS += \
     MessageListModel.h \
     ProtocolUtils.h \
     Requests.h \
+    Structures.h \
     mainwindow.h
 
 FORMS += \
