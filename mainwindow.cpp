@@ -140,21 +140,19 @@ QString MainWindow::getLocalIPv6Address()
         for (const QNetworkAddressEntry& entry : iface.addressEntries()) {
             QHostAddress ip = entry.ip();
 
-            if (ip.protocol() == QAbstractSocket::IPv6Protocol && !ip.isLoopback()) {
-                if (!ip.toString().startsWith("fe80"))
-                    continue;
+            if (ip.protocol() != QAbstractSocket::IPv6Protocol || ip.isLoopback())
+                continue;
+            if (!ip.toString().startsWith("fe80"))
+                continue;
 
-                Q_IPV6ADDR raw = ip.toIPv6Address();
-                QHostAddress cleanAddr(raw);
-                QString addr = cleanAddr.toString();
+            QString addr = ip.toString().section('%', 0, 0);
 
 #ifdef _WIN32
-                addr += "%" + QString::number(ifaceIndex);
+            addr += "%" + QString::number(ifaceIndex);
 #else
-                addr += "%" + iface.name();
+            addr += "%" + iface.name();
 #endif
-                return addr;
-            }
+            return addr;
         }
     }
 
