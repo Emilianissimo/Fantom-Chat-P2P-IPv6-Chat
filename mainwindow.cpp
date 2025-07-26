@@ -147,11 +147,9 @@ QString MainWindow::getLocalIPv6Address()
 
             QString addr = ip.toString().section('%', 0, 0);
 
-#ifdef _WIN32
+
             addr += "%" + QString::number(ifaceIndex);
-#else
-            addr += "%" + iface.name();
-#endif
+
             return addr;
         }
     }
