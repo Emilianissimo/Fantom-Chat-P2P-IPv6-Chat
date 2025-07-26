@@ -23,7 +23,7 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     connect(socket, &QTcpSocket::connected, this, &IPv6ChatClient::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &IPv6ChatClient::onDisconnected);
 
-    socket->connectToHost(address, port);
+    socket->connectToHost(QHostAddress(address), port);
     if (!socket->waitForConnected(3000)){
         qDebug() << "Client: couldn't connect to the server" << address << ":" << port;
         socket->deleteLater();
