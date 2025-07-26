@@ -133,6 +133,8 @@ void MainWindow::InitServer(int serverPort)
         socketServer = new IPv6ChatServer(this->selfHostAddress, serverPort);
         socketServer->run();
         connect(socketServer, &IPv6ChatServer::messageArrived, this, &MainWindow::onMessageArrived);
+        connect(socketServer, &IPv6ChatServer::clientDisconnected, this, &MainWindow::onServerClientDisconnected);
+        connect(socketServer, &IPv6ChatServer::clientConnected, this, &MainWindow::onServerClientConnected);
     }, Qt::QueuedConnection);
     if (socketServerThread->isRunning()){
         ui->start_server_button->setDisabled(true);
@@ -165,14 +167,18 @@ void MainWindow::UploadConfig()
     }
 }
 
-
 // Chat pages changing handler
 void MainWindow::OpenChatPage(QString clientID)
 {
-    ui->clientID_text->setText(clientID);
-    ui->chat_stacked_widget->setCurrentIndex(0);
+    if (clientID != currentChatClientID){
+        isCurrentChatClientOnline = false;
+        ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
+        ui->status_text->setText("Offline");
+        currentChatClientID = clientID;
+        ui->clientID_text->setText(clientID);
+        ui->chat_stacked_widget->setCurrentIndex(0);
+    }
 }
-
 
 // Custom emited thread Signals
 
@@ -186,6 +192,7 @@ void MainWindow::onPeerConnected(const QString& clientID)
     OpenChatPage(clientID);
 }
 
+
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
@@ -197,6 +204,23 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     qDebug() << "Message arrived: " << message << clientID;
 }
 
+void MainWindow::onServerClientConnected(const QString& clientID)
+{
+    if (clientID == currentChatClientID){
+        isCurrentChatClientOnline = true;
+        ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check));
+        ui->status_text->setText("Online");
+    }
+}
+
+void MainWindow::onServerClientDisconnected(const QString& clientID)
+{
+    if (clientID == currentChatClientID){
+        isCurrentChatClientOnline = false;
+        ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
+        ui->status_text->setText("Offline");
+    }
+}
 
 // Classic UI slot signals
 void MainWindow::on_start_server_button_clicked()

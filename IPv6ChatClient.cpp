@@ -29,7 +29,7 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     }
     qDebug() << "Client: connected to the server: " << address << ":" << port;
     QMutexLocker locker(&connectionsMutex);
-    connections.insert(clientID, {socket, clientID});
+    connections.insert(clientID, {clientID, socket});
     // Emiting to return clientID outside the thread
     emit peerConnected(clientID);
 }

@@ -1,6 +1,7 @@
 #ifndef IPV6CHATCLIENT_H
 #define IPV6CHATCLIENT_H
 
+#include "Structures.h"
 #include <QMap>
 #include <QMutex>
 #include <QObject>
@@ -21,10 +22,6 @@ private slots:
 
 private:
     QMutex connectionsMutex;
-    struct PeerConnection {
-        QTcpSocket* socket;
-        QString clientID;
-    };
     QMap<QString, PeerConnection> connections;
 
 signals:

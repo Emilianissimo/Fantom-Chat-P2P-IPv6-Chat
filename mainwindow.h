@@ -33,23 +33,6 @@ public:
     void InitClient();
     void OpenChatPage(QString clientID);
 
-private slots:
-    void on_splitter_splitterMoved(int pos, int index);
-
-    void on_start_server_button_clicked();
-
-    void on_port_input_textChanged();
-
-    void on_write_to_button_clicked();
-
-    void on_port_input_returnPressed();
-
-    void on_client_address_input_returnPressed();
-
-    void on_client_port_input_returnPressed();
-
-    void on_send_message_button_clicked();
-
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -62,10 +45,26 @@ private:
     QThread *clientSocketsThread;
     QHostAddress selfHostAddress;
     Requests *request;
+    QString currentChatClientID;
+    bool isCurrentChatClientOnline = false;
 
 private slots:
+    void on_splitter_splitterMoved(int pos, int index);
+    void on_start_server_button_clicked();
+    void on_port_input_textChanged();
+    void on_write_to_button_clicked();
+    void on_port_input_returnPressed();
+    void on_client_address_input_returnPressed();
+    void on_client_port_input_returnPressed();
+    void on_send_message_button_clicked();
+
+    // Client
     void onPeerConnected(const QString& clientID);
     void onMessageSent(const QString& clientID, const QByteArray& message);
+
+    // Server
+    void onServerClientConnected(const QString& clientID);
+    void onServerClientDisconnected(const QString& clientID);
     void onMessageArrived(const QString& clientID, const QByteArray& message);
 };
 #endif // MAINWINDOW_H

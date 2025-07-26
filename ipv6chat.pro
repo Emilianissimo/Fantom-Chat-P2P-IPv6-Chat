@@ -7,6 +7,7 @@ SOURCES += \
     IPv6ChatClient.cpp \
     IPv6ChatServer.cpp \
     Requests.cpp \
+    Structures.h \
     main.cpp \
     mainwindow.cpp
 

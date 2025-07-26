@@ -44,6 +44,8 @@ void IPv6ChatServer::onNewConnection() {
     connect(socket, &QTcpSocket::disconnected, this, &IPv6ChatServer::onClientDisconnected);
 
     qDebug() << "Server: New client connected: " << clientID;
+
+    emit clientConnected(clientID);
 }
 
 void IPv6ChatServer::onReadyRead() {
@@ -79,13 +81,20 @@ void IPv6ChatServer::onClientDisconnected() {
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
     if (!socket) return;
 
+    QString disconnectedID;
     QMutexLocker locker(&clientsMutex);
     auto client = std::find_if(clients.begin(), clients.end(), [&](const PeerConnection& c){
         return c.socket == socket;
     });
     if (client != clients.end()) {
         qDebug() << "Disconnected:" << client.value().clientID;
+        disconnectedID = client.value().clientID;
         clients.erase(client);
+    }
+
+    if (!disconnectedID.isEmpty()){
+        qDebug() << "Disconnected:" << disconnectedID;
+        emit clientDisconnected(disconnectedID);
     }
 
     socket->deleteLater();

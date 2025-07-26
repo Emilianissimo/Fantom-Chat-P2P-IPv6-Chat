@@ -1,5 +1,7 @@
 #ifndef IPV6CHATSERVER_H
 #define IPV6CHATSERVER_H
+
+#include "Structures.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>
@@ -17,10 +19,6 @@ private:
     QString myClientID;
     QHostAddress addr;
     int port;
-    struct PeerConnection {
-        QString clientID;
-        QTcpSocket* socket;
-    };
     QMap<QString, PeerConnection> clients;
     QMap<QTcpSocket*, QByteArray> socketBuffers;
 
@@ -37,5 +35,8 @@ public slots:
 
 signals:
     void messageArrived(const QString& clientID, const QByteArray& message);
+
+    void clientConnected(const QString& clientID);
+    void clientDisconnected(const QString& clientID);
 };
 #endif // IPV6CHATSERVER_H
