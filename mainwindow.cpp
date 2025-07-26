@@ -136,7 +136,7 @@ QString MainWindow::getLocalIPv6Address()
         }
 
 #ifdef Q_OS_WIN
-    if (!iface.name().startsWith("ethernet"))
+    if (!iface.humanReadableName().toLower().startsWith("ethernet"))
         continue;
 #elif defined(Q_OS_MAC)
     if (!iface.name().startsWith("en0"))

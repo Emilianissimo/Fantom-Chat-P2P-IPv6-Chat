@@ -73,6 +73,7 @@ DISTFILES += \
     .gitignore \
     LICENSE.md \
     README.md \
+    TESTING_NOTES.md \
     copy_dlls.bat \
     third_party_licenses/FontAwesome-LICENSE.md \
     third_party_licenses/Qt-LICENSE.md
