@@ -155,8 +155,7 @@ QString MainWindow::getLocalIPv6Address()
 
             QString addr = ip.toString().section('%', 0, 0);
 
-
-            addr += "%" + QString::number(ifaceIndex);
+            addr += '%' + QString::number(ifaceIndex);
 
             return addr;
         }
