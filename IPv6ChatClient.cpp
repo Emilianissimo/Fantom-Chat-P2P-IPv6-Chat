@@ -1,6 +1,8 @@
 #include "IPv6ChatClient.h"
 #include <QDebug>
+#ifdef _WIN32
 #include <winsock2.h>
+#endif
 
 
 IPv6ChatClient::IPv6ChatClient(QObject* parent) : QObject(parent) {}
