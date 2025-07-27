@@ -15,4 +15,6 @@ struct Message {
     QString message;
     bool isIncoming;
 };
+
+Q_DECLARE_METATYPE(Message)
 #endif

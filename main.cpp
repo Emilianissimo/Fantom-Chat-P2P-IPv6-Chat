@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     awesome = new fa::QtAwesome(qApp);
     awesome->initFontAwesome();
 
+    qRegisterMetaType<Message>("Message");
+
     MainWindow w;
     w.show();
 

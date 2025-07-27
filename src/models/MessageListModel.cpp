@@ -22,13 +22,10 @@ QVariant MessageListModel::data(const QModelIndex& index, int role) const
     if (!index.isValid() || index.row() >= m_messages.size())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
+    if (role != Qt::UserRole)
         return QVariant();
 
-    const Message& msg = m_messages[index.row()];
-    return QString("%1: %2")
-        .arg(msg.isIncoming ? msg.peerID : "You")
-        .arg(msg.message);
+    return QVariant::fromValue(m_messages[index.row()]);
 }
 
 void MessageListModel::addMessage(const Message& msg)
