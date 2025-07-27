@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "src/headers/AwesomeGlobal.h"
+#include "src/font-awesome/AwesomeGlobal.h"
 
 #include <QApplication>
 #include <QLocale>

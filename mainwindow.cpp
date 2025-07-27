@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "src/headers/AwesomeGlobal.h"
+#include "src/font-awesome/AwesomeGlobal.h"
 
 #include "ui_mainwindow.h"
 #include <QFont>
@@ -174,16 +174,20 @@ QString MainWindow::getLocalIPv6Address()
 void MainWindow::InitServer(int serverPort)
 {
     // Move server to Thread
+    socketServer = new IPv6ChatServer(this->selfHostAddress, serverPort);
+    socketServer->moveToThread(socketServerThread);
+
+    connect(socketServer, &IPv6ChatServer::messageArrived, this, &MainWindow::onMessageArrived);
+    connect(socketServer, &IPv6ChatServer::clientDisconnected, this, &MainWindow::onServerClientDisconnected);
+    connect(socketServer, &IPv6ChatServer::clientConnected, this, &MainWindow::onServerClientConnected);
+
     socketServerThread->start();
 
     // Run server into the thread by invoking
-    QMetaObject::invokeMethod(socketServerThread, [this, serverPort](){
-        socketServer = new IPv6ChatServer(this->selfHostAddress, serverPort);
+    QMetaObject::invokeMethod(socketServer, [=]{
         socketServer->run();
-        connect(socketServer, &IPv6ChatServer::messageArrived, this, &MainWindow::onMessageArrived);
-        connect(socketServer, &IPv6ChatServer::clientDisconnected, this, &MainWindow::onServerClientDisconnected);
-        connect(socketServer, &IPv6ChatServer::clientConnected, this, &MainWindow::onServerClientConnected);
     }, Qt::QueuedConnection);
+
     if (socketServerThread->isRunning()){
         ui->start_server_button->setDisabled(true);
         ui->port_input->setReadOnly(true);
@@ -192,11 +196,14 @@ void MainWindow::InitServer(int serverPort)
 
 void MainWindow::InitClient()
 {
-    clientSocketsThread->start();
+    socketClient = new IPv6ChatClient();
+    socketClient->moveToThread(clientSocketsThread);
 
-    QMetaObject::invokeMethod(clientSocketsThread, [this](){
-        socketClient = new IPv6ChatClient();
-    }, Qt::QueuedConnection);
+    connect(socketClient, &IPv6ChatClient::peerConnected, this, &MainWindow::onPeerConnected);
+    connect(socketClient, &IPv6ChatClient::peerDisconnected, this, &MainWindow::onPeerDisconnected);
+    connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);
+
+    clientSocketsThread->start();
 }
 
 void MainWindow::UploadConfig()
@@ -261,8 +268,12 @@ void MainWindow::onPeerConnected(const QString& clientID)
     QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);
     openChatPage(clientID);
+}
+
+void MainWindow::onPeerDisconnected(const QString& clientID)
+{
+    QMessageBox::warning(this, "WARNING", "No connection to peer: " + clientID);
 }
 
 
@@ -362,8 +373,6 @@ void MainWindow::on_write_to_button_clicked()
     QMetaObject::invokeMethod(clientSocketsThread, [this, clientAddress, port](){
         socketClient->connectToPeer(clientAddress.toString(), port);
     }, Qt::QueuedConnection);
-
-    connect(socketClient, &IPv6ChatClient::peerConnected, this, &MainWindow::onPeerConnected);
 }
 
 void MainWindow::on_port_input_returnPressed()

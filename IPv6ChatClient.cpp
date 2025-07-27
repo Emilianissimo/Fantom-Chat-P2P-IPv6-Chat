@@ -42,6 +42,7 @@ void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& mess
     // TODO: use identifier on handshakes
     if (!connections.contains(clientID)) {
         qDebug() << "Client: No connection to peer" << clientID;
+        emit peerDisconnected(clientID);
         return;
     }
 
@@ -84,4 +85,5 @@ void IPv6ChatClient::onDisconnected() {
         connections.remove(deadPeer);
     }
     socket->deleteLater();
+    emit peerDisconnected(deadPeer);
 }

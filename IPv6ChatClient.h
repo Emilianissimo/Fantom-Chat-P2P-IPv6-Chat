@@ -25,6 +25,7 @@ private:
 
 signals:
     void peerConnected(const QString& clientID);
+    void peerDisconnected(const QString& clientID);
     void messageSent(const QString& clientID, const QByteArray& message);
 };
 

@@ -66,6 +66,7 @@ private slots:
 
     // Client
     void onPeerConnected(const QString& clientID);
+    void onPeerDisconnected(const QString& clientID);
     void onMessageSent(const QString& clientID, const QByteArray& message);
 
     // Server
