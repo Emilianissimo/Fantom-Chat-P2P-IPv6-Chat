@@ -9,6 +9,7 @@
 - macOS (interface index like %11, e.g. fe80::c3e:e516:261:d28e%11)
 
 ## 🔍 Key Observations
+- Windows works on WI-FI and Ethernet. For MacX we search for en0 which is Wi-Fi.
 
 - Link-local addresses (those starting with fe80::) require a zone ID (%interfaceIndex) to function correctly.
 

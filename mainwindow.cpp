@@ -129,6 +129,7 @@ QString MainWindow::getLocalIPv6Address()
     const auto interfaces = QNetworkInterface::allInterfaces();
 
     for (const QNetworkInterface& iface : interfaces) {
+        qDebug() << iface.type();
         if (!(iface.flags() & QNetworkInterface::IsUp) ||
             !(iface.flags() & QNetworkInterface::IsRunning) ||
             (iface.flags() & QNetworkInterface::IsLoopBack)) {
@@ -136,10 +137,14 @@ QString MainWindow::getLocalIPv6Address()
         }
 
 #ifdef Q_OS_WIN
-    if (!iface.humanReadableName().toLower().startsWith("ethernet"))
+    if (
+        iface.type() != QNetworkInterface::Ethernet &&
+        iface.type() != QNetworkInterface::Wifi
+        )
         continue;
 #elif defined(Q_OS_MAC)
-    if (!iface.name().startsWith("en0"))
+    // en0 is base active interface, en1, en2... are additional for ethernet cabel/thunderbolt connection
+    if (!iface.name().startsWith("en"))
         continue;
 #endif
 
