@@ -1,4 +1,4 @@
-#include "../../../src/utils/Structures.h"
+#include "../../src/utils/Structures.h"
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QModelIndex>
