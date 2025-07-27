@@ -299,7 +299,7 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
-    if (clientID == currentChatClientID){
+    if (stripPort(clientID) == stripPort(currentChatClientID)){
         isCurrentChatClientOnline = true;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check));
         ui->status_text->setText("Online");
@@ -308,7 +308,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
-    if (clientID == currentChatClientID){
+    if (stripPort(clientID) == stripPort(currentChatClientID)){
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
         ui->status_text->setText("Offline");
