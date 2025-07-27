@@ -196,14 +196,14 @@ void MainWindow::InitServer(int serverPort)
 
 void MainWindow::InitClient()
 {
-    socketClient = new IPv6ChatClient();
-    socketClient->moveToThread(clientSocketsThread);
-
-    connect(socketClient, &IPv6ChatClient::peerConnected, this, &MainWindow::onPeerConnected);
-    connect(socketClient, &IPv6ChatClient::peerDisconnected, this, &MainWindow::onPeerDisconnected);
-    connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);
-
     clientSocketsThread->start();
+
+    QMetaObject::invokeMethod(clientSocketsThread, [this](){
+        socketClient = new IPv6ChatClient();
+        connect(socketClient, &IPv6ChatClient::peerConnected, this, &MainWindow::onPeerConnected);
+        connect(socketClient, &IPv6ChatClient::peerDisconnected, this, &MainWindow::onPeerDisconnected);
+        connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);
+    }, Qt::QueuedConnection);
 }
 
 void MainWindow::UploadConfig()
