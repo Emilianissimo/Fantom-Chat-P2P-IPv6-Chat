@@ -41,6 +41,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->send_message_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_paper_plane, iconOptions));
 
+    ui->chat_list->setWordWrap(true);
+    ui->chat_list->setWrapping(false);
+    ui->chat_list->setResizeMode(QListView::Adjust);
+    ui->chat_list->setUniformItemSizes(false);
+
     this->showMaximized();
     this->UploadConfig();
 }
