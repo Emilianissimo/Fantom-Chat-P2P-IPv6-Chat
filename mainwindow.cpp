@@ -301,6 +301,7 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
     if (currentMessageModel)
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
     ui->send_message_input->clear();
+    ui->chat_list->scrollToBottom();
 }
 
 //Server
@@ -311,6 +312,7 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     messages[clientID].append({clientID, QString::fromUtf8(message), true});
     if (currentMessageModel)
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
+    ui->chat_list->scrollToBottom();
 }
 
 void MainWindow::onServerClientConnected(const QString& clientID)
