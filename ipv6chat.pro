@@ -9,7 +9,8 @@ SOURCES += \
     MessageListModel.cpp \
     Requests.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ui/chat/delegates/ChatMessageDelegate.cpp
 
 HEADERS += \
     IPv6ChatClient.h \

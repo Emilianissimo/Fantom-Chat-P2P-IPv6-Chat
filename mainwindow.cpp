@@ -14,6 +14,8 @@
 #include <ProtocolUtils.h>
 #include <QFile>
 
+#include "ui/chat/delegates/ChatMessageDelegate.cpp"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -41,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->send_message_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_paper_plane, iconOptions));
 
+    ui->chat_list->setItemDelegate(new ChatMessageDelegate(ui->chat_list));
     ui->chat_list->setWordWrap(true);
-    ui->chat_list->setWrapping(false);
-    ui->chat_list->setResizeMode(QListView::Adjust);
     ui->chat_list->setUniformItemSizes(false);
+    ui->chat_list->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     this->showMaximized();
     this->UploadConfig();

@@ -60,7 +60,7 @@ void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& mess
     socket->write(composedMessage);
     if (socket->waitForBytesWritten(3000)){
         qDebug() << "Client: message sent: " << composedMessage;
-        emit messageSent(clientID, composedMessage);
+        emit messageSent(clientID, message);
     }else{
         qDebug() << "Client: message to" << clientID << "not sent";
     }
