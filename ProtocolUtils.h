@@ -18,7 +18,7 @@ inline QByteArray prependLength(const QByteArray& data) {
 }
 
 // Client and server from each peer has different ports (server is stable and client is dynamic)
-QString stripPort(const QString& fullID) {
+inline QString stripPort(const QString& fullID) {
     return fullID.section(':', 0, -2);
 }
 
