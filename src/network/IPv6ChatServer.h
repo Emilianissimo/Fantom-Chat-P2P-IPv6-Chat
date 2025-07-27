@@ -1,7 +1,7 @@
 #ifndef IPV6CHATSERVER_H
 #define IPV6CHATSERVER_H
 
-#include "Structures.h"
+#include "../utils/Structures.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>

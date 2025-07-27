@@ -1,7 +1,7 @@
 #ifndef IPV6CHATCLIENT_H
 #define IPV6CHATCLIENT_H
 
-#include "Structures.h"
+#include "../utils/Structures.h"
 #include <QMap>
 #include <QMutex>
 #include <QObject>

@@ -4,25 +4,25 @@ TARGET = ipv6chat
 TEMPLATE = app
 
 SOURCES += \
-    IPv6ChatClient.cpp \
-    IPv6ChatServer.cpp \
-    MessageListModel.cpp \
-    Requests.cpp \
+    src/network/IPv6ChatClient.cpp \
+    src/network/IPv6ChatServer.cpp \
+    src/models/MessageListModel.cpp \
+    src/utils/Requests.cpp \
     main.cpp \
-    mainwindow.cpp \
-    ui/chat/delegates/ChatMessageDelegate.cpp
+    src/ui/main_window/mainwindow.cpp \
+    src/ui/chat/delegates/ChatMessageDelegate.cpp
 
 HEADERS += \
-    IPv6ChatClient.h \
-    IPv6ChatServer.h \
-    MessageListModel.h \
-    ProtocolUtils.h \
-    Requests.h \
-    Structures.h \
-    mainwindow.h
+    src/network/IPv6ChatClient.h \
+    src/network/IPv6ChatServer.h \
+    src/models/MessageListModel.h \
+    src/utils/ProtocolUtils.h \
+    src/utils/Requests.h \
+    src/utils/Structures.h \
+    src/ui/main_window/mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    src/templates/mainwindow.ui
 
 TRANSLATIONS = ipv6chat_en_US.ts
 
@@ -68,7 +68,7 @@ target.path = $$[QT_INSTALL_BINS]
 INSTALLS += target
 
 CONFIG+=fontAwesomeFree
-include(QtAwesome/QtAwesome.pri)
+include(dependencies/QtAwesome/QtAwesome.pri)
 
 DISTFILES += \
     .gitignore \

@@ -2,7 +2,7 @@
 #ifndef MESSAGELISTMODEL_H
 #define MESSAGELISTMODEL_H
 
-#include "Structures.h"
+#include "../utils/Structures.h"
 #include <QAbstractListModel>
 #include <QObject>
 #include <QList>

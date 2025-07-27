@@ -1,14 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "IPv6ChatServer.h"
-#include "IPv6ChatClient.h"
-#include "MessageListModel.h"
+#include "../../network/IPv6ChatClient.h"
+#include "../../network/IPv6ChatServer.h"
+#include "../../models/MessageListModel.h"
+#include "../../utils/Requests.h"
 
 #include <QMainWindow>
 #include <QSettings>
 #include <QGridLayout>
-#include <Requests.h>
 
 const int DEFAULT_SERVER_PORT = 31488;
 

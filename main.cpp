@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "src/ui/main_window/mainwindow.h"
 #include "src/font-awesome/AwesomeGlobal.h"
 
 #include <QApplication>

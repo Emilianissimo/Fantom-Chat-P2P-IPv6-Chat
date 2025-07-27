@@ -1,5 +1,5 @@
 #include "IPv6ChatServer.h"
-#include "ProtocolUtils.h"
+#include "../utils/ProtocolUtils.h"
 #include <QDebug>
 #include <QTcpServer>
 

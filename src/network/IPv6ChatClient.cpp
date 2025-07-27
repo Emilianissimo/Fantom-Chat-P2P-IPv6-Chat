@@ -4,7 +4,6 @@
 #include <winsock2.h>
 #endif
 
-
 IPv6ChatClient::IPv6ChatClient(QObject* parent) : QObject(parent) {}
 
 void IPv6ChatClient::connectToPeer(const QString& address, int port) {
@@ -34,8 +33,6 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     // Emiting to return clientID outside the thread
     emit peerConnected(clientID);
 }
-
-
 
 void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& message) {
     // Sending the message, with ID identifier in the message

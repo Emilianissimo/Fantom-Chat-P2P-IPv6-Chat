@@ -1,20 +1,20 @@
 #include "mainwindow.h"
-#include "src/font-awesome/AwesomeGlobal.h"
-
 #include "ui_mainwindow.h"
+#include "../../src/font-awesome/AwesomeGlobal.h"
+#include "../../utils/Requests.h"
+#include "../../utils/ProtocolUtils.h"
+
+#include <curl/curl.h>
+
 #include <QFont>
 #include <QDebug>
 #include <QString>
 #include <QSettings>
 #include <QMetaObject>
 #include <QMessageBox>
-
-#include <curl/curl.h>
-#include <Requests.h>
-#include <ProtocolUtils.h>
 #include <QFile>
 
-#include "ui/chat/delegates/ChatMessageDelegate.cpp"
+#include "../../ui/chat/delegates/ChatMessageDelegate.cpp"
 
 
 MainWindow::MainWindow(QWidget *parent)
