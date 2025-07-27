@@ -92,10 +92,7 @@ void IPv6ChatServer::onClientDisconnected() {
         clients.erase(client);
     }
 
-    if (!disconnectedID.isEmpty()){
-        qDebug() << "Disconnected:" << disconnectedID;
-        emit clientDisconnected(disconnectedID);
-    }
+    emit clientDisconnected(disconnectedID);
 
     socket->deleteLater();
 }
