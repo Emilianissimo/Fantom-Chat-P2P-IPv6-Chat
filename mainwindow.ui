@@ -371,6 +371,13 @@
                 <item row="0" column="0">
                  <widget class="QWidget" name="widget_3" native="true">
                   <layout class="QGridLayout" name="gridLayout_11">
+                   <item row="0" column="1">
+                    <widget class="QLabel" name="status_label">
+                     <property name="text">
+                      <string>Status</string>
+                     </property>
+                    </widget>
+                   </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="clientID_text">
                      <property name="text">
@@ -385,23 +392,10 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="1">
-                    <widget class="QLabel" name="status_label">
-                     <property name="text">
-                      <string>Status</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="1" column="1">
-                    <widget class="QPushButton" name="status_text">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
+                    <widget class="QLabel" name="status_text">
                      <property name="text">
-                      <string>PushButton</string>
+                      <string/>
                      </property>
                     </widget>
                    </item>
