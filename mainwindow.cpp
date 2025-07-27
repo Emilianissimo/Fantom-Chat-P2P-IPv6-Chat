@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QVariantMap iconOptions;
     iconOptions.insert("color", QColor("#e0e0e0"));
+    iconOptions.insert("color-active", QColor("#e0e0e0"));
     ui->burger_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_bars, iconOptions));
 
     ui->port_input->setText(QString::number(DEFAULT_SERVER_PORT));
@@ -240,12 +241,12 @@ void MainWindow::openChatPage(const QString& clientID)
     if (clientID != currentChatClientID){
         QVariantMap iconOptions;
         if (connectedClients.contains(stripPort(clientID))) {
-            iconOptions.insert("color", QColor("#03da5a"));
+            iconOptions.insert("color-dsabled", QColor("#03da5a"));
             isCurrentChatClientOnline = true;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
             ui->status_text->setText("Online");
         } else {
-            iconOptions.insert("color", QColor("#d32f2f"));
+            iconOptions.insert("color-dsabled", QColor("#d32f2f"));
             isCurrentChatClientOnline = false;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
             ui->status_text->setText("Offline");
@@ -317,7 +318,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
     connectedClients.insert(stripPort(clientID));
     if (stripPort(clientID) == stripPort(currentChatClientID)){
         QVariantMap iconOptions;
-        iconOptions.insert("color", QColor("#03da5a"));
+        iconOptions.insert("color-dsabled", QColor("#03da5a"));
         isCurrentChatClientOnline = true;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
         ui->status_text->setText("Online");
@@ -329,7 +330,7 @@ void MainWindow::onServerClientDisconnected(const QString& clientID)
     connectedClients.remove(stripPort(clientID));
     if (stripPort(clientID) == stripPort(currentChatClientID)){
         QVariantMap iconOptions;
-        iconOptions.insert("color", QColor("#d32f2f"));
+        iconOptions.insert("color-dsabled", QColor("#d32f2f"));
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
         ui->status_text->setText("Offline");
