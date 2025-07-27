@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->chat_list->setWordWrap(true);
     ui->chat_list->setUniformItemSizes(false);
     ui->chat_list->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->chat_list->setSpacing(10);
 
     this->showMaximized();
     this->UploadConfig();
