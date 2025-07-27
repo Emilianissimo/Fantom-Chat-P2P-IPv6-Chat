@@ -75,6 +75,7 @@ DISTFILES += \
     README.md \
     TESTING_NOTES.md \
     copy_dlls.bat \
+    src/styles/mainwindow.qss \
     third_party_licenses/FontAwesome-LICENSE.md \
     third_party_licenses/Qt-LICENSE.md
 
@@ -87,3 +88,6 @@ local_network = true
 } else {
     message("🌐 Remote network mode")
 }
+
+RESOURCES += \
+    resources.qrc

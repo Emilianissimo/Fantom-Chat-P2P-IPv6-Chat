@@ -26,24 +26,7 @@
    <string>P2P IPv6 Chat</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#scrollArea{
-	background-color: #e7e7e7;
-	border-top: 1px solid #6c757d;
-}
-
-#sidebar{
-	background-color: #e7e7e7;
-}
-
-#ip_text, #your_ip_label{
-	color: black;
-	font-size: 15px;
-	font-weight: 600;
-}
-
-#mainframe{
-	background-color: white;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="0">
@@ -111,7 +94,7 @@
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: black</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string/>
@@ -160,7 +143,7 @@
         <item>
          <widget class="QLabel" name="port_warning">
           <property name="styleSheet">
-           <string notr="true">color: black</string>
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Please, do not change port if you are not sure what are you doing</string>
@@ -177,8 +160,11 @@
           </property>
           <item row="0" column="0">
            <widget class="QPushButton" name="start_server_button">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
-             <string notr="true">color: black</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>start_server</string>
@@ -218,6 +204,9 @@
            </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="write_to_button">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>write_to</string>
              </property>
@@ -241,7 +230,7 @@
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #e7e7e7 !important;</string>
+           <string notr="true"/>
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
            <property name="leftMargin">
@@ -270,7 +259,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>480</width>
-                <height>743</height>
+                <height>744</height>
                </rect>
               </property>
              </widget>
@@ -365,11 +354,14 @@
                    </item>
                    <item>
                     <widget class="QPushButton" name="send_message_button">
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">height: 100%</string>
                      </property>
                      <property name="text">
-                      <string>send</string>
+                      <string/>
                      </property>
                     </widget>
                    </item>
@@ -406,11 +398,7 @@
                       <bool>false</bool>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">QPushButton#status_text:disabled {
-    color: black;
-	border: 0;
-	background: #e7e7e7;
-}</string>
+                      <string notr="true"/>
                      </property>
                      <property name="text">
                       <string>PushButton</string>

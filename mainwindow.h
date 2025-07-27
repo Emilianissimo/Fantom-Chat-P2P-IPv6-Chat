@@ -76,5 +76,6 @@ private slots:
     void onServerClientConnected(const QString& clientID);
     void onServerClientDisconnected(const QString& clientID);
     void onMessageArrived(const QString& clientID, const QByteArray& message);
+    void on_burger_button_clicked();
 };
 #endif // MAINWINDOW_H

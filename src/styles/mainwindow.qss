@@ -1,0 +1,120 @@
+/* === Global Reset === */
+* {
+    font-family: "Segoe UI", "Roboto", sans-serif;
+    font-size: 14px;
+    color: #f0f0f0;
+    background: transparent;
+}
+
+/* === Main Colors === */
+QMainWindow, QWidget {
+    background-color: #1e1e1e;
+}
+
+QFrame, QSplitter {
+    background-color: #2a2a2a;
+    border: none;
+}
+
+QLabel {
+    color: #e0e0e0;
+    padding: 10px;
+}
+
+/* === Buttons === */
+QPushButton {
+    background-color: #3c3f41;
+    border: 1px solid #5c5c5c;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: #f0f0f0;
+}
+
+QPushButton:hover {
+    background-color: #505357;
+    border: 1px solid #7a7a7a;
+    color: #f0f0f0;
+}
+
+QPushButton:pressed {
+    background-color: #2e2e2e;
+    color: #f0f0f0;
+}
+
+QPushButton:disabled {
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    color: #f0f0f0;
+}
+
+/* === Text Inputs === */
+QLineEdit, QTextEdit {
+    background-color: #2b2b2b;
+    border: 1px solid #5a5a5a;
+    border-radius: 3px;
+    padding: 4px;
+    color: #e0e0e0;
+    selection-background-color: #007acc;
+}
+
+/* === Scroll Areas === */
+QScrollArea {
+    border: none;
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    background-color: #2a2a2a;
+    width: 8px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background-color: #5c5c5c;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    background: none;
+}
+
+/* === List Views === */
+QListView {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    color: #f0f0f0;
+}
+
+/* === Status Indicator === */
+QPushButton#status_text:disabled {
+    background-color: #2d2d2d;
+    color: #4caf50; /* green for online */
+    border: none;
+}
+
+/* === Stacked Widgets === */
+QStackedWidget {
+    background-color: #1e1e1e;
+    border: none;
+}
+
+/* === Sidebar Specific === */
+#sidebar {
+    background-color: #252526;
+}
+
+#mainframe {
+    background-color: #1e1e1e;
+}
+
+/* === IP and Text Labels === */
+#your_ip_label, #ip_text, #port_warning {
+    color: #cccccc;
+    font-weight: 500;
+}
+
+/* === Selection Highlighting === */
+QWidget::item:selected {
+    background-color: #007acc;
+    color: #ffffff;
+}

@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QFile>
 #include <curl/curl.h>
 
 fa::QtAwesome* awesome = nullptr;
@@ -13,6 +14,15 @@ int main(int argc, char *argv[])
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     QApplication a(argc, argv);
+    a.setStyle("Fusion");
+
+    QFile f(":/src/styles/mainwindow.qss");
+    if (!f.open(QFile::ReadOnly)) {
+        qDebug() << "Failed to load stylesheet";
+    } else {
+        qDebug() << "Stylesheet loaded";
+        a.setStyleSheet(f.readAll());
+    }
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
