@@ -233,9 +233,16 @@ void MainWindow::openChatPage(const QString& clientID)
     }
 
     if (clientID != currentChatClientID){
-        isCurrentChatClientOnline = false;
-        ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
-        ui->status_text->setText("Offline");
+        if (connectedClients.contains(stripPort(clientID))) {
+            isCurrentChatClientOnline = true;
+            ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check));
+            ui->status_text->setText("Online");
+        } else {
+            isCurrentChatClientOnline = false;
+            ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));
+            ui->status_text->setText("Offline");
+        }
+
         currentChatClientID = clientID;
         ui->clientID_text->setText(clientID);
         setUpMessagesForChat(clientID);
@@ -299,6 +306,7 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
+    connectedClients.insert(stripPort(clientID));
     if (stripPort(clientID) == stripPort(currentChatClientID)){
         isCurrentChatClientOnline = true;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check));
@@ -308,6 +316,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
+    connectedClients.remove(stripPort(clientID));
     if (stripPort(clientID) == stripPort(currentChatClientID)){
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times));

@@ -50,6 +50,9 @@ private:
     bool isCurrentChatClientOnline = false;
     MessageListModel* currentMessageModel = nullptr;
 
+    // Client list connected to server (for UI purpose)
+    QSet<QString> connectedClients;
+
     void openChatPage(const QString& clientID);
     void setUpMessagesForChat(const QString& clientID);
     QString getLocalIPv6Address();
