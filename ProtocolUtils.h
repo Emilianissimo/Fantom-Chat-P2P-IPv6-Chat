@@ -18,8 +18,14 @@ inline QByteArray prependLength(const QByteArray& data) {
 }
 
 // Client and server from each peer has different ports (server is stable and client is dynamic)
+// Also remove zone ID
 inline QString stripPort(const QString& fullID) {
-    return fullID.section(':', 0, -2);
+    QString addr = fullID.section(':', 0, -2);
+    int zoneIndex = addr.indexOf('%');
+    if (zoneIndex != -1) {
+        addr = addr.left(zoneIndex);
+    }
+    return addr;
 }
 
 #endif // PROTOCOLUTILS_H
