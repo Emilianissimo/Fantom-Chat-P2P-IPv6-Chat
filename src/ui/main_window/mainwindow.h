@@ -45,7 +45,6 @@ private:
     IPv6ChatClient *socketClient;
     QThread *clientSocketsThread;
     QHostAddress selfHostAddress;
-    int selfPort;
     Requests *request;
     QString currentChatID;
 

@@ -268,6 +268,7 @@ void MainWindow::onContactClicked(const QModelIndex& index)
 // Chat pages changing handler
 void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
 {
+    qDebug() << currentChatID << chatID << clientID;
     // Clear: previous chat models from RAM
     if (currentMessageModel){
         ui->chat_list->setModel(nullptr);

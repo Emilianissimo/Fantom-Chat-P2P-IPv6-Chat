@@ -29,8 +29,10 @@ inline QString stripPort(const QString& fullID) {
 }
 
 // Unique Identificator for chat list (contact list)
-inline QString makeChatID(const QString& a, const QString& b) {
-    return (a < b) ? (a + "__" + b) : (b + "__" + a);
+inline QString makeChatID(const QString& a, const QString& b){
+    QString a_clean = a.section('%', 0, 0);
+    QString b_clean = b.section('%', 0, 0);
+    return (a_clean < b_clean) ? (a_clean + "__" + b_clean) : (b_clean + "__" + a_clean);
 }
 
 #endif // PROTOCOLUTILS_H
