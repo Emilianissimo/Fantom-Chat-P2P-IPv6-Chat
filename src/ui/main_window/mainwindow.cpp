@@ -291,12 +291,12 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
         }
 
         currentChatID = chatID;
-        currentContactModel->setActive(chatID);
         ui->clientID_text->setText(clientID);
 
         // Set up messages in RAM for all chats (to store them as in DB)
         setUpMessagesForChatInRAM(chatID);
 
+        currentContactModel->setActive(chatID);
         // 0 for chat page, initital is 1 (just in case)
         if(ui->chat_stacked_widget->currentIndex()){
             ui->chat_stacked_widget->setCurrentIndex(0);
@@ -348,7 +348,9 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
 
     ui->send_message_input->clear();
+
     ui->chat_list->scrollToBottom();
+    currentContactModel->setActive(chatID);
 }
 
 //Server
@@ -364,7 +366,10 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     if (currentMessageModel)
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
 
-    ui->chat_list->scrollToBottom();
+    if (chatID == currentChatID){
+        ui->chat_list->scrollToBottom();
+        currentContactModel->setActive(chatID);
+    }
 }
 
 void MainWindow::onServerClientConnected(const QString& clientID)

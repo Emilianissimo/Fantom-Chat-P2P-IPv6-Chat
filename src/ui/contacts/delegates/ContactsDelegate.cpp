@@ -23,12 +23,12 @@ public:
         QColor msgColor;
         if (isActive) {
             bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#f5f5f5") : QColor("#ffffff");
-            senderColor = QColor("#dddddd");
-            msgColor = QColor("#ffffff");
-        } else {
-            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#252526") : QColor("#3b3b3d");
             senderColor = QColor("#000000");
             msgColor = QColor("#666666");
+        } else {
+            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#252526") : QColor("#3b3b3d");
+            senderColor = QColor("#ffffff");
+            msgColor = QColor("#dddddd");
         }
         painter->fillRect(rect, bgColor);
 
