@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->burger_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_bars, iconOptions));
 
     ui->port_input->setText(QString::number(DEFAULT_SERVER_PORT));
+    ui->write_to_button->setEnabled(false);
 
     ui->chat_stacked_widget->setCurrentIndex(1);
 
@@ -369,7 +370,6 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
     QString chatID = makeChatID(selfHostAddress.toString() , clientID);
-    connectedClients.insert(chatID);
     if (chatID == currentChatID){
         QVariantMap iconOptions;
         iconOptions.insert("color-disabled", QColor("#03da5a"));
@@ -377,6 +377,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
         ui->status_text->setText("Online");
     }
+    connectedClients.insert(chatID);
 }
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
@@ -389,6 +390,9 @@ void MainWindow::onServerClientDisconnected(const QString& clientID)
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
         ui->status_text->setText("Offline");
+        QString message = "Peer disconnected, if peer will be active again, just push button write to using actual port.";
+        messages[chatID].append({chatID, message, true});
+        currentMessageModel->addMessage({"System", message, true});
     }
 }
 
@@ -410,6 +414,7 @@ void MainWindow::on_start_server_button_clicked()
 
     InitServer(port);
     InitClient();
+    ui->write_to_button->setEnabled(true);
 }
 
 void MainWindow::on_port_input_textChanged()
