@@ -223,7 +223,6 @@ void MainWindow::InitServer(int serverPort)
     if (socketServerThread->isRunning()){
         ui->start_server_button->setDisabled(true);
         ui->port_input->setReadOnly(true);
-        selfPort = serverPort;
     }
 }
 
@@ -268,7 +267,6 @@ void MainWindow::onContactClicked(const QModelIndex& index)
 // Chat pages changing handler
 void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
 {
-    qDebug() << currentChatID << chatID << clientID;
     // Clear: previous chat models from RAM
     if (currentMessageModel){
         ui->chat_list->setModel(nullptr);
@@ -305,7 +303,7 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
 
 void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     if (!messages.contains(chatID)) {
         messages[chatID] = QList<Message>();
     }
@@ -325,7 +323,7 @@ void MainWindow::onPeerConnected(const QString& clientID)
     QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     openChatPage(chatID, clientID);
 }
 
@@ -338,7 +336,7 @@ void MainWindow::onPeerDisconnected(const QString& clientID)
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({chatID, QString::fromUtf8(message), false});
 
@@ -355,7 +353,7 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
 void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message arrived: " << message << clientID;
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
      // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({chatID, QString::fromUtf8(message), true});
 
@@ -369,7 +367,7 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString() , clientID);
     connectedClients.insert(chatID);
     if (chatID == currentChatID){
         QVariantMap iconOptions;
@@ -382,7 +380,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     connectedClients.remove(clientID);
     if (chatID == currentChatID){
         QVariantMap iconOptions;
