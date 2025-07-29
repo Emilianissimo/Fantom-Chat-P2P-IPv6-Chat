@@ -68,14 +68,6 @@ void IPv6ChatServer::onReadyRead() {
         if (sepIndex == -1) continue;
 
         QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
-        QString actualSocketID = QString("%1:%2")
-            .arg(senderClient->peerAddress().toString())
-            .arg(senderClient->peerPort());
-
-        if (clientID != actualSocketID) {
-            qWarning() << "⚠️ Spoofed clientID? Declared:" << clientID << "Actual:" << actualSocketID;
-            return;
-        }
         QByteArray message = fullMessage.mid(sepIndex + 1);
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
 
