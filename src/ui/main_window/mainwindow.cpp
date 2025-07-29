@@ -475,9 +475,9 @@ void MainWindow::on_send_message_button_clicked()
     }
 
     QString clientID = ui->clientID_text->text();
-
-    QMetaObject::invokeMethod(clientSocketsThread, [this, clientID, message](){
-        socketClient->sendMessage(clientID, message.toUtf8());
+    QString selfHost = selfHostAddress.toString() + ui->port_input->text();
+    QMetaObject::invokeMethod(clientSocketsThread, [this, selfHost, clientID, message](){
+        socketClient->sendMessage(selfHost, clientID, message.toUtf8());
     }, Qt::QueuedConnection);
 }
 

@@ -34,7 +34,7 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     emit peerConnected(clientID);
 }
 
-void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& message) {
+void IPv6ChatClient::sendMessage(const QString& selfHost, const QString& clientID, const QByteArray& message) {
     // Sending the message, with ID identifier in the message
     // TODO: use identifier on handshakes
     if (!connections.contains(clientID)) {
@@ -43,7 +43,7 @@ void IPv6ChatClient::sendMessage(const QString& clientID, const QByteArray& mess
         return;
     }
 
-    QByteArray composedMessage = clientID.toUtf8() + '\0' + message;
+    QByteArray composedMessage = selfHost.toUtf8() + '\0' + message;
 
     // Protocol prefix for server to determine length
     QByteArray lengthPrefix;
