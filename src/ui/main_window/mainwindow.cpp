@@ -302,13 +302,14 @@ void MainWindow::openChatPage(const QString& clientID)
 
 void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 {
-    if (!messages.contains(clientID)) {
-        messages[clientID] = QList<Message>();
+    QString clearedClientID = stripPort(clientID);
+    if (!messages.contains(clearedClientID)) {
+        messages[clearedClientID] = QList<Message>();
     }
 
     currentMessageModel = new MessageListModel(this);
-    if (messages.contains(clientID))
-        currentMessageModel->setMessages(messages[clientID]);
+    if (messages.contains(clearedClientID))
+        currentMessageModel->setMessages(messages[clearedClientID]);
 
     ui->chat_list->setModel(currentMessageModel);
 }
@@ -319,9 +320,10 @@ void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 void MainWindow::onPeerConnected(const QString& clientID)
 {
     QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
+    QString clearedClientID = stripPort(clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    openChatPage(clientID);
+    openChatPage(clearedClientID);
 }
 
 void MainWindow::onPeerDisconnected(const QString& clientID)
@@ -333,13 +335,14 @@ void MainWindow::onPeerDisconnected(const QString& clientID)
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
+    QString clearedClientID = stripPort(clientID);
     // TODO: add optional ability to store into DB, for now only RAM
-    messages[clientID].append({clientID, QString::fromUtf8(message), false});
+    messages[clearedClientID].append({clearedClientID, QString::fromUtf8(message), false});
 
-    currentContactModel->onNewMessage(clientID, message);
+    currentContactModel->onNewMessage(clearedClientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
+        currentMessageModel->addMessage({clearedClientID, QString::fromUtf8(message), false});
 
     ui->send_message_input->clear();
     ui->chat_list->scrollToBottom();
@@ -349,13 +352,14 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
 void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message arrived: " << message << clientID;
+    QString clearedClientID = stripPort(clientID);
      // TODO: add optional ability to store into DB, for now only RAM
-    messages[clientID].append({clientID, QString::fromUtf8(message), true});
+    messages[clearedClientID].append({clearedClientID, QString::fromUtf8(message), true});
 
-    currentContactModel->onNewMessage(clientID, message);
+    currentContactModel->onNewMessage(clearedClientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
+        currentMessageModel->addMessage({clearedClientID, QString::fromUtf8(message), true});
 
     ui->chat_list->scrollToBottom();
 }
