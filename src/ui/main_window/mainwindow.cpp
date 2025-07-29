@@ -340,12 +340,12 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
     qDebug() << "Message sent: " << message << clientID;
     QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     // TODO: add optional ability to store into DB, for now only RAM
-    messages[chatID].append({chatID, QString::fromUtf8(message), false});
+    messages[chatID].append({clientID, QString::fromUtf8(message), false});
 
     currentContactModel->onNewMessage(chatID, clientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({chatID, QString::fromUtf8(message), false});
+        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
 
     ui->send_message_input->clear();
     ui->chat_list->scrollToBottom();
@@ -357,12 +357,12 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     qDebug() << "Message arrived: " << message << clientID;
     QString chatID = makeChatID(selfHostAddress.toString(), clientID);
      // TODO: add optional ability to store into DB, for now only RAM
-    messages[chatID].append({chatID, QString::fromUtf8(message), true});
+    messages[chatID].append({clientID, QString::fromUtf8(message), true});
 
     currentContactModel->onNewMessage(chatID, clientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({chatID, QString::fromUtf8(message), true});
+        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
 
     ui->chat_list->scrollToBottom();
 }
@@ -390,7 +390,7 @@ void MainWindow::onServerClientDisconnected(const QString& clientID)
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
         ui->status_text->setText("Offline");
-        QString message = "Peer disconnected, if peer will be active again, just push button write to using actual port.";
+        QString message = "Peer is disconnected, if peer will be active again, just push the button \"Write to\" using actual port.";
         messages[chatID].append({chatID, message, true});
         currentMessageModel->addMessage({"System", message, true});
     }

@@ -19,11 +19,16 @@ public:
         QString lastMsg  = index.data(ContactListModel::LastMessageRole).toString();
 
         QColor bgColor;
+        QColor senderColor;
+        QColor msgColor;
         if (isActive) {
             bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#f5f5f5") : QColor("#ffffff");
+            senderColor = QColor("#dddddd");
+            msgColor = QColor("#ffffff");
         } else {
-            // Hover / selected background
             bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#252526") : QColor("#3b3b3d");
+            senderColor = QColor("#000000");
+            msgColor = QColor("#666666");
         }
         painter->fillRect(rect, bgColor);
 
@@ -45,11 +50,11 @@ public:
 
         // Draw texts
         painter->setFont(idFont);
-        painter->setPen(QColor("#000000"));
+        painter->setPen(senderColor);
         painter->drawText(contentRect, Qt::AlignTop | Qt::AlignLeft, elidedID);
 
         painter->setFont(msgFont);
-        painter->setPen(QColor("#666666"));
+        painter->setPen(msgColor);
 
         QRect msgRect = contentRect;
         msgRect.setTop(contentRect.top() + idFm.height() + 4);

@@ -14,7 +14,11 @@ public:
         QString sender = msg.isIncoming ? msg.clientID : "You";
         QString text = msg.message;
 
-        QFontMetrics fm(option.font);
+        QFont font("Arial", 12);
+        if (msg.clientID == "System"){
+            font.setItalic(true);
+        }
+        QFontMetrics fm(font);
         QTextOption textOption;
         textOption.setWrapMode(QTextOption::WordWrap);
 
@@ -22,7 +26,7 @@ public:
         const int bubbleMargin = 12;
         const int lineSpacing = 4;
 
-        int maxTextWidth = option.rect.width() * 0.6;
+        int maxTextWidth = option.rect.width() * 0.65;
 
         QRect senderRect = fm.boundingRect(sender);
         QRect messageRect = fm.boundingRect(QRect(0, 0, maxTextWidth, INT_MAX), Qt::TextWordWrap, text);
@@ -46,6 +50,11 @@ public:
         // Colors
         QColor bubbleColor = msg.isIncoming ? QColor("#e0e0e0") : QColor("#0078d7");
         QColor textColor = msg.isIncoming ? Qt::black : Qt::white;
+
+        if (msg.clientID == "System"){
+            bubbleColor = QColor("#d32f2f");
+            textColor = Qt::white;
+        }
 
         // Bubble drawing
         // Tail (Messenger like)
@@ -71,6 +80,7 @@ public:
         painter->drawRoundedRect(bubbleRect, 10, 10);
 
         // Text
+        painter->setFont(font);
         painter->setPen(textColor);
         QRect senderArea = QRect(bubbleRect.left() + bubblePadding,
                                  bubbleRect.top() + bubblePadding,
