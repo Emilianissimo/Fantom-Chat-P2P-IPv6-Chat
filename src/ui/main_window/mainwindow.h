@@ -4,6 +4,7 @@
 #include "../../network/IPv6ChatClient.h"
 #include "../../network/IPv6ChatServer.h"
 #include "../../models/MessageListModel.h"
+#include "../../models/ContactListModel.h"
 #include "../../utils/Requests.h"
 
 #include <QMainWindow>
@@ -46,15 +47,19 @@ private:
     QHostAddress selfHostAddress;
     Requests *request;
     QString currentChatClientID;
+
     QMap<QString, QList<Message>> messages;
+
     bool isCurrentChatClientOnline = false;
+
     MessageListModel* currentMessageModel = nullptr;
+    ContactListModel* currentContactModel = nullptr;
 
     // Client list connected to server (for UI purpose)
     QSet<QString> connectedClients;
 
     void openChatPage(const QString& clientID);
-    void setUpMessagesForChat(const QString& clientID);
+    void setUpMessagesForChatInRAM(const QString& clientID);
     QString getLocalIPv6Address();
 
 private slots:
@@ -66,6 +71,7 @@ private slots:
     void on_client_address_input_returnPressed();
     void on_client_port_input_returnPressed();
     void on_send_message_button_clicked();
+    void onContactClicked(const QModelIndex& index);
 
     // Client
     void onPeerConnected(const QString& clientID);

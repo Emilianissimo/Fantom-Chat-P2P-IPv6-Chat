@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     awesome->initFontAwesome();
 
     qRegisterMetaType<Message>("Message");
+    qRegisterMetaType<Contact>("Contact");
 
     MainWindow w;
     w.show();

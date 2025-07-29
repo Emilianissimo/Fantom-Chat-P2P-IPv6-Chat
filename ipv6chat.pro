@@ -4,15 +4,19 @@ TARGET = ipv6chat
 TEMPLATE = app
 
 SOURCES += \
+    src/models/ContactListModel.cpp \
     src/network/IPv6ChatClient.cpp \
     src/network/IPv6ChatServer.cpp \
     src/models/MessageListModel.cpp \
+    src/ui/contacts/delegates/ContactsDelegate.cpp \
     src/utils/Requests.cpp \
     main.cpp \
     src/ui/main_window/mainwindow.cpp \
     src/ui/chat/delegates/ChatMessageDelegate.cpp
+    src/ui/contacts/delegates/ContactsDelegate.cpp
 
 HEADERS += \
+    src/models/ContactListModel.h \
     src/network/IPv6ChatClient.h \
     src/network/IPv6ChatServer.h \
     src/models/MessageListModel.h \

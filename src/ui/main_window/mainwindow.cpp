@@ -14,7 +14,8 @@
 #include <QMessageBox>
 #include <QFile>
 
-#include "../../ui/chat/delegates/ChatMessageDelegate.cpp"
+#include "../chat/delegates/ChatMessageDelegate.cpp"
+#include "../contacts/delegates/ContactsDelegate.cpp"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -48,6 +49,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->chat_list->setUniformItemSizes(false);
     ui->chat_list->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->chat_list->setSpacing(10);
+
+    ui->contacts_list_view->setItemDelegate(new ContactsDelegate(ui->contacts_list_view));
+    ui->contacts_list_view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->contacts_list_view->setUniformItemSizes(true);
+    // For hovering
+    ui->contacts_list_view->setMouseTracking(true);
+
+    // Set contacts model
+    currentContactModel = new ContactListModel(this);
+    ui->contacts_list_view->setModel(currentContactModel);
+    ui->contacts_list_view->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->contacts_list_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    connect(ui->contacts_list_view, &QListView::clicked, this, &MainWindow::onContactClicked);
+
+    QVector<Contact> contacts;
+    currentContactModel->setContacts(contacts);
 
     this->showMaximized();
     this->UploadConfig();
@@ -236,6 +254,15 @@ void MainWindow::UploadConfig()
     }
 }
 
+void MainWindow::onContactClicked(const QModelIndex& index)
+{
+    if (!index.isValid())
+        return;
+
+    QString clientID = index.data(ContactListModel::ClientIDRole).toString();
+    openChatPage(clientID);
+}
+
 // Chat pages changing handler
 void MainWindow::openChatPage(const QString& clientID)
 {
@@ -262,7 +289,9 @@ void MainWindow::openChatPage(const QString& clientID)
 
         currentChatClientID = clientID;
         ui->clientID_text->setText(clientID);
-        setUpMessagesForChat(clientID);
+
+        // Set up messages in RAM for all chats (to store them as in DB)
+        setUpMessagesForChatInRAM(clientID);
 
         // 0 for chat page, initital is 1 (just in case)
         if(ui->chat_stacked_widget->currentIndex()){
@@ -271,7 +300,7 @@ void MainWindow::openChatPage(const QString& clientID)
     }
 }
 
-void MainWindow::setUpMessagesForChat(const QString& clientID)
+void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 {
     if (!messages.contains(clientID)) {
         messages[clientID] = QList<Message>();
@@ -306,8 +335,12 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
     qDebug() << "Message sent: " << message << clientID;
     // TODO: add optional ability to store into DB, for now only RAM
     messages[clientID].append({clientID, QString::fromUtf8(message), false});
+
+    currentContactModel->onNewMessage(clientID, message);
+
     if (currentMessageModel)
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), false});
+
     ui->send_message_input->clear();
     ui->chat_list->scrollToBottom();
 }
@@ -318,8 +351,12 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
     qDebug() << "Message arrived: " << message << clientID;
      // TODO: add optional ability to store into DB, for now only RAM
     messages[clientID].append({clientID, QString::fromUtf8(message), true});
+
+    currentContactModel->onNewMessage(clientID, message);
+
     if (currentMessageModel)
         currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
+
     ui->chat_list->scrollToBottom();
 }
 

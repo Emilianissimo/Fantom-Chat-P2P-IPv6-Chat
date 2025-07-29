@@ -11,10 +11,17 @@ struct PeerConnection {
 };
 
 struct Message {
-    QString peerID;
+    QString clientID;
     QString message;
     bool isIncoming;
 };
 
+struct Contact {
+    QString clientID;
+    QString lastMessage;
+    int order;
+};
+
 Q_DECLARE_METATYPE(Message)
+Q_DECLARE_METATYPE(Contact);
 #endif

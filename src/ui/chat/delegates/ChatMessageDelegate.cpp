@@ -11,7 +11,7 @@ public:
         painter->save();
         Message msg = index.data(Qt::UserRole).value<Message>();
 
-        QString sender = msg.isIncoming ? msg.peerID : "You";
+        QString sender = msg.isIncoming ? msg.clientID : "You";
         QString text = msg.message;
 
         QFontMetrics fm(option.font);
@@ -95,7 +95,7 @@ public:
 
         int maxTextWidth = option.rect.width() > 0 ? option.rect.width() * 0.6 : 400;
 
-        QRect senderRect = fm.boundingRect(msg.isIncoming ? msg.peerID : "You");
+        QRect senderRect = fm.boundingRect(msg.isIncoming ? msg.clientID : "You");
         QRect messageRect = fm.boundingRect(QRect(0, 0, maxTextWidth, INT_MAX), Qt::TextWordWrap, msg.message);
 
         int height = senderRect.height() + 4 + messageRect.height() + 24; // 4 is spacing + 24 as padding top/bottom
