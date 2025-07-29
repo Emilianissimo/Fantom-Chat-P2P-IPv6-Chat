@@ -67,13 +67,14 @@ void IPv6ChatServer::onReadyRead() {
         int sepIndex = fullMessage.indexOf('\0');
         if (sepIndex == -1) continue;
 
-        QString clientID;
-        QMutexLocker locker(&clientsMutex);
-        auto client = std::find_if(clients.begin(), clients.end(), [&](const PeerConnection& c){
-            return c.socket == senderClient;
-        });
-        if (client != clients.end()) {
-            clientID = client.value().clientID;
+        QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
+        QString actualSocketID = QString("%1:%2")
+            .arg(senderClient->peerAddress().toString())
+            .arg(senderClient->peerPort());
+
+        if (clientID != actualSocketID) {
+            qWarning() << "⚠️ Spoofed clientID? Declared:" << clientID << "Actual:" << actualSocketID;
+            return;
         }
         QByteArray message = fullMessage.mid(sepIndex + 1);
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
