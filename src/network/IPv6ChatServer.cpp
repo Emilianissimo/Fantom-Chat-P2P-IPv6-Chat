@@ -67,7 +67,9 @@ void IPv6ChatServer::onReadyRead() {
         int sepIndex = fullMessage.indexOf('\0');
         if (sepIndex == -1) continue;
 
-        QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
+        QString clientID = QString("%1:%2")
+           .arg(senderClient->peerAddress().toString())
+           .arg(senderClient->peerPort());
         QByteArray message = fullMessage.mid(sepIndex + 1);
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
 
