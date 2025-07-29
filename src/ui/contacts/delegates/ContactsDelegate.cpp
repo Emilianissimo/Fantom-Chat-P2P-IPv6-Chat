@@ -23,7 +23,7 @@ public:
             bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#f5f5f5") : QColor("#ffffff");
         } else {
             // Hover / selected background
-            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#afe5ec") : QColor("#8ebcc2");
+            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#252526") : QColor("#3b3b3d");
         }
         painter->fillRect(rect, bgColor);
 

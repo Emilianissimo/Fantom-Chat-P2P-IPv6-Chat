@@ -277,7 +277,7 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
         }
 
         QVariantMap iconOptions;
-        if (connectedClients.contains(stripPort(chatID))) {
+        if (connectedClients.contains(chatID)) {
             iconOptions.insert("color-disabled", QColor("#03da5a"));
             isCurrentChatClientOnline = true;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
