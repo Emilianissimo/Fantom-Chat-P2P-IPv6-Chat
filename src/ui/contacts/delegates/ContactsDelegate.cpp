@@ -13,15 +13,19 @@ public:
 
         QRect rect = option.rect;
 
-        // Hover / selected background
-        QColor bgColor = (option.state & QStyle::State_MouseOver) ?
-                             QColor("#f5f5f5") : QColor("#ffffff");
-
-        painter->fillRect(rect, bgColor);
-
         // Extract data
+        bool isActive = index.data(ContactListModel::IsActiveRole).toBool();
         QString clientID = index.data(ContactListModel::ClientIDRole).toString();
         QString lastMsg  = index.data(ContactListModel::LastMessageRole).toString();
+
+        QColor bgColor;
+        if (isActive) {
+            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#f5f5f5") : QColor("#ffffff");
+        } else {
+            // Hover / selected background
+            bgColor = (option.state & QStyle::State_MouseOver) ? QColor("#afe5ec") : QColor("#8ebcc2");
+        }
+        painter->fillRect(rect, bgColor);
 
         // Padding
         const int x_padding = 5;

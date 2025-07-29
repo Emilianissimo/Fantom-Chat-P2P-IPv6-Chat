@@ -46,6 +46,18 @@ void ContactListModel::onNewMessage(const QString& chatID, const QString& client
     }
 }
 
+void ContactListModel::setActive(const QString& chatID) {
+    for (int i = 0; i < m_contacts.size(); ++i) {
+        bool wasActive = m_contacts[i].isActive;
+        bool nowActive = (m_contacts[i].chatID == chatID);
+
+        if (wasActive != nowActive) {
+            m_contacts[i].isActive = nowActive;
+            emit dataChanged(index(i), index(i), { IsActiveRole });
+        }
+    }
+}
+
 void ContactListModel::setContacts(const QVector<Contact>& contacts) {
     beginResetModel();
     m_contacts = contacts;
@@ -66,6 +78,7 @@ QVariant ContactListModel::data(const QModelIndex& index, int role) const {
         case ClientIDRole: return contact.clientID;
         case LastMessageRole: return contact.lastMessage;
         case OrderRole: return contact.order;
+        case IsActiveRole: return contact.isActive;
         default: return {};
     }
 }
@@ -75,7 +88,8 @@ QHash<int, QByteArray> ContactListModel::roleNames() const {
         { ChatIDRole, "chatID" },
         { ClientIDRole, "clientID" },
         { LastMessageRole, "lastMessage" },
-        { OrderRole, "order" }
+        { OrderRole, "order" },
+        { IsActiveRole, "isActive" },
     };
 }
 

@@ -12,11 +12,13 @@ public:
         ChatIDRole,
         ClientIDRole = Qt::UserRole + 1,
         LastMessageRole,
-        OrderRole
+        OrderRole,
+        IsActiveRole,
     };
 
     explicit ContactListModel(QObject *parent = nullptr);
 
+    void setActive(const QString& chatID);
     void setContacts(const QVector<Contact>& contacts);
     void onNewMessage(const QString& chatID, const QString& clientID, const QString& message);
 

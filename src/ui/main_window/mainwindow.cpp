@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->contacts_list_view->setUniformItemSizes(true);
     // For hovering
     ui->contacts_list_view->setMouseTracking(true);
+    ui->contacts_list_view->viewport()->setCursor(Qt::PointingHandCursor);
 
     // Set contacts model
     currentContactModel = new ContactListModel(this);
@@ -301,9 +302,8 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
     }
 }
 
-void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
+void MainWindow::setUpMessagesForChatInRAM(const QString& chatID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
     if (!messages.contains(chatID)) {
         messages[chatID] = QList<Message>();
     }

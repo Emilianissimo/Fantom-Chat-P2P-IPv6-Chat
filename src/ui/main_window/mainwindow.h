@@ -59,7 +59,7 @@ private:
     QSet<QString> connectedClients;
 
     void openChatPage(const QString& chatID, const QString& clientID);
-    void setUpMessagesForChatInRAM(const QString& clientID);
+    void setUpMessagesForChatInRAM(const QString& chatID);
     QString getLocalIPv6Address();
 
 private slots:

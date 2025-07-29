@@ -21,6 +21,7 @@ struct Contact {
     QString clientID;
     QString lastMessage;
     int order;
+    bool isActive;
 };
 
 Q_DECLARE_METATYPE(Message)
