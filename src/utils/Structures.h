@@ -17,6 +17,7 @@ struct Message {
 };
 
 struct Contact {
+    QString chatID;
     QString clientID;
     QString lastMessage;
     int order;

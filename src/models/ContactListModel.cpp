@@ -4,11 +4,11 @@ ContactListModel::ContactListModel(QObject *parent)
     : QAbstractListModel{parent}
 {}
 
-void ContactListModel::onNewMessage(const QString& clientID, const QString& message) {
+void ContactListModel::onNewMessage(const QString& chatID, const QString& clientID, const QString& message) {
     auto it = std::find_if(
         m_contacts.begin(),
         m_contacts.end(),
-        [&](const Contact& c) { return c.clientID == clientID; }
+        [&](const Contact& c) { return c.chatID == chatID; }
     );
 
     if (it != m_contacts.end()) {
@@ -32,7 +32,7 @@ void ContactListModel::onNewMessage(const QString& clientID, const QString& mess
             emit dataChanged(index(0), index(0));
         }
     } else {
-        Contact newContact{ clientID, message, 0 };
+        Contact newContact{ chatID, clientID, message, 0 };
         for (Contact& c : m_contacts)
             c.order += 1;
 
@@ -62,6 +62,7 @@ QVariant ContactListModel::data(const QModelIndex& index, int role) const {
     const Contact& contact = m_contacts.at(index.row());
 
     switch (role) {
+        case ChatIDRole: return contact.chatID;
         case ClientIDRole: return contact.clientID;
         case LastMessageRole: return contact.lastMessage;
         case OrderRole: return contact.order;
@@ -71,6 +72,7 @@ QVariant ContactListModel::data(const QModelIndex& index, int role) const {
 
 QHash<int, QByteArray> ContactListModel::roleNames() const {
     return {
+        { ChatIDRole, "chatID" },
         { ClientIDRole, "clientID" },
         { LastMessageRole, "lastMessage" },
         { OrderRole, "order" }

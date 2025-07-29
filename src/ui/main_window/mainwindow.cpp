@@ -223,6 +223,7 @@ void MainWindow::InitServer(int serverPort)
     if (socketServerThread->isRunning()){
         ui->start_server_button->setDisabled(true);
         ui->port_input->setReadOnly(true);
+        selfPort = serverPort;
     }
 }
 
@@ -260,11 +261,12 @@ void MainWindow::onContactClicked(const QModelIndex& index)
         return;
 
     QString clientID = index.data(ContactListModel::ClientIDRole).toString();
-    openChatPage(clientID);
+    QString chatID = index.data(ContactListModel::ChatIDRole).toString();
+    openChatPage(chatID, clientID);
 }
 
 // Chat pages changing handler
-void MainWindow::openChatPage(const QString& clientID)
+void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
 {
     // Clear: previous chat models from RAM
     if (currentMessageModel){
@@ -273,9 +275,9 @@ void MainWindow::openChatPage(const QString& clientID)
         currentMessageModel = nullptr;
     }
 
-    if (clientID != currentChatClientID){
+    if (chatID != currentChatID){
         QVariantMap iconOptions;
-        if (connectedClients.contains(stripPort(clientID))) {
+        if (connectedClients.contains(stripPort(chatID))) {
             iconOptions.insert("color-disabled", QColor("#03da5a"));
             isCurrentChatClientOnline = true;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
@@ -287,11 +289,11 @@ void MainWindow::openChatPage(const QString& clientID)
             ui->status_text->setText("Offline");
         }
 
-        currentChatClientID = clientID;
+        currentChatID = chatID;
         ui->clientID_text->setText(clientID);
 
         // Set up messages in RAM for all chats (to store them as in DB)
-        setUpMessagesForChatInRAM(clientID);
+        setUpMessagesForChatInRAM(chatID);
 
         // 0 for chat page, initital is 1 (just in case)
         if(ui->chat_stacked_widget->currentIndex()){
@@ -302,14 +304,14 @@ void MainWindow::openChatPage(const QString& clientID)
 
 void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 {
-    QString clearedClientID = stripPort(clientID);
-    if (!messages.contains(clearedClientID)) {
-        messages[clearedClientID] = QList<Message>();
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    if (!messages.contains(chatID)) {
+        messages[chatID] = QList<Message>();
     }
 
     currentMessageModel = new MessageListModel(this);
-    if (messages.contains(clearedClientID))
-        currentMessageModel->setMessages(messages[clearedClientID]);
+    if (messages.contains(chatID))
+        currentMessageModel->setMessages(messages[chatID]);
 
     ui->chat_list->setModel(currentMessageModel);
 }
@@ -322,7 +324,8 @@ void MainWindow::onPeerConnected(const QString& clientID)
     QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    openChatPage(clientID);
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    openChatPage(chatID, clientID);
 }
 
 void MainWindow::onPeerDisconnected(const QString& clientID)
@@ -334,14 +337,14 @@ void MainWindow::onPeerDisconnected(const QString& clientID)
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
-    QString clearedClientID = stripPort(clientID);
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
     // TODO: add optional ability to store into DB, for now only RAM
-    messages[clearedClientID].append({clearedClientID, QString::fromUtf8(message), false});
+    messages[chatID].append({chatID, QString::fromUtf8(message), false});
 
-    currentContactModel->onNewMessage(clearedClientID, message);
+    currentContactModel->onNewMessage(chatID, clientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({clearedClientID, QString::fromUtf8(message), false});
+        currentMessageModel->addMessage({chatID, QString::fromUtf8(message), false});
 
     ui->send_message_input->clear();
     ui->chat_list->scrollToBottom();
@@ -351,22 +354,23 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
 void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message arrived: " << message << clientID;
-    QString clearedClientID = stripPort(clientID);
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
      // TODO: add optional ability to store into DB, for now only RAM
-    messages[clearedClientID].append({clearedClientID, QString::fromUtf8(message), true});
+    messages[chatID].append({chatID, QString::fromUtf8(message), true});
 
-    currentContactModel->onNewMessage(clearedClientID, message);
+    currentContactModel->onNewMessage(chatID, clientID, message);
 
     if (currentMessageModel)
-        currentMessageModel->addMessage({clearedClientID, QString::fromUtf8(message), true});
+        currentMessageModel->addMessage({chatID, QString::fromUtf8(message), true});
 
     ui->chat_list->scrollToBottom();
 }
 
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
-    connectedClients.insert(stripPort(clientID));
-    if (stripPort(clientID) == stripPort(currentChatClientID)){
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    connectedClients.insert(chatID);
+    if (chatID == currentChatID){
         QVariantMap iconOptions;
         iconOptions.insert("color-disabled", QColor("#03da5a"));
         isCurrentChatClientOnline = true;
@@ -377,8 +381,9 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
-    connectedClients.remove(stripPort(clientID));
-    if (stripPort(clientID) == stripPort(currentChatClientID)){
+    QString chatID = makeChatID(selfHostAddress.toString() + QString::number(selfPort), clientID);
+    connectedClients.remove(clientID);
+    if (chatID == currentChatID){
         QVariantMap iconOptions;
         iconOptions.insert("color-disabled", QColor("#d32f2f"));
         isCurrentChatClientOnline = false;

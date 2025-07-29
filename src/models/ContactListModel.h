@@ -9,6 +9,7 @@ class ContactListModel : public QAbstractListModel
 {
 public:
     enum ContactRoles {
+        ChatIDRole,
         ClientIDRole = Qt::UserRole + 1,
         LastMessageRole,
         OrderRole
@@ -17,7 +18,7 @@ public:
     explicit ContactListModel(QObject *parent = nullptr);
 
     void setContacts(const QVector<Contact>& contacts);
-    void onNewMessage(const QString& clientID, const QString& message);
+    void onNewMessage(const QString& chatID, const QString& clientID, const QString& message);
 
     QHash<int, QByteArray> roleNames() const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

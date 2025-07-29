@@ -45,8 +45,9 @@ private:
     IPv6ChatClient *socketClient;
     QThread *clientSocketsThread;
     QHostAddress selfHostAddress;
+    int selfPort;
     Requests *request;
-    QString currentChatClientID;
+    QString currentChatID;
 
     QMap<QString, QList<Message>> messages;
 
@@ -58,7 +59,7 @@ private:
     // Client list connected to server (for UI purpose)
     QSet<QString> connectedClients;
 
-    void openChatPage(const QString& clientID);
+    void openChatPage(const QString& chatID, const QString& clientID);
     void setUpMessagesForChatInRAM(const QString& clientID);
     QString getLocalIPv6Address();
 
