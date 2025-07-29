@@ -320,10 +320,9 @@ void MainWindow::setUpMessagesForChatInRAM(const QString& clientID)
 void MainWindow::onPeerConnected(const QString& clientID)
 {
     QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
-    QString clearedClientID = stripPort(clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    openChatPage(clearedClientID);
+    openChatPage(clientID);
 }
 
 void MainWindow::onPeerDisconnected(const QString& clientID)
