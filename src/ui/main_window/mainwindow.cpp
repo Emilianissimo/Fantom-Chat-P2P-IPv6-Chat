@@ -290,6 +290,7 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
         }
 
         currentChatID = chatID;
+        currentContactModel->setActive(chatID);
         ui->clientID_text->setText(clientID);
 
         // Set up messages in RAM for all chats (to store them as in DB)
