@@ -268,13 +268,13 @@ void MainWindow::onContactClicked(const QModelIndex& index)
 void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
 {
     // Clear: previous chat models from RAM
-    if (currentMessageModel){
-        ui->chat_list->setModel(nullptr);
-        delete currentMessageModel;
-        currentMessageModel = nullptr;
-    }
-
     if (chatID != currentChatID){
+        if (currentMessageModel){
+            ui->chat_list->setModel(nullptr);
+            delete currentMessageModel;
+            currentMessageModel = nullptr;
+        }
+
         QVariantMap iconOptions;
         if (connectedClients.contains(stripPort(chatID))) {
             iconOptions.insert("color-disabled", QColor("#03da5a"));
