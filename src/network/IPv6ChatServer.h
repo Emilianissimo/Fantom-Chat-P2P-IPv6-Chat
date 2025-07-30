@@ -21,6 +21,9 @@ private:
     int port;
     QMap<QString, PeerConnection> clients;
     QMap<QTcpSocket*, QByteArray> socketBuffers;
+    QSet<QTcpSocket*> handshakedSockets;
+
+    void processMessage(QTcpSocket* socket, QByteArray& buffer);
 
 public:
     explicit IPv6ChatServer(QHostAddress addr, int port, QObject* parent = nullptr);

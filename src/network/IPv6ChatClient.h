@@ -18,10 +18,15 @@ public:
 private slots:
     void onConnected();
     void onDisconnected();
+    void onReadyRead();
+    void onSocketError(QAbstractSocket::SocketError);
 
 private:
     QMutex connectionsMutex;
     QMap<QString, PeerConnection> connections;
+    QHash<QTcpSocket*, bool> handshakeStatus;
+
+    QString findClientID(QTcpSocket* socket);
 
 signals:
     void peerConnected(const QString& clientID);

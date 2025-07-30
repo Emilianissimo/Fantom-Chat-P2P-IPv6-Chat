@@ -51,16 +51,57 @@ void IPv6ChatServer::onNewConnection() {
 void IPv6ChatServer::onReadyRead() {
     // Read message incoming from client
     // Any message from client will be get and separated by its id
-    qDebug() << "Server: ready Read runs";
+    qDebug() << "Server: ready read starts";
     QTcpSocket* senderClient = qobject_cast<QTcpSocket*>(sender());
     if (!senderClient) return;
 
-    // We have to ensure, that we get full message and determine client as one for this message
     QByteArray& buffer = socketBuffers[senderClient];
     buffer.append(senderClient->readAll());
+
+    bool isHandshaked = handshakedSockets.contains(senderClient);
+
+    if (!isHandshaked && !buffer.startsWith("HANDSHAKE ")){
+        qDebug() << "Server: Got message before handshake, disconnecting.";
+        senderClient->disconnectFromHost();
+        socketBuffers.remove(senderClient);
+        return;
+    }
+
+    // Handshaking first
+    if (!isHandshaked){
+        int endIndex = buffer.indexOf('\n');
+        if (endIndex == -1) return;
+
+        QByteArray line = buffer.left(endIndex).trimmed();
+        buffer.remove(0, endIndex + 1);
+
+        QString lineStr = QString::fromUtf8(line);
+
+        handshakedSockets.insert(senderClient);
+
+        QString selfAddrPort = addr.toString() + ":" + QString::number(port);
+        senderClient->write("HANDSHAKE_ACK " + selfAddrPort.toUtf8() + "\n");
+        return;
+    }
+
+    // If handshaked, move on
+    processMessage(senderClient, buffer);
+}
+
+void IPv6ChatServer::processMessage(QTcpSocket* socket, QByteArray& buffer)
+{
+    const int maxMessageSize = 64 * 1024;
+
+    // We have to ensure, that we get full message and determine client as one for this message
     while (buffer.size() >= 4) {
         quint32 msgLen = readUInt32(buffer.left(4));
         if (buffer.size() < 4 + msgLen) break;
+
+        if (msgLen > maxMessageSize) {
+            qDebug() << "Server: Message too large (" << msgLen << " bytes), dropping.";
+            socket->disconnectFromHost();
+            return;
+        }
 
         QByteArray fullMessage = buffer.mid(4, msgLen);
         buffer.remove(0, 4 + msgLen);
@@ -69,6 +110,14 @@ void IPv6ChatServer::onReadyRead() {
 
         QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
         QByteArray message = fullMessage.mid(sepIndex + 1);
+
+        if (!handshakedSockets.contains(socket)) {
+            qDebug() << "Server: Message from unverified clientID " << clientID << ", dropping.";
+            socket->disconnectFromHost();
+            socketBuffers.remove(socket);
+            return;
+        }
+
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
 
         emit messageArrived(clientID, message);
