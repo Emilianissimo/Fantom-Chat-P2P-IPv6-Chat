@@ -1,6 +1,6 @@
 QT += core widgets network linguist
 
-TARGET = ipv6chat
+TARGET = FantomChat
 TEMPLATE = app
 
 SOURCES += \
