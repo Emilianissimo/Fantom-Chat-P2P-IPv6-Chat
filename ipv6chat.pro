@@ -12,7 +12,7 @@ SOURCES += \
     src/utils/Requests.cpp \
     main.cpp \
     src/ui/main_window/mainwindow.cpp \
-    src/ui/chat/delegates/ChatMessageDelegate.cpp
+    src/ui/chat/delegates/ChatMessageDelegate.cpp \
     src/ui/contacts/delegates/ContactsDelegate.cpp
 
 HEADERS += \
@@ -57,7 +57,7 @@ win32 {
     LIBS += -L$$CURL_ROOT/lib -lcurl -lws2_32 -lwsock32 -lcrypt32
     # set needed DLLs
     BAT_PATH = $$PWD/win32/copy_dlls.bat
-    QMAKE_POST_LINK += call \"$$BAT_PATH\" \"$$OUT_PWD\"
+    QMAKE_POST_LINK += cmd /c \"$$BAT_PATH\" \"$$OUT_PWD\"
 }
 
 macx {
@@ -84,15 +84,15 @@ DISTFILES += \
     third_party_licenses/FontAwesome-LICENSE.md \
     third_party_licenses/Qt-LICENSE.md
 
-# Set on to run on local IPv6 network
-local_network = true
+# Set on to run on local IPv6 network (for Debugging)
+# local_network = false
 
-!isEmpty(local_network) {
-    message("🔧 Local IPv6 network mode ENABLED")
-    DEFINES += USE_LOCAL_IPV6
-} else {
-    message("🌐 Remote network mode")
-}
+# !isEmpty(local_network) {
+#     message("🔧 Local IPv6 network mode ENABLED")
+#     DEFINES += USE_LOCAL_IPV6
+# } else {
+#     message("🌐 Remote network mode")
+# }
 
 RESOURCES += \
     resources.qrc

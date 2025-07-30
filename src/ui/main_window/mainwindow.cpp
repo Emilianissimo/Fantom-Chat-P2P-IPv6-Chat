@@ -130,32 +130,32 @@ void MainWindow::showEvent(QShowEvent *event)
 
 // Past init complex handler
 void MainWindow::PastInit(){
-#if !USE_LOCAL_IPV6
-    QString externalIP = request->get("https://api64.ipify.org", true);
-    QHostAddress addr;
-    QString protocolName = "";
-    if (!addr.setAddress(externalIP)) {
-        QMessageBox::warning(this, "Error", "Invalid IP address received: " + externalIP);
-        return;
-    }
+    if (!QCoreApplication::instance()->property("local_network").toBool()){
+        QString externalIP = request->get("https://api64.ipify.org", true);
+        QHostAddress addr;
+        QString protocolName = "";
+        if (!addr.setAddress(externalIP)) {
+            QMessageBox::warning(this, "Error", "Invalid IP address received: " + externalIP);
+            return;
+        }
 
-    if (addr.protocol() != QAbstractSocket::IPv6Protocol){
-        QMessageBox::warning(this, "Error", "Your connection does not provide IPv6 address. Connection is unavailable.");
-        // return;
+        if (addr.protocol() != QAbstractSocket::IPv6Protocol){
+            QMessageBox::warning(this, "Error", "Your connection does not provide IPv6 address. Connection is unavailable.");
+            // return;
+        }
+        if (addr.protocol() == QAbstractSocket::IPv4Protocol){
+            protocolName = "/IPv4";
+        } else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
+            protocolName = "/IPv6";
+        }
+        ui->ip_text->setText(externalIP + protocolName);
+        this->selfHostAddress = addr;
+    } else {
+        QString address = getLocalIPv6Address();
+        qDebug() << "Local IPv6 IP: " << address;
+        ui->ip_text->setText(address + "/IPv6");
+        this->selfHostAddress = QHostAddress(address);
     }
-    else if (addr.protocol() == QAbstractSocket::IPv4Protocol){
-        protocolName = "/IPv4";
-    } else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
-        protocolName = "/IPv6";
-    }
-    ui->ip_text->setText(externalIP + protocolName);
-    this->selfHostAddress = addr;
-#else
-    QString address = getLocalIPv6Address();
-    qDebug() << "Local IPv6 IP: " << address;
-    ui->ip_text->setText(address + "/IPv6");
-    this->selfHostAddress = QHostAddress(address);
-#endif
 }
 
 QString MainWindow::getLocalIPv6Address()

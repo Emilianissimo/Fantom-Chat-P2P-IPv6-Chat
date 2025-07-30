@@ -1,3 +1,10 @@
 build/*
 ipv6chat.pro.user*
 *.autosave
+*.stash
+release/*
+debug/*
+Makefile
+Makefile.Debug
+Makefile.Release
+ui_mainwindow.h

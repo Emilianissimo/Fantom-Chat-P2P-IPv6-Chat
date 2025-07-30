@@ -6,6 +6,7 @@
 #include <QTranslator>
 #include <QFile>
 #include <curl/curl.h>
+#include <QCommandLineParser>
 
 fa::QtAwesome* awesome = nullptr;
 
@@ -14,6 +15,13 @@ int main(int argc, char *argv[])
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     QApplication a(argc, argv);
+    QCommandLineParser parser;
+    parser.setApplicationDescription("IPv6 Chat Client");
+    parser.addHelpOption();
+    parser.addOption({{"l", "local"}, "Use local IPv6 mode."});
+    parser.process(a);
+    a.setProperty("local_network", parser.isSet("local"));
+
     a.setStyle("Fusion");
 
     QFile f(":/src/styles/mainwindow.qss");
@@ -41,6 +49,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Contact>("Contact");
 
     MainWindow w;
+
     w.show();
 
     return a.exec();
