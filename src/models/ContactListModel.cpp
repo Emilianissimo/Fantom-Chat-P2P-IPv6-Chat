@@ -32,7 +32,7 @@ void ContactListModel::onNewMessage(const QString& chatID, const QString& client
             emit dataChanged(index(0), index(0));
         }
     } else {
-        Contact newContact{ chatID, clientID, message, 0 };
+        Contact newContact{ chatID, clientID, message, 0 , false};
         for (Contact& c : m_contacts)
             c.order += 1;
 

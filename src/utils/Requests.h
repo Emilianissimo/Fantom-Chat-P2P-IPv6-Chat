@@ -9,6 +9,7 @@ class Requests{
 public:
     Requests();
     ~Requests();
+    QString writeCertToTemp();
     QString get(char* url, bool ipv6mode = true);
 
 private:

@@ -34,26 +34,12 @@ win32 {
     OPENSSL_ROOT = C:/msys64/ucrt64
     ZLIB_ROOT = C:/msys64/ucrt64
     CURL_ROOT = C:/msys64/ucrt64
-}
 
-macx {
-    OPENSSL_ROOT = /opt/homebrew/opt/openssl@3
-    ZLIB_ROOT = /opt/homebrew/opt/zlib
-    CURL_ROOT =
-}
-
-# Connect OpenSSL
-INCLUDEPATH += $$OPENSSL_ROOT/include
-LIBS += -L$$OPENSSL_ROOT/lib -lssl -lcrypto
-
-# Connect Zlib
-INCLUDEPATH += $$ZLIB_ROOT/include
-LIBS += $$ZLIB_ROOT/lib/libz.a
-
-# Connect CURL
-INCLUDEPATH += $$CURL_ROOT/include
-
-win32 {
+    # Connect OpenSSL
+    INCLUDEPATH += $$OPENSSL_ROOT/include
+    LIBS += -L$$OPENSSL_ROOT/lib -lssl -lcrypto
+    # Connect CURL
+    INCLUDEPATH += $$CURL_ROOT/include
     LIBS += -L$$CURL_ROOT/lib -lcurl -lws2_32 -lwsock32 -lcrypt32
     # set needed DLLs
     BAT_PATH = $$PWD/win32/copy_dlls.bat
@@ -61,10 +47,15 @@ win32 {
 }
 
 macx {
-    LIBS += -L$$CURL_ROOT/lib -lcurl
-    QMAKE_POST_LINK +=
+    ZLIB_ROOT = /opt/homebrew/opt/zlib
+    CURL_ROOT =
+    CONFIG += app_bundle
+    LIBS += -lcurl
 }
 
+# Connect Zlib
+INCLUDEPATH += $$ZLIB_ROOT/include
+LIBS += $$ZLIB_ROOT/lib/libz.a
 
 
 # Set path for installation

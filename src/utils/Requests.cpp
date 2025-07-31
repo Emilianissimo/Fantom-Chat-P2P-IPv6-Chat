@@ -1,6 +1,8 @@
 #include "Requests.h"
 #include <QDebug>
 #include <QHostInfo>
+#include <QFile>
+#include <QStandardPaths>
 
 
 Requests::Requests(){
@@ -13,7 +15,10 @@ Requests::Requests(){
         if (sslBackend.find("OpenSSL") != std::string::npos ||
             sslBackend.find("wolfSSL") != std::string::npos ||
             sslBackend.find("LibreSSL") != std::string::npos) {
-            curl_easy_setopt(curl, CURLOPT_CAINFO, "cacert.pem");
+
+            QString certPath = writeCertToTemp();
+            curl_easy_setopt(curl, CURLOPT_CAINFO, certPath.toUtf8().constData());
+
         } else if (sslBackend.find("Schannel") != std::string::npos) {
             // Windows — Schannel no need CA
         } else if (sslBackend.find("SecureTransport") != std::string::npos) {
@@ -27,6 +32,20 @@ Requests::~Requests(){
     if (curl) curl_easy_cleanup(curl);
 }
 
+QString Requests::writeCertToTemp() {
+    QFile cert(":/src/certs/cacert.pem");
+    if (!cert.open(QIODevice::ReadOnly))
+        return {};
+
+    QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/cacert.pem";
+    QFile out(tempPath);
+    if (out.open(QIODevice::WriteOnly)) {
+        out.write(cert.readAll());
+        out.close();
+        return tempPath;
+    }
+    return {};
+}
 
 QString Requests::get(char* url, bool ipv6mode){
     CURLcode response;
