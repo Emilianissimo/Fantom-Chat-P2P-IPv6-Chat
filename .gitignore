@@ -8,3 +8,4 @@ Makefile
 Makefile.Debug
 Makefile.Release
 ui_mainwindow.h
+*.DS_Store*
