@@ -1,0 +1,16 @@
+#ifndef ICRYPTOBACKEND_H
+#define ICRYPTOBACKEND_H
+
+#include "ICryptoKeyPair.h"
+#include "ICryptoSession.h"
+
+class ICryptoBackend {
+public:
+    virtual std::unique_ptr<ICryptoKeyPair> generateKeyPair() = 0;
+    virtual std::unique_ptr<ICryptoSession> createSession(
+        const ICryptoKeyPair& selfKey, const QByteArray& peerPublicKey
+    ) = 0;
+    virtual ~ICryptoBackend() {}
+};
+
+#endif // ICRYPTOBACKEND_H

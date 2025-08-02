@@ -4,6 +4,10 @@ TARGET = FantomChat
 TEMPLATE = app
 
 SOURCES += \
+    src/encrypting/sodium/backends/SodiumCryptoBackend.cpp \
+    src/encrypting/sodium/errors/SodiumCryptoError.cpp \
+    src/encrypting/sodium/key_pairs/SodiumKeyPair.cpp \
+    src/encrypting/sodium/sessions/SodiumSession.cpp \
     src/models/ContactListModel.cpp \
     src/network/IPv6ChatClient.cpp \
     src/network/IPv6ChatServer.cpp \
@@ -16,6 +20,14 @@ SOURCES += \
     src/ui/contacts/delegates/ContactsDelegate.cpp
 
 HEADERS += \
+    src/encrypting/interfaces/ICryptoError.h \
+    src/encrypting/sodium/backends/SodiumCryptoBackend.h \
+    src/encrypting/interfaces/ICryptoBackend.h \
+    src/encrypting/interfaces/ICryptoKeyPair.h \
+    src/encrypting/interfaces/ICryptoSession.h \
+    src/encrypting/sodium/errors/SodiumCryptoError.h \
+    src/encrypting/sodium/key_pairs/SodiumKeyPair.h \
+    src/encrypting/sodium/sessions/SodiumSession.h \
     src/models/ContactListModel.h \
     src/network/IPv6ChatClient.h \
     src/network/IPv6ChatServer.h \
@@ -34,6 +46,7 @@ win32 {
     OPENSSL_ROOT = C:/msys64/ucrt64
     ZLIB_ROOT = C:/msys64/ucrt64
     CURL_ROOT = C:/msys64/ucrt64
+    SODIUM_ROOT = C:/msys64/ucrt64
 
     # Connect OpenSSL
     INCLUDEPATH += $$OPENSSL_ROOT/include
@@ -47,8 +60,8 @@ win32 {
 }
 
 macx {
+    SODIUM_ROOT =
     ZLIB_ROOT = /opt/homebrew/opt/zlib
-    CURL_ROOT =
     CONFIG += app_bundle
     LIBS += -lcurl
 }
@@ -57,6 +70,9 @@ macx {
 INCLUDEPATH += $$ZLIB_ROOT/include
 LIBS += $$ZLIB_ROOT/lib/libz.a
 
+# Connect libsodium
+INCLUDEPATH += $$SODIUM_ROOT/include
+LIBS += -L$$SODIUM_ROOT/lib -lsodium
 
 # Set path for installation
 target.path = $$[QT_INSTALL_BINS]

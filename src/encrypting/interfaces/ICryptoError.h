@@ -1,0 +1,4 @@
+#ifndef ICRYPTOERROR_H
+#define ICRYPTOERROR_H
+
+#endif // ICRYPTOERROR_H
