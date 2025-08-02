@@ -5,7 +5,6 @@ TEMPLATE = app
 
 SOURCES += \
     src/encrypting/sodium/backends/SodiumCryptoBackend.cpp \
-    src/encrypting/sodium/errors/SodiumCryptoError.cpp \
     src/encrypting/sodium/key_pairs/SodiumKeyPair.cpp \
     src/encrypting/sodium/sessions/SodiumSession.cpp \
     src/models/ContactListModel.cpp \
