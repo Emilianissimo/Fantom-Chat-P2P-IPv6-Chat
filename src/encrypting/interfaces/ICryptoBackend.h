@@ -10,6 +10,7 @@ public:
     virtual std::unique_ptr<ICryptoSession> createSession(
         const ICryptoKeyPair& selfKey, const QByteArray& peerPublicKey
     ) = 0;
+    virtual std::shared_ptr<ICryptoBackend> clone() const = 0;
     virtual ~ICryptoBackend() {}
 };
 

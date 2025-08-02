@@ -3,6 +3,7 @@
 #include "../../src/font-awesome/AwesomeGlobal.h"
 #include "../../utils/Requests.h"
 #include "../../utils/ProtocolUtils.h"
+#include "../../encrypting/sodium/backends/SodiumCryptoBackend.h"
 
 #include <curl/curl.h>
 
@@ -16,7 +17,6 @@
 
 #include "../chat/delegates/ChatMessageDelegate.cpp"
 #include "../contacts/delegates/ContactsDelegate.cpp"
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     QVector<Contact> contacts;
     currentContactModel->setContacts(contacts);
+
+    std::shared_ptr<ICryptoBackend> baseCrypto = std::make_shared<SodiumCryptoBackend>();
 
     this->showMaximized();
     this->UploadConfig();
@@ -215,6 +217,8 @@ void MainWindow::InitServer(int serverPort)
     connect(socketServer, &IPv6ChatServer::clientDisconnected, this, &MainWindow::onServerClientDisconnected);
     connect(socketServer, &IPv6ChatServer::clientConnected, this, &MainWindow::onServerClientConnected);
 
+    socketServer->cryptoBackend = baseCrypto->clone();
+
     socketServerThread->start();
 
     // Run server into the thread by invoking
@@ -234,6 +238,7 @@ void MainWindow::InitClient()
 
     QMetaObject::invokeMethod(clientSocketsThread, [this](){
         socketClient = new IPv6ChatClient();
+        socketClient->cryptoBackend = this->baseCrypto->clone();
         connect(socketClient, &IPv6ChatClient::peerConnected, this, &MainWindow::onPeerConnected);
         connect(socketClient, &IPv6ChatClient::peerDisconnected, this, &MainWindow::onPeerDisconnected);
         connect(socketClient, &IPv6ChatClient::messageSent, this, &MainWindow::onMessageSent);

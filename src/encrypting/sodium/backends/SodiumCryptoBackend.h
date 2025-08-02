@@ -14,6 +14,7 @@ public:
     std::unique_ptr<ICryptoSession> createSession(
         const ICryptoKeyPair& selfKey, const QByteArray& peerPublicKey
     ) override;
+    std::shared_ptr<ICryptoBackend> clone() const override;
 };
 
 #endif // SODIUMCRYPTOBACKEND_H

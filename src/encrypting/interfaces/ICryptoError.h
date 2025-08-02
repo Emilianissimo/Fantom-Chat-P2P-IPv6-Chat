@@ -3,8 +3,10 @@
 
 #include <QString>
 
-class ICryptoError{
+class ICryptoError : public std::runtime_error {
 public:
+    explicit ICryptoError(const std::string& message)
+        : std::runtime_error(message) {}
     virtual ~ICryptoError() = default;
     virtual QString message() const = 0;
 };

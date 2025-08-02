@@ -1,5 +1,6 @@
 #include "IPv6ChatServer.h"
 #include "../utils/ProtocolUtils.h"
+#include "../encrypting/interfaces/ICryptoError.h"
 #include <QDebug>
 #include <QTcpServer>
 
@@ -69,18 +70,44 @@ void IPv6ChatServer::onReadyRead() {
 
     // Handshaking first
     if (!isHandshaked){
+        const int maxHandshakeLineSize = 2048;
+        if (buffer.size() > maxHandshakeLineSize) {
+            qWarning() << "Server: Handshake line too long, disconnecting.";
+            senderClient->disconnectFromHost();
+            socketBuffers.remove(senderClient);
+            return;
+        }
+
         int endIndex = buffer.indexOf('\n');
-        if (endIndex == -1) return;
+        if (endIndex == -1) return; // Waiting for full line
 
         QByteArray line = buffer.left(endIndex).trimmed();
         buffer.remove(0, endIndex + 1);
 
         QString lineStr = QString::fromUtf8(line);
 
-        handshakedSockets.insert(senderClient);
+        QString peerPublicKeyBase64 = lineStr.section(' ', 1);
+        QByteArray peerPublicKey = QByteArray::fromBase64(peerPublicKeyBase64.toUtf8());
 
-        QString selfAddrPort = addr.toString() + ":" + QString::number(port);
-        senderClient->write("HANDSHAKE_ACK " + selfAddrPort.toUtf8() + "\n");
+        try{
+            // Generate keys and session from server side
+            auto keyPair = cryptoBackend->generateKeyPair();
+            serverKeys[senderClient] = std::move(keyPair);
+
+            auto session = cryptoBackend->createSession(*serverKeys[senderClient], peerPublicKey);
+            sessions[senderClient] = std::move(session);
+
+            QString serverPublicKeyBase64 = serverKeys[senderClient]->publicKey().toBase64();
+            QString ackMessage = QString("HANDSHAKE_ACK %1\n").arg(serverPublicKeyBase64);
+            senderClient->write(ackMessage.toUtf8());
+
+            handshakedSockets.insert(senderClient);
+        } catch (const ICryptoError& ex) {
+            qWarning() << "Server: Failed handshake:" << ex.message();
+            senderClient->disconnectFromHost();
+            socketBuffers.remove(senderClient);
+        }
+
         return;
     }
 

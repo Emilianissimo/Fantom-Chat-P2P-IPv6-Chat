@@ -2,6 +2,9 @@
 #define IPV6CHATSERVER_H
 
 #include "../utils/Structures.h"
+#include "../encrypting/interfaces/ICryptoKeyPair.h"
+#include "../encrypting/interfaces/ICryptoSession.h"
+#include "../encrypting/interfaces/ICryptoBackend.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>
@@ -23,9 +26,14 @@ private:
     QMap<QTcpSocket*, QByteArray> socketBuffers;
     QSet<QTcpSocket*> handshakedSockets;
 
+    QHash<QTcpSocket*, std::unique_ptr<ICryptoKeyPair>> serverKeys;
+    QHash<QTcpSocket*, std::unique_ptr<ICryptoSession>> sessions;
+
     void processMessage(QTcpSocket* socket, QByteArray& buffer);
 
 public:
+    std::shared_ptr<ICryptoBackend> cryptoBackend;
+
     explicit IPv6ChatServer(QHostAddress addr, int port, QObject* parent = nullptr);
     ~IPv6ChatServer();
 

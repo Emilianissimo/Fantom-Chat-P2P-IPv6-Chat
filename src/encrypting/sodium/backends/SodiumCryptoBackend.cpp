@@ -53,3 +53,7 @@ std::unique_ptr<ICryptoSession> SodiumCryptoBackend::createSession(
         QByteArray(reinterpret_cast<const char*>(rx), crypto_kx_SESSIONKEYBYTES)
     );
 }
+
+std::shared_ptr<ICryptoBackend> SodiumCryptoBackend::clone() const {
+    return std::make_shared<SodiumCryptoBackend>(*this);
+}

@@ -1,4 +1,5 @@
 #include "IPv6ChatClient.h"
+#include "../encrypting/interfaces/ICryptoError.h"
 #include <QDebug>
 #ifdef Q_OS_WIN
 #include <winsock2.h>
@@ -69,7 +70,19 @@ void IPv6ChatClient::onConnected() {
 
     // Handshake
     qDebug() << "Client: Sending handshake";
-    socket->write("HANDSHAKE\n");
+
+    // Generate pair for this connection
+    auto keyPair = cryptoBackend->generateKeyPair();
+    clientKeys[socket] = std::move(keyPair);
+
+    // Encode public key to Base64
+    QString publicKeyBase64 = clientKeys[socket]->publicKey().toBase64();
+
+    // Send handshake message with public key
+    QString handashakeMessage = QString("HANDSHAKE %1\n").arg(publicKeyBase64);
+
+    socket->write(handashakeMessage.toUtf8());
+    qDebug() << "Client: Sent handshake with public key";
 }
 
 void IPv6ChatClient::onReadyRead()
@@ -80,16 +93,30 @@ void IPv6ChatClient::onReadyRead()
     QByteArray data = socket->readAll();
     QString line = QString::fromUtf8(data).trimmed();
 
-    if (line.startsWith("HANDSHAKE_ACK")) {
-        qDebug() << "Client: Handshake complete with" << line.section(' ', 1);
-        handshakeStatus[socket] = true;
+    try{
+        if (line.startsWith("HANDSHAKE_ACK ")) {
+            // Retrieving key and decoding it
+            QString peerPublicKeyBase64 = line.section(' ', 1);
+            QByteArray peerPublicKey = QByteArray::fromBase64(peerPublicKeyBase64.toUtf8());
 
-        // Emiting to return clientID outside the thread
-        emit peerConnected(findClientID(socket));
-    } else {
-        qDebug() << "Client: Unexpected response during handshake: " << line;
+            auto& keyPair = clientKeys[socket];
+            auto session = cryptoBackend->createSession(*keyPair, peerPublicKey);
+            sessions[socket] = std::move(session);
+
+            qDebug() << "Client: Handshake complete. Session keys established.";
+            handshakeStatus[socket] = true;
+
+            // Emiting to return clientID outside the thread
+            emit peerConnected(findClientID(socket));
+        } else {
+            qDebug() << "Client: Unexpected response during handshake.";
+            socket->disconnectFromHost();
+        }
+    } catch (const ICryptoError& ex) {
+        qWarning() << "Client: Failed to perform handshake: " << ex.message();
         socket->disconnectFromHost();
     }
+
     // Only handshake may be read here.
     disconnect(socket, &QTcpSocket::readyRead, this, &IPv6ChatClient::onReadyRead);
 }
@@ -105,6 +132,8 @@ void IPv6ChatClient::onDisconnected() {
     }
 
     handshakeStatus.remove(socket);
+    clientKeys.remove(socket);
+    sessions.remove(socket);
     socket->deleteLater();
     emit peerDisconnected(deadPeer);
 }

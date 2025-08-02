@@ -58,6 +58,8 @@ private:
     // Client list connected to server (for UI purpose)
     QSet<QString> connectedClients;
 
+    std::shared_ptr<ICryptoBackend> baseCrypto;
+
     void openChatPage(const QString& chatID, const QString& clientID);
     void setUpMessagesForChatInRAM(const QString& chatID);
     QString getLocalIPv6Address();
