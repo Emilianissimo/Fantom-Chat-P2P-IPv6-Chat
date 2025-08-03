@@ -147,7 +147,28 @@ void IPv6ChatClient::sendMessage(const QString& selfHost, const QString& clientI
         return;
     }
 
-    QByteArray composedMessage = selfHost.toUtf8() + '\0' + message;
+    QTcpSocket* socket = connections[clientID].socket;
+    if (!handshakeStatus.value(socket, false)) {
+        qDebug() << "Client: Can't send, handshake not complete for" << clientID;
+        return;
+    }
+
+    auto session = sessions.value(socket, nullptr);
+    if (!session){
+        qDebug() << "Client: No crypto session found for" << clientID;
+    }
+
+    QByteArray encryptedMessage;
+    try{
+        encryptedMessage = session->encrypt(message);
+    } catch (const ICryptoError& ex){
+        qWarning() << "Client: cannot encrypt message: " << ex.message();
+        return;
+    }
+
+    qDebug() << "Client: Encrypted message: " << encryptedMessage;
+
+    QByteArray composedMessage = selfHost.toUtf8() + '\0' + encryptedMessage;
 
     // Protocol prefix for server to determine length
     QByteArray lengthPrefix;
@@ -156,13 +177,6 @@ void IPv6ChatClient::sendMessage(const QString& selfHost, const QString& clientI
     stream << static_cast<quint32>(composedMessage.size());
 
     composedMessage = lengthPrefix + composedMessage;
-
-    QTcpSocket* socket = connections[clientID].socket;
-
-    if (!handshakeStatus.value(socket, false)) {
-        qDebug() << "Client: Can't send, handshake not complete for" << clientID;
-        return;
-    }
 
     socket->write(composedMessage);
     if (socket->waitForBytesWritten(3000)){

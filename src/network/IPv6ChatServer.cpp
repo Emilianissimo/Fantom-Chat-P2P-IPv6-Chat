@@ -136,13 +136,28 @@ void IPv6ChatServer::processMessage(QTcpSocket* socket, QByteArray& buffer)
         if (sepIndex == -1) continue;
 
         QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
-        QByteArray message = fullMessage.mid(sepIndex + 1);
+        QByteArray encryptedMessage = fullMessage.mid(sepIndex + 1);
 
         if (!handshakedSockets.contains(socket)) {
             qDebug() << "Server: Message from unverified clientID " << clientID << ", dropping.";
             socket->disconnectFromHost();
             socketBuffers.remove(socket);
             return;
+        }
+
+        auto session = sessions.value(socket, nullptr);
+        if (!session) {
+            qDebug() << "Server: No crypto session found for socket";
+            continue;
+        }
+
+        qDebug() << "Server: Original message: " << encryptedMessage;
+        QByteArray message;
+        try{
+            message = session->decrypt(encryptedMessage);
+        } catch (const ICryptoError& ex){
+            qWarning() << "Server: cannot decrypt message: " << ex.message();
+            continue;
         }
 
         qDebug() << "Server: Received message from: " << clientID << ":" << message;
