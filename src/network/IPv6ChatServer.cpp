@@ -92,10 +92,10 @@ void IPv6ChatServer::onReadyRead() {
         try{
             // Generate keys and session from server side
             auto keyPair = cryptoBackend->generateKeyPair();
-            serverKeys[senderClient] = std::move(keyPair);
+            serverKeys[senderClient] = keyPair;
 
             auto session = cryptoBackend->createSession(*serverKeys[senderClient], peerPublicKey);
-            sessions[senderClient] = std::move(session);
+            sessions[senderClient] = session;
 
             QString serverPublicKeyBase64 = serverKeys[senderClient]->publicKey().toBase64();
             QString ackMessage = QString("HANDSHAKE_ACK %1\n").arg(serverPublicKeyBase64);
@@ -182,6 +182,13 @@ void IPv6ChatServer::onClientDisconnected() {
         disconnectedID = client.value().clientID;
         clients.erase(client);
     }
+
+    delete sessions[socket];
+    sessions.remove(socket);
+    delete serverKeys[socket];
+    serverKeys.remove(socket);
+    handshakedSockets.remove(socket);
+    socketBuffers.remove(socket);
 
     emit clientDisconnected(disconnectedID);
 

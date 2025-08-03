@@ -6,8 +6,8 @@
 
 class ICryptoBackend {
 public:
-    virtual std::unique_ptr<ICryptoKeyPair> generateKeyPair() = 0;
-    virtual std::unique_ptr<ICryptoSession> createSession(
+    virtual ICryptoKeyPair* generateKeyPair() = 0;
+    virtual ICryptoSession* createSession(
         const ICryptoKeyPair& selfKey, const QByteArray& peerPublicKey
     ) = 0;
     virtual std::shared_ptr<ICryptoBackend> clone() const = 0;

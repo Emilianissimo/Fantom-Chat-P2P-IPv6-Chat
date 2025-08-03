@@ -3,7 +3,7 @@
 #include "../key_pairs/SodiumKeyPair.h"
 #include "../sessions/SodiumSession.h"
 
-std::unique_ptr<ICryptoKeyPair> SodiumCryptoBackend::generateKeyPair()
+ICryptoKeyPair* SodiumCryptoBackend::generateKeyPair()
 {
     QByteArray public_key(crypto_kx_PUBLICKEYBYTES, Qt::Uninitialized);
     QByteArray private_key(crypto_kx_SECRETKEYBYTES, Qt::Uninitialized);
@@ -12,10 +12,10 @@ std::unique_ptr<ICryptoKeyPair> SodiumCryptoBackend::generateKeyPair()
         reinterpret_cast<unsigned char*>(public_key.data()),
         reinterpret_cast<unsigned char*>(private_key.data())
     );
-    return std::make_unique<SodiumKeyPair>(public_key, private_key);
+    return new SodiumKeyPair(public_key, private_key);
 }
 
-std::unique_ptr<ICryptoSession> SodiumCryptoBackend::createSession(
+ICryptoSession* SodiumCryptoBackend::createSession(
     const ICryptoKeyPair& selfKey,
     const QByteArray& peerPublicKey
 )
@@ -48,7 +48,7 @@ std::unique_ptr<ICryptoSession> SodiumCryptoBackend::createSession(
         throw SodiumCryptoError("Failed to derive session keys with crypto_kx_*_session_keys.");
     }
 
-    return std::make_unique<SodiumSession>(
+    return new SodiumSession(
         QByteArray(reinterpret_cast<const char*>(tx), crypto_kx_SESSIONKEYBYTES),
         QByteArray(reinterpret_cast<const char*>(rx), crypto_kx_SESSIONKEYBYTES)
     );

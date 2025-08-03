@@ -26,8 +26,8 @@ private:
     QMap<QTcpSocket*, QByteArray> socketBuffers;
     QSet<QTcpSocket*> handshakedSockets;
 
-    QHash<QTcpSocket*, std::unique_ptr<ICryptoKeyPair>> serverKeys;
-    QHash<QTcpSocket*, std::unique_ptr<ICryptoSession>> sessions;
+    QMap<QTcpSocket*, ICryptoKeyPair*> serverKeys;
+    QMap<QTcpSocket*, ICryptoSession*> sessions;
 
     void processMessage(QTcpSocket* socket, QByteArray& buffer);
 

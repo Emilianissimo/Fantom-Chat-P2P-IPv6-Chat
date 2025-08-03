@@ -31,8 +31,8 @@ private:
     QMap<QString, PeerConnection> connections;
     QHash<QTcpSocket*, bool> handshakeStatus;
 
-    QHash<QTcpSocket*, std::unique_ptr<ICryptoKeyPair>> clientKeys;
-    QHash<QTcpSocket*, std::unique_ptr<ICryptoSession>> sessions;
+    QHash<QTcpSocket*, ICryptoKeyPair*> clientKeys;
+    QHash<QTcpSocket*, ICryptoSession*> sessions;
 
 
     QString findClientID(QTcpSocket* socket);

@@ -73,7 +73,7 @@ void IPv6ChatClient::onConnected() {
 
     // Generate pair for this connection
     auto keyPair = cryptoBackend->generateKeyPair();
-    clientKeys[socket] = std::move(keyPair);
+    clientKeys.insert(socket, keyPair);
 
     // Encode public key to Base64
     QString publicKeyBase64 = clientKeys[socket]->publicKey().toBase64();
@@ -99,9 +99,9 @@ void IPv6ChatClient::onReadyRead()
             QString peerPublicKeyBase64 = line.section(' ', 1);
             QByteArray peerPublicKey = QByteArray::fromBase64(peerPublicKeyBase64.toUtf8());
 
-            auto& keyPair = clientKeys[socket];
+            auto keyPair = clientKeys[socket];
             auto session = cryptoBackend->createSession(*keyPair, peerPublicKey);
-            sessions[socket] = std::move(session);
+            sessions.insert(socket, session);
 
             qDebug() << "Client: Handshake complete. Session keys established.";
             handshakeStatus[socket] = true;
@@ -132,7 +132,9 @@ void IPv6ChatClient::onDisconnected() {
     }
 
     handshakeStatus.remove(socket);
+    delete clientKeys[socket];
     clientKeys.remove(socket);
+    delete sessions[socket];
     sessions.remove(socket);
     socket->deleteLater();
     emit peerDisconnected(deadPeer);
