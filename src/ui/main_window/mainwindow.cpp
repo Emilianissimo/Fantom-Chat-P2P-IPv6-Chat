@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     QVector<Contact> contacts;
     currentContactModel->setContacts(contacts);
 
-    std::shared_ptr<ICryptoBackend> baseCrypto = std::make_shared<SodiumCryptoBackend>();
+    baseCrypto = std::make_shared<SodiumCryptoBackend>();
 
     this->showMaximized();
     this->UploadConfig();
