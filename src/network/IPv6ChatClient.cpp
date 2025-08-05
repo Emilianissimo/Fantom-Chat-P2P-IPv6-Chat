@@ -24,11 +24,7 @@ void IPv6ChatClient::connectToPeer(const QString& address, int port) {
     connect(socket, &QTcpSocket::readyRead, this, &IPv6ChatClient::onReadyRead);
     connect(socket, &QTcpSocket::errorOccurred, this, &IPv6ChatClient::onSocketError);
 
-    {
-        QMutexLocker locker(&connectionsMutex);
-        connections.insert(clientID, {clientID, socket});
-    }
-
+    socket->setProperty("clientID", clientID);
     socket->connectToHost(QHostAddress(address), port);
 }
 
@@ -46,15 +42,13 @@ void IPv6ChatClient::onSocketError(QAbstractSocket::SocketError)
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
     if (!socket) return;
 
-    QString clientID = findClientID(socket);
+    QString clientID = socket->property("clientID").toString();
     qDebug() << "Client: couldn't connect to the server" << clientID;
 
-    QString deadPeer = findClientID(socket);
-
-    if (!deadPeer.isEmpty()) {
+    if (!clientID.isEmpty()) {
         QMutexLocker locker(&connectionsMutex);
-        qDebug() << "Client: Disconnected from peer" << deadPeer;
-        connections.remove(deadPeer);
+        qDebug() << "Client: Disconnected from peer" << clientID;
+        connections.remove(clientID);
     }
 
     handshakeStatus.remove(socket);
@@ -67,6 +61,15 @@ void IPv6ChatClient::onConnected() {
 
     QTcpSocket* socket = qobject_cast<QTcpSocket*>(sender());
     if (!socket) return;
+
+    QString clientID = QString("%1:%2")
+                           .arg(socket->peerAddress().toString())
+                           .arg(socket->peerPort());
+
+    {
+        QMutexLocker locker(&connectionsMutex);
+        connections.insert(clientID, {clientID, socket});
+    }
 
     // Handshake
     qDebug() << "Client: Sending handshake";

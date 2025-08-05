@@ -178,6 +178,13 @@ QString MainWindow::getLocalIPv6Address()
         iface.type() != QNetworkInterface::Wifi
         )
         continue;
+    QString name = iface.humanReadableName();
+
+    if (name.contains("vEthernet", Qt::CaseInsensitive) ||
+        name.contains("VMware", Qt::CaseInsensitive) ||
+        name.contains("Virtual", Qt::CaseInsensitive) ||
+        name.contains("TAP", Qt::CaseInsensitive))
+        continue;
 #elif defined(Q_OS_MAC)
     // en0 is base active interface, en1, en2... are additional for ethernet cabel/thunderbolt connection
     if (!iface.name().startsWith("en"))
