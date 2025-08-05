@@ -59,7 +59,7 @@ win32 {
 }
 
 macx {
-    SODIUM_ROOT =
+    SODIUM_ROOT = /opt/homebrew/opt/libsodium
     ZLIB_ROOT = /opt/homebrew/opt/zlib
     CONFIG += app_bundle
     LIBS += -lcurl
