@@ -128,6 +128,11 @@ QWidget::item:selected {
     color: #ffffff;
 }
 
+QTextEdit::welcome_text {
+    background: transparent;
+    color: #f0f0f0;
+}
+
 QMessageBox {
     background-color: #2e2e2e;
     color: #f0f0f0;

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>src/styles/mainwindow.qss</file>
         <file>src/certs/cacert.pem</file>
+        <file>src/images/logo.png</file>
     </qresource>
 </RCC>

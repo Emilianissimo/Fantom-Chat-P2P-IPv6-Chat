@@ -86,6 +86,7 @@ DISTFILES += \
     README.md \
     TESTING_NOTES.md \
     copy_dlls.bat \
+    src/images/app_icon.rc \
     src/styles/mainwindow.qss \
     third_party_licenses/FontAwesome-LICENSE.md \
     third_party_licenses/Qt-LICENSE.md
@@ -102,3 +103,6 @@ DISTFILES += \
 
 RESOURCES += \
     resources.qrc
+
+RC_FILE = src/images/app_icon.rc
+

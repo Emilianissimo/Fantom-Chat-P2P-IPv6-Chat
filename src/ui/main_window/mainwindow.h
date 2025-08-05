@@ -29,8 +29,8 @@ public:
 
     void PastInit();
     void UploadConfig();
-    void HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid);
-    void ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid);
+    void HideSidebarElements(QGridLayout *ipGrid, QGridLayout *startServerGrid);
+    void ShowSidebarElements(QGridLayout *ipGrid, QGridLayout *startServerGrid);
     void InitServer(int serverPort = DEFAULT_SERVER_PORT);
     void InitClient();
 
@@ -63,6 +63,7 @@ private:
     void openChatPage(const QString& chatID, const QString& clientID);
     void setUpMessagesForChatInRAM(const QString& chatID);
     QString getLocalIPv6Address();
+    void showToolTipOnPosition(QWidget* widget, QString text);
 
 private slots:
     void on_splitter_splitterMoved(int pos, int index);
@@ -73,6 +74,7 @@ private slots:
     void on_client_address_input_returnPressed();
     void on_client_port_input_returnPressed();
     void on_send_message_button_clicked();
+    void on_copy_server_button_clicked();
     void onContactClicked(const QModelIndex& index);
 
     // Client
@@ -84,6 +86,5 @@ private slots:
     void onServerClientConnected(const QString& clientID);
     void onServerClientDisconnected(const QString& clientID);
     void onMessageArrived(const QString& clientID, const QByteArray& message);
-    void on_burger_button_clicked();
 };
 #endif // MAINWINDOW_H

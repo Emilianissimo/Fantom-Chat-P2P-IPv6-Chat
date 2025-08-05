@@ -14,6 +14,9 @@
 #include <QMetaObject>
 #include <QMessageBox>
 #include <QFile>
+#include <QToolTip>
+#include <QTimer>
+#include <QClipboard>
 
 #include "../chat/delegates/ChatMessageDelegate.cpp"
 #include "../contacts/delegates/ContactsDelegate.cpp"
@@ -36,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     QVariantMap iconOptions;
     iconOptions.insert("color", QColor("#e0e0e0"));
     iconOptions.insert("color-active", QColor("#e0e0e0"));
-    ui->burger_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_bars, iconOptions));
 
     ui->port_input->setText(QString::number(DEFAULT_SERVER_PORT));
     ui->write_to_button->setEnabled(false);
@@ -44,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->chat_stacked_widget->setCurrentIndex(1);
 
     ui->send_message_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_paper_plane, iconOptions));
+    ui->copy_server_button->setIcon(awesome->icon(fa::fa_solid, fa::fa_copy, iconOptions));
+    ui->copy_server_button->setToolTip("Copy to clipboard");
 
     ui->chat_list->setItemDelegate(new ChatMessageDelegate(ui->chat_list));
     ui->chat_list->setWordWrap(true);
@@ -70,6 +74,9 @@ MainWindow::MainWindow(QWidget *parent)
     currentContactModel->setContacts(contacts);
 
     baseCrypto = std::make_shared<SodiumCryptoBackend>();
+
+    QIcon windowIcon(":/src/images/logo.png");
+    this->setWindowIcon(windowIcon);
 
     this->showMaximized();
     this->UploadConfig();
@@ -261,10 +268,9 @@ void MainWindow::UploadConfig()
     }
     ui->splitter->setSizes(sizes);
     if (sizes[0] < 150){
-        QGridLayout *profileGrid = qobject_cast<QGridLayout*>(ui->profile_panel->layout());
         QGridLayout *ipGrid = qobject_cast<QGridLayout*>(ui->ip_panel->layout());
         QGridLayout *startServerGrid = qobject_cast<QGridLayout*>(ui->start_server_panel->layout());
-        this->HideSidebarElements(profileGrid, ipGrid, startServerGrid);
+        this->HideSidebarElements(ipGrid, startServerGrid);
     }
 }
 
@@ -509,27 +515,23 @@ void MainWindow::on_send_message_button_clicked()
 void MainWindow::on_splitter_splitterMoved(int pos, int index)
 {
     int sidebarWidth = ui->sidebar->width();
-    QGridLayout *profileGrid = qobject_cast<QGridLayout*>(ui->profile_panel->layout());
     QGridLayout *ipGrid = qobject_cast<QGridLayout*>(ui->ip_panel->layout());
     QGridLayout *startServerGrid = qobject_cast<QGridLayout*>(ui->start_server_panel->layout());
     if (sidebarWidth < 150){
-        this->HideSidebarElements(profileGrid, ipGrid, startServerGrid);
+        this->HideSidebarElements(ipGrid, startServerGrid);
     }else{
-        this->ShowSidebarElements(profileGrid, ipGrid, startServerGrid);
+        this->ShowSidebarElements(ipGrid, startServerGrid);
     }
 }
 
-void MainWindow::HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid)
+void MainWindow::HideSidebarElements(QGridLayout *ipGrid, QGridLayout *startServerGrid)
 {
-    ui->search_line->setVisible(false);
     ui->your_ip_label->setVisible(false);
     ui->port_input->setVisible(false);
     ui->port_warning->setVisible(false);
     ui->client_port_input->setVisible(false);
     ui->client_address_input->setVisible(false);
     ui->write_to_button->setVisible(false);
-    profileGrid->setColumnStretch(1, 0);
-    profileGrid->update();
     ipGrid->setColumnStretch(0, 1);
     ipGrid->update();
     startServerGrid->setColumnStretch(1, 0);
@@ -537,24 +539,37 @@ void MainWindow::HideSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGr
 
 }
 
-void MainWindow::ShowSidebarElements(QGridLayout *profileGrid, QGridLayout *ipGrid, QGridLayout *startServerGrid)
+void MainWindow::ShowSidebarElements(QGridLayout *ipGrid, QGridLayout *startServerGrid)
 {
-    ui->search_line->setVisible(true);
     ui->your_ip_label->setVisible(true);
     ui->port_input->setVisible(true);
     ui->port_warning->setVisible(true);
     ui->client_port_input->setVisible(true);
     ui->client_address_input->setVisible(true);
     ui->write_to_button->setVisible(true);
-    profileGrid->setColumnStretch(1, 6);
-    profileGrid->update();
     ipGrid->setColumnStretch(1, 6);
     ipGrid->update();
     startServerGrid->setColumnStretch(1, 6);
     startServerGrid->update();
 }
 
-void MainWindow::on_burger_button_clicked()
+void MainWindow::on_copy_server_button_clicked()
 {
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(ui->ip_text->text().replace("/IPv6", ""));
 
+    showToolTipOnPosition(
+        ui->copy_server_button,
+        "Copied to clipboard"
+    );
+}
+
+void MainWindow::showToolTipOnPosition(QWidget* widget, QString text)
+{
+    QPoint globalPos = widget->mapToGlobal(QPoint(widget->width() / 2, 0));
+    QToolTip::showText(globalPos, text, widget);
+
+    QTimer::singleShot(1500, []() {
+        QToolTip::hideText();
+    });
 }
