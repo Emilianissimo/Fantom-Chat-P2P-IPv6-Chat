@@ -3,6 +3,8 @@ QT += core widgets network linguist
 TARGET = FantomChat
 TEMPLATE = app
 
+CONFIG += c++20
+
 SOURCES += \
     src/encrypting/sodium/backends/SodiumCryptoBackend.cpp \
     src/encrypting/sodium/key_pairs/SodiumKeyPair.cpp \

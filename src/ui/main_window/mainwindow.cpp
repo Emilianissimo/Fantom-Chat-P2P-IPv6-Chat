@@ -18,6 +18,7 @@
 #include <QTimer>
 #include <QClipboard>
 #include <QFontDatabase>
+#include <QButtonGroup>
 
 #include "../chat/delegates/ChatMessageDelegate.cpp"
 #include "../contacts/delegates/ContactsDelegate.cpp"
@@ -74,6 +75,30 @@ MainWindow::MainWindow(QWidget *parent)
     QVector<Contact> contacts;
     currentContactModel->setContacts(contacts);
 
+    // locale buttons
+    QButtonGroup* localeGroup = new QButtonGroup(this);
+    localeGroup->addButton(ui->en_locale, 0);
+    localeGroup->addButton(ui->ru_locale, 1);
+    localeGroup->addButton(ui->sindarin_locale, 2);
+
+    connect(localeGroup, &QButtonGroup::idClicked, this, [=, this](int id){
+        switch (id) {
+            case 0: switchLanguage("en"); break;
+            case 1: switchLanguage("ru"); break;
+            case 2: switchLanguage("sindarin"); break;
+        }
+    });
+
+    ui->en_locale->setIcon(QIcon(":/assets/images/en_flag.png"));
+    ui->ru_locale->setIcon(QIcon(":/assets/images/ru_flag.png"));
+    ui->sindarin_locale->setIcon(QIcon(":/assets/images/sindarin.png"));
+
+    QSize iconSize(32, 32);
+    ui->en_locale->setIconSize(iconSize);
+    ui->ru_locale->setIconSize(iconSize);
+    ui->sindarin_locale->setIconSize(iconSize);
+
+    // Initializing cryptography
     baseCrypto = std::make_shared<SodiumCryptoBackend>();
 
     QIcon windowIcon(":/assets/images/logo.png");
@@ -278,7 +303,7 @@ void MainWindow::InitServer(int serverPort)
     socketServerThread->start();
 
     // Run server into the thread by invoking
-    QMetaObject::invokeMethod(socketServer, [=]{
+    QMetaObject::invokeMethod(socketServer, [=, this]{
         socketServer->run();
     }, Qt::QueuedConnection);
 
@@ -316,14 +341,61 @@ void MainWindow::UploadConfig()
     }
 }
 
-void MainWindow::onContactClicked(const QModelIndex& index)
+void MainWindow::switchLanguage(const QString &langCode)
 {
-    if (!index.isValid())
-        return;
+    if (translator) {
+        qApp->removeTranslator(translator);
+        delete translator;
+        translator = nullptr;
+    }
 
-    QString clientID = index.data(ContactListModel::ClientIDRole).toString();
-    QString chatID = index.data(ContactListModel::ChatIDRole).toString();
-    openChatPage(chatID, clientID);
+    translator = new QTranslator(this);
+    qDebug() << "Trying to load translation file:" << ":/translations/" + langCode + ".qm";
+    if (translator->load(":/translations/" + langCode + ".qm")) {
+        qDebug() << "Loaded translation";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+
+        if (langCode == "sindarin") {
+            int fontID = QFontDatabase::addApplicationFont(":assets/fonts/tngan.ttf");
+            if (fontID != -1) {
+                QString family = QFontDatabase::applicationFontFamilies(fontID).at(0);
+                QFont tengwarFont(family);
+                qApp->setFont(tengwarFont);
+            } else {
+                qDebug() << "Unable load font";
+            }
+        } else {
+            qApp->setFont(QFont("Segoe UI, Roboto"));
+        }
+
+        settings->setValue("language", langCode);
+        settings->sync();
+    }else{
+        qDebug() << "Failed to load translation";
+    }
+    qDebug() << "Language chosen: " << langCode;
+    this->applyStyleSheet(langCode);
+    this->initializeTranslatingTexts();
+}
+
+void MainWindow::applyStyleSheet(QString langCode)
+{
+    QFile file(":/assets/styles/mainwindow.qss");
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Failed to load stylesheet";
+        return;
+    }
+
+    qDebug() << "Stylesheet loaded";
+
+    QString style = QString::fromUtf8(file.readAll());
+    file.close();
+
+    QString fontName = (langCode == "sindarin") ? "\"Tengwar Annatar\"" : "\"Segoe UI\", \"Roboto\", sans-serif";
+    style.replace("{{font}}", fontName);
+
+    qApp->setStyleSheet(style);
 }
 
 // Chat pages changing handler
@@ -393,7 +465,6 @@ void MainWindow::onPeerDisconnected(const QString& clientID)
 {
     QMessageBox::warning(this, "WARNING", tr("No connection to peer: ") + clientID);
 }
-
 
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
@@ -552,7 +623,6 @@ void MainWindow::on_send_message_button_clicked()
     }, Qt::QueuedConnection);
 }
 
-
 // UI handlers
 void MainWindow::on_splitter_splitterMoved(int pos, int index)
 {
@@ -606,6 +676,16 @@ void MainWindow::on_copy_server_button_clicked()
     );
 }
 
+void MainWindow::onContactClicked(const QModelIndex& index)
+{
+    if (!index.isValid())
+        return;
+
+    QString clientID = index.data(ContactListModel::ClientIDRole).toString();
+    QString chatID = index.data(ContactListModel::ChatIDRole).toString();
+    openChatPage(chatID, clientID);
+}
+
 void MainWindow::showToolTipOnPosition(QWidget* widget, QString text)
 {
     QPoint globalPos = widget->mapToGlobal(QPoint(widget->width() / 2, 0));
@@ -614,61 +694,4 @@ void MainWindow::showToolTipOnPosition(QWidget* widget, QString text)
     QTimer::singleShot(1500, []() {
         QToolTip::hideText();
     });
-}
-
-void MainWindow::switchLanguage(const QString &langCode)
-{
-    if (translator) {
-        qApp->removeTranslator(translator);
-        delete translator;
-        translator = nullptr;
-    }
-
-    translator = new QTranslator(this);
-    qDebug() << "Trying to load translation file:" << ":/translations/" + langCode + ".qm";
-    if (translator->load(":/translations/" + langCode + ".qm")) {
-        qDebug() << "Loaded translation";
-        qApp->installTranslator(translator);
-        ui->retranslateUi(this);
-
-        if (langCode == "sindarin") {
-            int fontID = QFontDatabase::addApplicationFont(":assets/fonts/tngan.ttf");
-            if (fontID != -1) {
-                QString family = QFontDatabase::applicationFontFamilies(fontID).at(0);
-                QFont tengwarFont(family);
-                qApp->setFont(tengwarFont);
-            } else {
-                qDebug() << "Unable load font";
-            }
-        } else {
-            qApp->setFont(QFont("Segoe UI, Roboto"));
-        }
-
-        settings->setValue("language", langCode);
-        settings->sync();
-    }else{
-        qDebug() << "Failed to load translation";
-    }
-    qDebug() << "Language chosen: " << langCode;
-    this->applyStyleSheet(langCode);
-    this->initializeTranslatingTexts();
-}
-
-void MainWindow::applyStyleSheet(QString langCode)
-{
-    QFile file(":/assets/styles/mainwindow.qss");
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Failed to load stylesheet";
-        return;
-    }
-
-    qDebug() << "Stylesheet loaded";
-
-    QString style = QString::fromUtf8(file.readAll());
-    file.close();
-
-    QString fontName = (langCode == "sindarin") ? "\"Tengwar Annatar\"" : "\"Segoe UI\", \"Roboto\", sans-serif";
-    style.replace("{{font}}", fontName);
-
-    qApp->setStyleSheet(style);
 }

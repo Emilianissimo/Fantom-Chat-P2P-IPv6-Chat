@@ -81,7 +81,7 @@
        <property name="styleSheet">
         <string notr="true"/>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,0,20">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,20">
         <property name="leftMargin">
          <number>10</number>
         </property>
@@ -95,8 +95,35 @@
          <number>10</number>
         </property>
         <item>
+         <widget class="QWidget" name="locale_panel" native="true">
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="1" column="1">
+            <widget class="QRadioButton" name="ru_locale">
+             <property name="text">
+              <string>Русский</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QRadioButton" name="sindarin_locale">
+             <property name="text">
+              <string>Sindarin</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="en_locale">
+             <property name="text">
+              <string>Enshish</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QWidget" name="ip_panel" native="true">
-          <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,6,1">
+          <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,0,0">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -258,7 +285,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>478</width>
-                <height>788</height>
+                <height>744</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_12">
@@ -489,7 +516,7 @@
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>98</width>
+                     <width>84</width>
                      <height>70</height>
                     </rect>
                    </property>

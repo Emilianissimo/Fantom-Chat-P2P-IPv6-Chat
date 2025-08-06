@@ -42,6 +42,10 @@ QPushButton {
     color: #f0f0f0;
 }
 
+#locale_panel{
+    font-weight: 900;
+}
+
 QPushButton:hover {
     background-color: #505357;
     border: 1px solid #7a7a7a;

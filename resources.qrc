@@ -8,5 +8,8 @@
         <file>assets/certs/cacert.pem</file>
         <file>assets/fonts/tngan.ttf</file>
         <file>translations/sindarin.qm</file>
+        <file>assets/images/sindarin.png</file>
+        <file>assets/images/en_flag.png</file>
+        <file>assets/images/ru_flag.png</file>
     </qresource>
 </RCC>
