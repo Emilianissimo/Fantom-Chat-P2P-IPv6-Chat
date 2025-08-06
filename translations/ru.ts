@@ -4,62 +4,57 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="26"/>
+        <location filename="../assets/templates/mainwindow.ui" line="26"/>
         <source>Fantom Chat - P2P IPv6 direct connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="115"/>
+        <location filename="../assets/templates/mainwindow.ui" line="115"/>
         <source>you_ip_text:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="122"/>
-        <source>ip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/templates/mainwindow.ui" line="148"/>
+        <location filename="../assets/templates/mainwindow.ui" line="148"/>
         <source>port_warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="169"/>
+        <location filename="../assets/templates/mainwindow.ui" line="169"/>
         <source>start_server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="176"/>
+        <location filename="../assets/templates/mainwindow.ui" line="176"/>
         <source>port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="200"/>
+        <location filename="../assets/templates/mainwindow.ui" line="200"/>
         <source>client_address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="210"/>
+        <location filename="../assets/templates/mainwindow.ui" line="210"/>
         <source>write_to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="217"/>
+        <location filename="../assets/templates/mainwindow.ui" line="217"/>
         <source>client_port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="443"/>
+        <location filename="../assets/templates/mainwindow.ui" line="443"/>
         <source>PeerID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="456"/>
+        <location filename="../assets/templates/mainwindow.ui" line="456"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="515"/>
+        <location filename="../assets/templates/mainwindow.ui" line="515"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -71,47 +66,47 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="131"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="130"/>
         <source>Your address:</source>
-        <translation type="unfinished">Ваш адрес:</translation>
+        <translation>Ваш адрес:</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="131"/>
+        <source>Please, do not change port if you are not sure what are you doing.</source>
+        <translation>Пожалуйста, не изменяйте порт, если вы не уверены в том, что делаете.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="132"/>
-        <source>Please, do not change port if you are not sure what are you doing.</source>
-        <translation type="unfinished">Пожалуйста, не изменяйте порт, если вы не уверены в том, что делаете.</translation>
+        <source>Start server</source>
+        <translation>Запуск сервера</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="133"/>
-        <source>Start server</source>
-        <translation type="unfinished">Запуск сервера</translation>
+        <source>Your local port, use any from 30000 to 65535</source>
+        <translation>Ваш локальный порт, используйте любой от 30000 до 65535</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="134"/>
-        <source>Your local port, use any from 30000 to 65535</source>
-        <translation type="unfinished">Ваш локальный порт, используйте любой от 30000 до 65535</translation>
+        <source>Write to</source>
+        <translation>Написать</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="135"/>
-        <source>Write to</source>
-        <translation type="unfinished">Написать</translation>
+        <source>Peer address</source>
+        <translation>Адрес пира</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="136"/>
-        <source>Peer address</source>
-        <translation type="unfinished">Адрес пира</translation>
+        <source>Peer port</source>
+        <translation>Порт пира</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="137"/>
-        <source>Peer port</source>
-        <translation type="unfinished">Порт пира</translation>
+        <source>Server status</source>
+        <translation>Статус сервера</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="138"/>
-        <source>Server status</source>
-        <translation type="unfinished">Статус сервера</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="139"/>
         <source>
         &lt;b&gt;Welcome!&lt;/b&gt;&lt;br&gt;&lt;br&gt;
 
@@ -160,68 +155,68 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="184"/>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="507"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="183"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="506"/>
         <source>Invalid IP address received: </source>
-        <translation type="unfinished">Неверный IP адрес: </translation>
+        <translation>Неверный IP адрес: </translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="189"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="188"/>
         <source>Your connection does not provide IPv6 address. Connection is unavailable.</source>
-        <translation type="unfinished">Ваше подключение не использует IPv6 адрес. Подключение невозможно.</translation>
+        <translation>Ваше подключение не использует IPv6 адрес. Подключение невозможно.</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="340"/>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="438"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="339"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="437"/>
         <source>Online</source>
-        <translation type="unfinished">Онлайн</translation>
+        <translation>Онлайн</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="345"/>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="452"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="344"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="451"/>
         <source>Offline</source>
-        <translation type="unfinished">Оффлайн</translation>
+        <translation>Оффлайн</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="380"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="379"/>
         <source>Connected to the peer: </source>
-        <translation type="unfinished">Успешное подключение к пиру: </translation>
+        <translation>Успешное подключение к пиру: </translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="389"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="388"/>
         <source>No connection to peer: </source>
-        <translation type="unfinished">Нет подключения к пиру: </translation>
+        <translation>Нет подключения к пиру: </translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="453"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="452"/>
         <source>Peer is disconnected, if peer will be active again, just push the button &quot;Write to&quot; using actual port.</source>
-        <translation type="unfinished">Пир отключился. Если он снова включится, просто снова внесите его адрес и порт. Нажмите &quot;Написать&quot;.</translation>
+        <translation>Пир отключился. Если он снова включится, просто снова внесите его адрес и порт. Нажмите &quot;Написать&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="455"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="454"/>
         <source>System</source>
-        <translation type="unfinished">Система</translation>
+        <translation>Система</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="471"/>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="495"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="470"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="494"/>
         <source>Provide port in range of 30000-65535</source>
-        <translation type="unfinished">Введите порт в диапазоне от 30000-65535</translation>
+        <translation>Введите порт в диапазоне от 30000-65535</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="503"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="502"/>
         <source>Client IP cannot be empty</source>
-        <translation type="unfinished">Адрес пира не может быть пустым</translation>
+        <translation>Адрес пира не может быть пустым</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="511"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="510"/>
         <source>Address is not IPv6 address. Connection is unavailable.</source>
-        <translation type="unfinished">Адрес не является IPv6. Невозможно подключиться.</translation>
+        <translation>Адрес не является IPv6. Невозможно подключиться.</translation>
     </message>
     <message>
-        <location filename="../src/ui/main_window/mainwindow.cpp" line="600"/>
+        <location filename="../src/ui/main_window/mainwindow.cpp" line="599"/>
         <source>Copied to clipboard</source>
-        <translation type="unfinished">Скопировано в буфер.</translation>
+        <translation>Скопировано в буфер.</translation>
     </message>
 </context>
 </TS>

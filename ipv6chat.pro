@@ -40,7 +40,7 @@ FORMS += \
     assets/templates/mainwindow.ui
 
 TRANSLATIONS = \
-    translations/en_US.ts \
+    translations/en.ts \
     translations/ru.ts \
     translations/sindarin.ts
 

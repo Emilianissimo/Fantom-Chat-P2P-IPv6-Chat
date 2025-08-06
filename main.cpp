@@ -45,11 +45,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
-    // Initializing translator
-    QSettings settings("config.ini", QSettings::IniFormat);
-    QString langCode = settings.value("language", "en").toString();
-    w.switchLanguage(langCode);
-
     w.show();
 
     return a.exec();

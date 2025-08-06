@@ -76,8 +76,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     baseCrypto = std::make_shared<SodiumCryptoBackend>();
 
-    initializeTranslatingTexts();
-
     QIcon windowIcon(":/assets/images/logo.png");
     this->setWindowIcon(windowIcon);
     this->showMaximized();
@@ -203,6 +201,10 @@ void MainWindow::PastInit(){
         ui->ip_text->setText(address + "/IPv6");
         this->selfHostAddress = QHostAddress(address);
     }
+    // Initializing translator
+    QSettings settings("config.ini", QSettings::IniFormat);
+    QString langCode = settings.value("language", "en").toString();
+    switchLanguage(langCode);
 }
 
 QString MainWindow::getLocalIPv6Address()
@@ -646,4 +648,5 @@ void MainWindow::switchLanguage(const QString &langCode)
         qDebug() << "Failed to load translation";
     }
     qDebug() << "Language chosen: " << langCode;
+    initializeTranslatingTexts();
 }

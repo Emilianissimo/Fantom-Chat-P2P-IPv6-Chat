@@ -14,11 +14,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/templates/mainwindow.ui" line="122"/>
-        <source>ip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/templates/mainwindow.ui" line="148"/>
         <source>port_warning</source>
         <translation type="unfinished"></translation>
