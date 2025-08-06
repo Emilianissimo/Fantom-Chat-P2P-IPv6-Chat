@@ -26,15 +26,6 @@ int main(int argc, char *argv[])
 
     a.setStyle("Fusion");
 
-    // Inititalizing style resources
-    QFile f(":/assets/styles/mainwindow.qss");
-    if (!f.open(QFile::ReadOnly)) {
-        qDebug() << "Failed to load stylesheet";
-    } else {
-        qDebug() << "Stylesheet loaded";
-        a.setStyleSheet(f.readAll());
-    }
-
     // Inititalizing font awesome resource
     awesome = new fa::QtAwesome(qApp);
     awesome->initFontAwesome();

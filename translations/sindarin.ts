@@ -6,7 +6,7 @@
     <message>
         <location filename="../assets/templates/mainwindow.ui" line="26"/>
         <source>Fantom Chat - P2P IPv6 direct connect</source>
-        <translation type="unfinished"></translation>
+        <translation>glamren quetta - híril na phain</translation>
     </message>
     <message>
         <location filename="../assets/templates/mainwindow.ui" line="115"/>
@@ -68,42 +68,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="130"/>
         <source>Your address:</source>
-        <translation type="unfinished"></translation>
+        <translation>i adlad lín</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="131"/>
         <source>Please, do not change port if you are not sure what are you doing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Áva chenio annabon (i-pôrt), an ú istal man caril.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="132"/>
         <source>Start server</source>
-        <translation type="unfinished"></translation>
+        <translation>Norno server</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="133"/>
         <source>Your local port, use any from 30000 to 65535</source>
-        <translation type="unfinished"></translation>
+        <translation>Annabon (i-pôrt) lín, yesta ned 30000 ar 65535</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="134"/>
         <source>Write to</source>
-        <translation type="unfinished"></translation>
+        <translation>Teco na</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="135"/>
         <source>Peer address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adreb i-meldor</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="136"/>
         <source>Peer port</source>
-        <translation type="unfinished"></translation>
+        <translation>Pôrt i-meldoro</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="137"/>
         <source>Server status</source>
-        <translation type="unfinished"></translation>
+        <translation>Ennost en server</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="138"/>
@@ -126,75 +126,97 @@ li.checked::marker { content: &quot;\2612&quot;; }
 
         &lt;p&gt;
             Exchange copied addresses and the port where you started your server — using the &lt;b&gt;“Start Server”&lt;/b&gt; button.&lt;br&gt;
-            Once you receive your peer&apos;s address, insert their &lt;b&gt;IP and port&lt;/b&gt; into the appropriate fields before clicking &lt;b&gt;“Send”&lt;/b&gt;.&lt;br&gt;
+            Once you receive your peer&apos;s address, insert their &lt;b&gt;IP and port&lt;/b&gt; into the appropriate fields before clicking &lt;b&gt;“Write to”&lt;/b&gt;.&lt;br&gt;
             Click the button. &lt;b&gt;Start chatting.&lt;/b&gt;
         &lt;/p&gt;
-    </source>
-        <translation type="unfinished"></translation>
+        </source>
+        <translation>
+        &lt;b&gt;Suilad!&lt;/b&gt;&lt;br&gt;&lt;br&gt;
+
+        An maethad i-app hen, maethog&lt;br&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;b&gt;Rembed:&lt;/b&gt; á istol úveth lín&lt;/li&gt;
+          &lt;li&gt;&lt;b&gt;Istad:&lt;/b&gt; i-meldir lín na narned&lt;/li&gt;
+          &lt;li&gt;&lt;b&gt;Penna:&lt;/b&gt; edregol lín boe&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;p&gt;
+            An eria i-pethad, boe lín &lt;b&gt;echui IPv6 nedrannad&lt;/b&gt; vi router lín.&lt;br&gt;
+            Ú-chegin? — phere i-ISP lín.&lt;br&gt;&lt;br&gt;
+
+            I-pethi &lt;b&gt;ú-darthar&lt;/b&gt;, ú-barthar — ae darthar, darthar &lt;b&gt;vi RAM lín ú-muinar&lt;/b&gt;.
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            Phedi i-enad lín ar i-annabon, i darthach i-server lín — bo &lt;b&gt;“Norno server”&lt;/b&gt; button.&lt;br&gt;
+            An anthol i-enad en meldir lín, ecthel i &lt;b&gt;IP ar annabon&lt;/b&gt; vi i-nad lín a panno &lt;b&gt;“Teco na”&lt;/b&gt;.&lt;br&gt;
+            Panno i-button. &lt;b&gt;Pethad aníra.&lt;/b&gt;
+        &lt;/p&gt;
+        </translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="183"/>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="506"/>
         <source>Invalid IP address received: </source>
-        <translation type="unfinished"></translation>
+        <translation>Adrann IP ú-fael:</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="188"/>
         <source>Your connection does not provide IPv6 address. Connection is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gwanna lín ú-aníad têw IPv6. Ú-beditha.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="339"/>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="437"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Bedithar</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="344"/>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="451"/>
         <source>Offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú-bedithar</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="379"/>
         <source>Connected to the peer: </source>
-        <translation type="unfinished"></translation>
+        <translation>Bedithar na i-meldir:</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="388"/>
         <source>No connection to peer: </source>
-        <translation type="unfinished"></translation>
+        <translation>Úbennas na i-meldir</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="452"/>
         <source>Peer is disconnected, if peer will be active again, just push the button &quot;Write to&quot; using actual port.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ú-channad na i-meldir. An-phainna, trî i-pedol &quot;Write to&quot; an idhren pantha.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="454"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Tírith</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="470"/>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="494"/>
         <source>Provide port in range of 30000-65535</source>
-        <translation type="unfinished"></translation>
+        <translation>Anno annon bo i-ennyn 30000 na 65535</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="502"/>
         <source>Client IP cannot be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>IP en-meldir ú-barn faeg.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="510"/>
         <source>Address is not IPv6 address. Connection is unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adab ú-natha IPv6. Channad ú-avail.</translation>
     </message>
     <message>
         <location filename="../src/ui/main_window/mainwindow.cpp" line="599"/>
         <source>Copied to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Yechannen na i-lenpad</translation>
     </message>
 </context>
 </TS>

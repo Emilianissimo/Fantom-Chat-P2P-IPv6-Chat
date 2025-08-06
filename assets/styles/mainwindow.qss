@@ -1,6 +1,6 @@
 /* === Global Reset === */
 * {
-    font-family: "Segoe UI", "Roboto", sans-serif;
+    font-family: {{font}};
     font-size: 14px;
     color: #f0f0f0;
     background: transparent;
@@ -139,4 +139,8 @@ QMessageBox {
     font-size: 14px;
     border: 1px solid #555;
     border-radius: 6px;
+}
+
+QLineEdit, #send_message_input, #ip_text {
+    font-family: "Segoe UI", "Roboto", sans-serif !important;
 }

@@ -7,5 +7,6 @@
         <file>assets/styles/mainwindow.qss</file>
         <file>assets/certs/cacert.pem</file>
         <file>assets/fonts/tngan.ttf</file>
+        <file>translations/sindarin.qm</file>
     </qresource>
 </RCC>

@@ -48,6 +48,7 @@ private:
     IPv6ChatClient *socketClient;
     QThread *clientSocketsThread;
     QHostAddress selfHostAddress;
+    QString stringSelfHostAddress;
     Requests *request;
     QString currentChatID;
     QTranslator* translator = nullptr;
@@ -66,6 +67,7 @@ private:
 
     void initializeTranslatingTexts();
 
+    void applyStyleSheet(QString langCode);
     void openChatPage(const QString& chatID, const QString& clientID);
     void setUpMessagesForChatInRAM(const QString& chatID);
     QString getLocalIPv6Address();

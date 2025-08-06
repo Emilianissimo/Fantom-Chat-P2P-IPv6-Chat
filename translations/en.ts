@@ -126,7 +126,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 
         &lt;p&gt;
             Exchange copied addresses and the port where you started your server — using the &lt;b&gt;“Start Server”&lt;/b&gt; button.&lt;br&gt;
-            Once you receive your peer&apos;s address, insert their &lt;b&gt;IP and port&lt;/b&gt; into the appropriate fields before clicking &lt;b&gt;“Send”&lt;/b&gt;.&lt;br&gt;
+            Once you receive your peer&apos;s address, insert their &lt;b&gt;IP and port&lt;/b&gt; into the appropriate fields before clicking &lt;b&gt;“Write to”&lt;/b&gt;.&lt;br&gt;
             Click the button. &lt;b&gt;Start chatting.&lt;/b&gt;
         &lt;/p&gt;
     </source>

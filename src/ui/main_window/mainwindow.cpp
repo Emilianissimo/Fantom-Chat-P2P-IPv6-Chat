@@ -154,10 +154,11 @@ void MainWindow::initializeTranslatingTexts()
 
         <p>
             Exchange copied addresses and the port where you started your server — using the <b>“Start Server”</b> button.<br>
-            Once you receive your peer's address, insert their <b>IP and port</b> into the appropriate fields before clicking <b>“Send”</b>.<br>
+            Once you receive your peer's address, insert their <b>IP and port</b> into the appropriate fields before clicking <b>“Write to”</b>.<br>
             Click the button. <b>Start chatting.</b>
         </p>
     )"));
+    ui->ip_text->setText(this->stringSelfHostAddress);
 }
 
 
@@ -175,15 +176,15 @@ void MainWindow::showEvent(QShowEvent *event)
 
 // Past init complex handler
 void MainWindow::PastInit(){
+    QString protocolName = "";
     if (!QCoreApplication::instance()->property("local_network").toBool()){
         QString externalIP = request->get("https://api64.ipify.org", true);
         QHostAddress addr;
-        QString protocolName = "";
+
         if (!addr.setAddress(externalIP)) {
             QMessageBox::warning(this, "Error", tr("Invalid IP address received: ") + externalIP);
             return;
         }
-
         if (addr.protocol() != QAbstractSocket::IPv6Protocol){
             QMessageBox::warning(this, "Error", tr("Your connection does not provide IPv6 address. Connection is unavailable."));
             // return;
@@ -193,13 +194,14 @@ void MainWindow::PastInit(){
         } else if(addr.setAddress(externalIP) && addr.protocol() == QAbstractSocket::IPv6Protocol){
             protocolName = "/IPv6";
         }
-        ui->ip_text->setText(externalIP + protocolName);
+        this->stringSelfHostAddress = externalIP + protocolName;
         this->selfHostAddress = addr;
     } else {
         QString address = getLocalIPv6Address();
         qDebug() << "Local IPv6 IP: " << address;
-        ui->ip_text->setText(address + "/IPv6");
+        protocolName = "/IPv6";
         this->selfHostAddress = QHostAddress(address);
+        this->stringSelfHostAddress = address + protocolName;
     }
     // Initializing translator
     QSettings settings("config.ini", QSettings::IniFormat);
@@ -596,7 +598,7 @@ void MainWindow::ShowSidebarElements(QGridLayout *ipGrid, QGridLayout *startServ
 void MainWindow::on_copy_server_button_clicked()
 {
     QClipboard *clipboard = QGuiApplication::clipboard();
-    clipboard->setText(ui->ip_text->text().replace("/IPv6", ""));
+    clipboard->setText(ui->ip_text->text().replace("/IPv6", "").replace("/IPv4", ""));
 
     showToolTipOnPosition(
         ui->copy_server_button,
@@ -633,13 +635,13 @@ void MainWindow::switchLanguage(const QString &langCode)
             int fontID = QFontDatabase::addApplicationFont(":assets/fonts/tngan.ttf");
             if (fontID != -1) {
                 QString family = QFontDatabase::applicationFontFamilies(fontID).at(0);
-                QFont tengwarFont(family, 16);
+                QFont tengwarFont(family);
                 qApp->setFont(tengwarFont);
             } else {
                 qDebug() << "Unable load font";
             }
         } else {
-            qApp->setFont(QFont());
+            qApp->setFont(QFont("Segoe UI, Roboto"));
         }
 
         settings->setValue("language", langCode);
@@ -648,5 +650,25 @@ void MainWindow::switchLanguage(const QString &langCode)
         qDebug() << "Failed to load translation";
     }
     qDebug() << "Language chosen: " << langCode;
-    initializeTranslatingTexts();
+    this->applyStyleSheet(langCode);
+    this->initializeTranslatingTexts();
+}
+
+void MainWindow::applyStyleSheet(QString langCode)
+{
+    QFile file(":/assets/styles/mainwindow.qss");
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Failed to load stylesheet";
+        return;
+    }
+
+    qDebug() << "Stylesheet loaded";
+
+    QString style = QString::fromUtf8(file.readAll());
+    file.close();
+
+    QString fontName = (langCode == "sindarin") ? "\"Tengwar Annatar\"" : "\"Segoe UI\", \"Roboto\", sans-serif";
+    style.replace("{{font}}", fontName);
+
+    qApp->setStyleSheet(style);
 }

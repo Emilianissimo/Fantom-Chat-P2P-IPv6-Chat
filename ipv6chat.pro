@@ -88,6 +88,7 @@ DISTFILES += \
     LICENSE.md \
     README.md \
     TESTING_NOTES.md \
+    assets/styles/general.qss \
     copy_dlls.bat \
     assets/images/app_icon.rc \
     assets/styles/mainwindow.qss \
