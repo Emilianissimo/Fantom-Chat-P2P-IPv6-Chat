@@ -10,6 +10,7 @@
 #include <QMainWindow>
 #include <QSettings>
 #include <QGridLayout>
+#include <QTranslator>
 
 const int DEFAULT_SERVER_PORT = 31488;
 
@@ -34,6 +35,8 @@ public:
     void InitServer(int serverPort = DEFAULT_SERVER_PORT);
     void InitClient();
 
+    void switchLanguage(const QString &langCode);
+
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -47,6 +50,7 @@ private:
     QHostAddress selfHostAddress;
     Requests *request;
     QString currentChatID;
+    QTranslator* translator = nullptr;
 
     QMap<QString, QList<Message>> messages;
 
@@ -59,6 +63,8 @@ private:
     QSet<QString> connectedClients;
 
     std::shared_ptr<ICryptoBackend> baseCrypto;
+
+    void initializeTranslatingTexts();
 
     void openChatPage(const QString& chatID, const QString& clientID);
     void setUpMessagesForChatInRAM(const QString& chatID);

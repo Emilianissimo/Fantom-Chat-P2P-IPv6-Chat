@@ -37,9 +37,12 @@ HEADERS += \
     src/ui/main_window/mainwindow.h
 
 FORMS += \
-    src/templates/mainwindow.ui
+    assets/templates/mainwindow.ui
 
-TRANSLATIONS = ipv6chat_en_US.ts
+TRANSLATIONS = \
+    translations/en_US.ts \
+    translations/ru.ts \
+    translations/sindarin.ts
 
 win32 {
     OPENSSL_ROOT = C:/msys64/ucrt64
@@ -86,23 +89,15 @@ DISTFILES += \
     README.md \
     TESTING_NOTES.md \
     copy_dlls.bat \
-    src/images/app_icon.rc \
-    src/styles/mainwindow.qss \
+    assets/images/app_icon.rc \
+    assets/styles/mainwindow.qss \
+    assets/fonts/tngan.ttf \
     third_party_licenses/FontAwesome-LICENSE.md \
     third_party_licenses/Qt-LICENSE.md
-
-# Set on to run on local IPv6 network (for Debugging)
-# local_network = false
-
-# !isEmpty(local_network) {
-#     message("🔧 Local IPv6 network mode ENABLED")
-#     DEFINES += USE_LOCAL_IPV6
-# } else {
-#     message("🌐 Remote network mode")
-# }
 
 RESOURCES += \
     resources.qrc
 
-RC_FILE = src/images/app_icon.rc
+# Icon
+RC_FILE = assets/images/app_icon.rc
 

@@ -33,7 +33,7 @@ Requests::~Requests(){
 }
 
 QString Requests::writeCertToTemp() {
-    QFile cert(":/src/certs/cacert.pem");
+    QFile cert(":/assets/certs/cacert.pem");
     if (!cert.open(QIODevice::ReadOnly))
         return {};
 

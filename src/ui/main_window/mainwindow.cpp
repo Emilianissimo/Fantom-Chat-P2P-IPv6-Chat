@@ -17,6 +17,7 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QClipboard>
+#include <QFontDatabase>
 
 #include "../chat/delegates/ChatMessageDelegate.cpp"
 #include "../contacts/delegates/ContactsDelegate.cpp"
@@ -75,9 +76,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     baseCrypto = std::make_shared<SodiumCryptoBackend>();
 
-    QIcon windowIcon(":/src/images/logo.png");
-    this->setWindowIcon(windowIcon);
+    initializeTranslatingTexts();
 
+    QIcon windowIcon(":/assets/images/logo.png");
+    this->setWindowIcon(windowIcon);
     this->showMaximized();
     this->UploadConfig();
 }
@@ -125,6 +127,42 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::initializeTranslatingTexts()
+{
+    ui->your_ip_label->setText(tr("Your address:"));
+    ui->port_warning->setText(tr("Please, do not change port if you are not sure what are you doing."));
+    ui->start_server_button->setText(tr("Start server"));
+    ui->port_input->setPlaceholderText(tr("Your local port, use any from 30000 to 65535"));
+    ui->write_to_button->setText(tr("Write to"));
+    ui->client_address_input->setPlaceholderText(tr("Peer address"));
+    ui->client_port_input->setPlaceholderText(tr("Peer port"));
+    ui->status_label->setText(tr("Server status"));
+    ui->welcome_text->setHtml(tr(R"(
+        <b>Welcome!</b><br><br>
+
+        To use this app, you must:<br>
+        <ul>
+          <li><b>Remember:</b> trust no one</li>
+          <li><b>Understand:</b> the peer you're connecting to is recorded</li>
+          <li><b>Know:</b> only your chat is secure</li>
+        </ul>
+
+        <p>
+            To start chatting, you need <b>full IPv6 support</b> on your router.<br>
+            If it's not available — contact your ISP.<br><br>
+
+            Messages are <b>not stored</b>, nothing is stored — everything lives <b>only in your RAM</b>.
+        </p>
+
+        <p>
+            Exchange copied addresses and the port where you started your server — using the <b>“Start Server”</b> button.<br>
+            Once you receive your peer's address, insert their <b>IP and port</b> into the appropriate fields before clicking <b>“Send”</b>.<br>
+            Click the button. <b>Start chatting.</b>
+        </p>
+    )"));
+}
+
+
 // On show, after initing all of the UI, run internal configurations
 void MainWindow::showEvent(QShowEvent *event)
 {
@@ -144,12 +182,12 @@ void MainWindow::PastInit(){
         QHostAddress addr;
         QString protocolName = "";
         if (!addr.setAddress(externalIP)) {
-            QMessageBox::warning(this, "Error", "Invalid IP address received: " + externalIP);
+            QMessageBox::warning(this, "Error", tr("Invalid IP address received: ") + externalIP);
             return;
         }
 
         if (addr.protocol() != QAbstractSocket::IPv6Protocol){
-            QMessageBox::warning(this, "Error", "Your connection does not provide IPv6 address. Connection is unavailable.");
+            QMessageBox::warning(this, "Error", tr("Your connection does not provide IPv6 address. Connection is unavailable."));
             // return;
         }
         if (addr.protocol() == QAbstractSocket::IPv4Protocol){
@@ -300,12 +338,12 @@ void MainWindow::openChatPage(const QString& chatID, const QString& clientID)
             iconOptions.insert("color-disabled", QColor("#03da5a"));
             isCurrentChatClientOnline = true;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
-            ui->status_text->setText("Online");
+            ui->status_text->setText(tr("Online"));
         } else {
             iconOptions.insert("color-disabled", QColor("#d32f2f"));
             isCurrentChatClientOnline = false;
             ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
-            ui->status_text->setText("Offline");
+            ui->status_text->setText(tr("Offline"));
         }
 
         currentChatID = chatID;
@@ -340,7 +378,7 @@ void MainWindow::setUpMessagesForChatInRAM(const QString& chatID)
 // Client
 void MainWindow::onPeerConnected(const QString& clientID)
 {
-    QMessageBox::information(this, "INFO", "Connected to the peer: " + clientID);
+    QMessageBox::information(this, "INFO", tr("Connected to the peer: ") + clientID);
 
     // Save clientID to use later in DB/File/Cache.
     QString chatID = makeChatID(selfHostAddress.toString(), clientID);
@@ -349,7 +387,7 @@ void MainWindow::onPeerConnected(const QString& clientID)
 
 void MainWindow::onPeerDisconnected(const QString& clientID)
 {
-    QMessageBox::warning(this, "WARNING", "No connection to peer: " + clientID);
+    QMessageBox::warning(this, "WARNING", tr("No connection to peer: ") + clientID);
 }
 
 
@@ -398,7 +436,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
         iconOptions.insert("color-disabled", QColor("#03da5a"));
         isCurrentChatClientOnline = true;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_check, iconOptions));
-        ui->status_text->setText("Online");
+        ui->status_text->setText(tr("Online"));
     }
     connectedClients.insert(chatID);
 }
@@ -412,10 +450,10 @@ void MainWindow::onServerClientDisconnected(const QString& clientID)
         iconOptions.insert("color-disabled", QColor("#d32f2f"));
         isCurrentChatClientOnline = false;
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
-        ui->status_text->setText("Offline");
-        QString message = "Peer is disconnected, if peer will be active again, just push the button \"Write to\" using actual port.";
+        ui->status_text->setText(tr("Offline"));
+        QString message = tr("Peer is disconnected, if peer will be active again, just push the button \"Write to\" using actual port.");
         messages[chatID].append({chatID, message, true});
-        currentMessageModel->addMessage({"System", message, true});
+        currentMessageModel->addMessage({tr("System"), message, true});
     }
 }
 
@@ -431,7 +469,7 @@ void MainWindow::on_start_server_button_clicked()
 
     if(!isValid){
         ui->port_input->setStyleSheet("border: 1px solid #dc3545");
-        QMessageBox::warning(this, "Error", "Provide port in range of 30000-65535");
+        QMessageBox::warning(this, "Error", tr("Provide port in range of 30000-65535"));
         return;
     }
 
@@ -455,7 +493,7 @@ void MainWindow::on_write_to_button_clicked()
     }
 
     if(!isValid){
-        QMessageBox::warning(this, "Error", "Provide port in range of 30000-65535");
+        QMessageBox::warning(this, "Error", tr("Provide port in range of 30000-65535"));
         return;
     }
 
@@ -463,15 +501,15 @@ void MainWindow::on_write_to_button_clicked()
     QString clientIP = ui->client_address_input->text();
 
     if (clientIP.trimmed().isEmpty()) {
-        QMessageBox::warning(this, "Error", "Client IP cannot be empty");
+        QMessageBox::warning(this, "Error", tr("Client IP cannot be empty"));
         return;
     }
     if (!clientAddress.setAddress(clientIP)) {
-        QMessageBox::warning(this, "Error", "Invalid IP address received: " + clientIP);
+        QMessageBox::warning(this, "Error", tr("Invalid IP address received: ") + clientIP);
         return;
     }
     if (clientAddress.protocol() != QAbstractSocket::IPv6Protocol){
-        QMessageBox::warning(this, "Error", "Address is not IPv6 address. Connection is unavailable.");
+        QMessageBox::warning(this, "Error", tr("Address is not IPv6 address. Connection is unavailable."));
         return;
     }
 
@@ -560,7 +598,7 @@ void MainWindow::on_copy_server_button_clicked()
 
     showToolTipOnPosition(
         ui->copy_server_button,
-        "Copied to clipboard"
+        tr("Copied to clipboard")
     );
 }
 
@@ -572,4 +610,40 @@ void MainWindow::showToolTipOnPosition(QWidget* widget, QString text)
     QTimer::singleShot(1500, []() {
         QToolTip::hideText();
     });
+}
+
+void MainWindow::switchLanguage(const QString &langCode)
+{
+    if (translator) {
+        qApp->removeTranslator(translator);
+        delete translator;
+        translator = nullptr;
+    }
+
+    translator = new QTranslator(this);
+    qDebug() << "Trying to load translation file:" << ":/translations/" + langCode + ".qm";
+    if (translator->load(":/translations/" + langCode + ".qm")) {
+        qDebug() << "Loaded translation";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+
+        if (langCode == "sindarin") {
+            int fontID = QFontDatabase::addApplicationFont(":assets/fonts/tngan.ttf");
+            if (fontID != -1) {
+                QString family = QFontDatabase::applicationFontFamilies(fontID).at(0);
+                QFont tengwarFont(family, 16);
+                qApp->setFont(tengwarFont);
+            } else {
+                qDebug() << "Unable load font";
+            }
+        } else {
+            qApp->setFont(QFont());
+        }
+
+        settings->setValue("language", langCode);
+        settings->sync();
+    }else{
+        qDebug() << "Failed to load translation";
+    }
+    qDebug() << "Language chosen: " << langCode;
 }

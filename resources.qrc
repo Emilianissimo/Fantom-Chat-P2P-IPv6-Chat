@@ -1,7 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>src/styles/mainwindow.qss</file>
-        <file>src/certs/cacert.pem</file>
-        <file>src/images/logo.png</file>
+        <file>translations/en.qm</file>
+        <file>translations/ru.qm</file>
+        <file>assets/images/app_icon.ico</file>
+        <file>assets/images/logo.png</file>
+        <file>assets/styles/mainwindow.qss</file>
+        <file>assets/certs/cacert.pem</file>
+        <file>assets/fonts/tngan.ttf</file>
     </qresource>
 </RCC>

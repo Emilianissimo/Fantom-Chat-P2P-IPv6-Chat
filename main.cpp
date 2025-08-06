@@ -15,8 +15,10 @@ int main(int argc, char *argv[])
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     QApplication a(argc, argv);
+
+    // Setting up --local directive to provide local network mode
     QCommandLineParser parser;
-    parser.setApplicationDescription("IPv6 Chat Client");
+    parser.setApplicationDescription("Fantom Chat - P2P IPv6 direct connect");
     parser.addHelpOption();
     parser.addOption({{"l", "local"}, "Use local IPv6 mode."});
     parser.process(a);
@@ -24,7 +26,8 @@ int main(int argc, char *argv[])
 
     a.setStyle("Fusion");
 
-    QFile f(":/src/styles/mainwindow.qss");
+    // Inititalizing style resources
+    QFile f(":/assets/styles/mainwindow.qss");
     if (!f.open(QFile::ReadOnly)) {
         qDebug() << "Failed to load stylesheet";
     } else {
@@ -32,23 +35,20 @@ int main(int argc, char *argv[])
         a.setStyleSheet(f.readAll());
     }
 
-    QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "ipv6chat_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
-    }
-
+    // Inititalizing font awesome resource
     awesome = new fa::QtAwesome(qApp);
     awesome->initFontAwesome();
 
+    // Registering meta tupes for delegates
     qRegisterMetaType<Message>("Message");
     qRegisterMetaType<Contact>("Contact");
 
     MainWindow w;
+
+    // Initializing translator
+    QSettings settings("config.ini", QSettings::IniFormat);
+    QString langCode = settings.value("language", "en").toString();
+    w.switchLanguage(langCode);
 
     w.show();
 
