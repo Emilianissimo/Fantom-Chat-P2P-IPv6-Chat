@@ -141,6 +141,6 @@ QMessageBox {
     border-radius: 6px;
 }
 
-QLineEdit, #send_message_input, #ip_text {
+QLineEdit, #send_message_input, #clientID_text, #ip_text {
     font-family: "Segoe UI", "Roboto", sans-serif !important;
 }

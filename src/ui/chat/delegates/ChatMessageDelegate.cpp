@@ -8,6 +8,7 @@ public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override {
+        const QSet<QString> systemIDs = { "System", "Tírith", "Система" };
         painter->save();
         Message msg = index.data(Qt::UserRole).value<Message>();
 
@@ -15,7 +16,7 @@ public:
         QString text = msg.message;
 
         QFont font("Arial", 12);
-        if (msg.clientID == "System"){
+        if (systemIDs.contains(msg.clientID)){
             font.setItalic(true);
         }
         QFontMetrics fm(font);
@@ -51,7 +52,7 @@ public:
         QColor bubbleColor = msg.isIncoming ? QColor("#e0e0e0") : QColor("#0078d7");
         QColor textColor = msg.isIncoming ? Qt::black : Qt::white;
 
-        if (msg.clientID == "System"){
+        if (systemIDs.contains(msg.clientID)){
             bubbleColor = QColor("#d32f2f");
             textColor = Qt::white;
         }
