@@ -1,6 +1,6 @@
-# 📦 P2P IPv6 Chat
+# 📦 Fantom Chat - P2P IPv6 Chat
 
-**P2P IPv6 Chat** is a lightweight peer-to-peer and client-server messenger focused on privacy, autonomy, and security.  
+**Fantom Chat - P2P IPv6 Chat** is a lightweight peer-to-peer and client-server messenger focused on privacy, autonomy, and security.  
 Built in C++ using Qt.
 
 ---

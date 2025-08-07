@@ -1,6 +1,9 @@
-# P2P IPv6 Chat License — Fair Source, v1.0 (Emil (Emilian) Erofeevskiy Edition)
+# Fantom Chat - P2P IPv6 Chat License — Fair Source, v1.0 (Emil (Emilian) Erofeevskiy Edition)
 
 Copyright (c) 2025 Emil (Emilian) Erofeevskiy
+
+**Effective Date: August 1, 2025**  
+This license applies to all versions of the code unless otherwise noted.
 
 This software is licensed under the following terms:
 
@@ -42,6 +45,8 @@ You may modify and redistribute the source code under the following conditions:
 - You must not remove or obscure the license or authorship
 - You must clearly state if you modified the code
 - You may **not** present a fork as the "original" project
+- You should not sell any modified copies/forks/original code
+- You must not circumvent the commercial license requirement through rebranding or trivial refactoring
 
 ---
 
@@ -82,6 +87,10 @@ This license does not legitimize or protect such actions.
 
 - 🧍 **Personal Use**: Free  
 - 🏢 **Corporate/Organizational Use**: Requires commercial license  
-- 🔧 **Modify and Fork**: Allowed, with attribution  
+- 🔧 **Modify and Fork**: Allowed, with attribution, for personal use only
 - 🧠 **Don’t be a jerk**  
 - ❤️ Respect Qt and FontAwesome licenses
+
+### License info
+License version: 1.0 (2025-08-01)
+If this license is updated, previous versions remain valid under their original terms.
