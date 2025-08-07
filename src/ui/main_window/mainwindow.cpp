@@ -457,7 +457,7 @@ void MainWindow::onPeerConnected(const QString& clientID)
     QMessageBox::information(this, "INFO", tr("Connected to the peer: ") + clientID);
 
     // Save clientID to use later in DB/File/Cache.
-    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
     openChatPage(chatID, clientID);
 }
 
@@ -469,7 +469,7 @@ void MainWindow::onPeerDisconnected(const QString& clientID)
 void MainWindow::onMessageSent(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message sent: " << message << clientID;
-    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
     // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({clientID, QString::fromUtf8(message), false});
 
@@ -488,7 +488,7 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
 void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& message)
 {
     qDebug() << "Message arrived: " << message << clientID;
-    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
      // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({clientID, QString::fromUtf8(message), true});
 
@@ -505,7 +505,7 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 
 void MainWindow::onServerClientConnected(const QString& clientID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString() , clientID);
+    QString chatID = makeChatID(selfHostAddress.toString() , stripPort(clientID));
     if (chatID == currentChatID){
         QVariantMap iconOptions;
         iconOptions.insert("color-disabled", QColor("#03da5a"));
@@ -518,7 +518,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
-    QString chatID = makeChatID(selfHostAddress.toString(), clientID);
+    QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
     connectedClients.remove(clientID);
     if (chatID == currentChatID){
         QVariantMap iconOptions;
