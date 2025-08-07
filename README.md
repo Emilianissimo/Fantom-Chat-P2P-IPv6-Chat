@@ -1,4 +1,7 @@
 # 📦 Fantom Chat - P2P IPv6 Chat
+![License](https://img.shields.io/badge/license-Fair%20Source%20v1.0-blue)
+![Platform](https://img.shields.io/badge/platform-win64%20%7C%20osx%20%7C%20linux-lightgrey)
+![Qt](https://img.shields.io/badge/qt-6.9%2B-success)
 
 **Fantom Chat - P2P IPv6 Chat** is a lightweight peer-to-peer and client-server messenger focused on privacy, autonomy, and security.  
 Built in C++ using Qt.
@@ -41,7 +44,7 @@ The author is not responsible for any misuse, abuse, or harm resulting from its 
 
 ---
 
-## 🧠 How to build?
+## 🚀 Getting Started | How to build?
 
 - Use Qt Creator with Qt 6.9 or more
 - For Win64
@@ -50,6 +53,12 @@ The author is not responsible for any misuse, abuse, or harm resulting from its 
 - - Ensure, that PATHs are correlate with .pro file
 - For OSX pretty same, but with homebrew
 - Or <a href="mailto:emilerofeevskij@gmail.com">email me</a>
+
+## 🌐 Language Support
+
+- 🇺🇸 English  
+- 🇷🇺 Russian  
+- 🧝 Sindarin (Tengwar script)
 
 ## 🛡️ License
 
@@ -71,5 +80,12 @@ The author is not responsible for any misuse, abuse, or harm resulting from its 
 ## ✨ About
 
 Created by **Emilianissimo** *(Emil (Emilian) Erofeevskiy)*  
-Open-source. Transparent by design.  
-Pull requests, issues, and discussions are welcome.
+Open-source. Transparent by design.
+Let us make world the better place than we found it.
+
+## 🤝 Contribute
+
+Pull requests and feedback are welcome!  
+Feel free to open an issue for bugs, ideas, or suggestions.
+
+Or reach out: [emilerofeevskij@gmail.com](mailto:emilerofeevskij@gmail.com)
