@@ -38,7 +38,18 @@ void IPv6ChatServer::onNewConnection() {
        .arg(socket->peerAddress().toString())
        .arg(socket->peerPort());
 
+    socket->setProperty("clientID", clientID);
+
     QMutexLocker locker(&clientsMutex);
+    for (auto client : clients){
+        // If he is already connected
+        if (stripPort(client.clientID) == stripPort(clientID)){
+            qDebug() << "Already connected. Rejecting new connection from:" << clientID;
+            socket->disconnectFromHost();
+            return;
+        }
+    }
+
     clients.insert(clientID, {clientID, socket});
 
     connect(socket, &QTcpSocket::readyRead, this, &IPv6ChatServer::onReadyRead, Qt::QueuedConnection);
@@ -64,7 +75,6 @@ void IPv6ChatServer::onReadyRead() {
     if (!isHandshaked && !buffer.startsWith("HANDSHAKE ")){
         qDebug() << "Server: Got message before handshake, disconnecting.";
         senderClient->disconnectFromHost();
-        socketBuffers.remove(senderClient);
         return;
     }
 
@@ -74,7 +84,6 @@ void IPv6ChatServer::onReadyRead() {
         if (buffer.size() > maxHandshakeLineSize) {
             qWarning() << "Server: Handshake line too long, disconnecting.";
             senderClient->disconnectFromHost();
-            socketBuffers.remove(senderClient);
             return;
         }
 
@@ -105,7 +114,6 @@ void IPv6ChatServer::onReadyRead() {
         } catch (const ICryptoError& ex) {
             qWarning() << "Server: Failed handshake:" << ex.message();
             senderClient->disconnectFromHost();
-            socketBuffers.remove(senderClient);
         }
 
         return;
@@ -141,7 +149,6 @@ void IPv6ChatServer::processMessage(QTcpSocket* socket, QByteArray& buffer)
         if (!handshakedSockets.contains(socket)) {
             qDebug() << "Server: Message from unverified clientID " << clientID << ", dropping.";
             socket->disconnectFromHost();
-            socketBuffers.remove(socket);
             return;
         }
 

@@ -519,7 +519,7 @@ void MainWindow::onServerClientConnected(const QString& clientID)
 void MainWindow::onServerClientDisconnected(const QString& clientID)
 {
     QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
-    connectedClients.remove(clientID);
+    connectedClients.remove(chatID);
     if (chatID == currentChatID){
         QVariantMap iconOptions;
         iconOptions.insert("color-disabled", QColor("#d32f2f"));

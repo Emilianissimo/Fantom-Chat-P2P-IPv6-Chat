@@ -34,9 +34,6 @@ private:
     QHash<QTcpSocket*, ICryptoKeyPair*> clientKeys;
     QHash<QTcpSocket*, ICryptoSession*> sessions;
 
-
-    QString findClientID(QTcpSocket* socket);
-
 signals:
     void peerConnected(const QString& clientID);
     void peerDisconnected(const QString& clientID);
