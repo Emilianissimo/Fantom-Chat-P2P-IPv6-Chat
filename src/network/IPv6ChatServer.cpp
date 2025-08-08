@@ -146,7 +146,7 @@ void IPv6ChatServer::processMessage(QTcpSocket* socket, QByteArray& buffer)
         int sepIndex = fullMessage.indexOf('\0');
         if (sepIndex == -1) continue;
 
-        QString clientID = QString::fromUtf8(fullMessage.left(sepIndex));
+        QString clientID = this->updateClientZoneID(QString::fromUtf8(fullMessage.left(sepIndex)));
         QByteArray encryptedMessage = fullMessage.mid(sepIndex + 1);
 
         if (!handshakedSockets.contains(socket)) {
@@ -174,6 +174,22 @@ void IPv6ChatServer::processMessage(QTcpSocket* socket, QByteArray& buffer)
 
         emit messageArrived(clientID, message);
     }
+}
+
+QString IPv6ChatServer::updateClientZoneID(QString rawClientID)
+{
+
+    QString serverAddress = this->addr.toString();
+    QString zoneID;
+    int percentIndex = serverAddress.indexOf('%');
+    if (percentIndex != -1)
+        zoneID = serverAddress.mid(percentIndex + 1);
+
+    QString clientPort = rawClientID.section(':', -1);
+    QString clientID = stripPort(rawClientID);
+    return zoneID.isEmpty()
+               ? clientID + ":" + clientPort
+               : clientID + "%" + zoneID + ":" + clientPort;
 }
 
 void IPv6ChatServer::onClientDisconnected() {

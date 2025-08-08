@@ -30,6 +30,7 @@ private:
     QMap<QTcpSocket*, ICryptoSession*> sessions;
 
     void processMessage(QTcpSocket* socket, QByteArray& buffer);
+    QString updateClientZoneID(QString rawClientID);
 
 public:
     std::shared_ptr<ICryptoBackend> cryptoBackend;
