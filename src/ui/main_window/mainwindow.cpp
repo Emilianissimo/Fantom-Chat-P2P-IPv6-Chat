@@ -527,7 +527,7 @@ void MainWindow::onServerClientDisconnected(const QString& clientID)
         ui->status_text->setIcon(awesome->icon(fa::fa_solid, fa::fa_times, iconOptions));
         ui->status_text->setText(tr("Offline"));
         QString message = tr("Peer is disconnected, if peer will be active again, just push the button \"Write to\" using actual port.");
-        messages[chatID].append({clientID, message, true});
+        messages[chatID].append({tr("System"), message, true});
         currentMessageModel->addMessage({tr("System"), message, true});
     }
 }
