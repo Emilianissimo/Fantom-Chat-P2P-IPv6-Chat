@@ -134,7 +134,8 @@ void IPv6ChatClient::onDisconnected() {
 
 void IPv6ChatClient::sendMessage(const QString& selfHost, const QString& clientID, const QByteArray& message) {
     // Sending the message, with ID identifier in the message
-    // TODO: use identifier on handshakes
+
+    qDebug() << "All clientIDs:" << connections.keys();
     if (!connections.contains(clientID)) {
         qDebug() << "Client: No connection to peer" << clientID;
         emit peerDisconnected(clientID);

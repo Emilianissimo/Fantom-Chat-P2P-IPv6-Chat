@@ -41,12 +41,15 @@ void IPv6ChatServer::onNewConnection() {
     socket->setProperty("clientID", clientID);
 
     QMutexLocker locker(&clientsMutex);
-    for (auto client : clients){
-        // If he is already connected
-        if (stripPort(client.clientID) == stripPort(clientID)){
-            qDebug() << "Already connected. Rejecting new connection from:" << clientID;
-            socket->disconnectFromHost();
-            return;
+    for (auto client : clients) {
+        if (stripPort(client.clientID) == stripPort(clientID)) {
+            if (client.socket->state() == QAbstractSocket::UnconnectedState) {
+                clients.remove(client.clientID);
+                break;
+            } else {
+                socket->disconnectFromHost();
+                return;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ public:
         // Fonts
         QFont idFont = option.font;
         idFont.setFamilies({ "Segoe UI", "Roboto", "sans-serif" });
-        idFont.setPointSize(option.font.pointSize());
+        idFont.setPointSize(option.font.pointSize() + 12);
         idFont.setBold(true);
 
         QFontMetrics idFm(idFont);
