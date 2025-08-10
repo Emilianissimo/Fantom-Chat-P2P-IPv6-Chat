@@ -25,10 +25,8 @@ The author is not responsible for any misuse, abuse, or harm resulting from its 
 - ✅ Custom binary protocol with length-prefix framing  
 - ✅ Signal-slot architecture (Qt style)  
 - ✅ UI built with Qt6 and FontAwesome Free  
-- ⏳ In-memory chat list and messages  
-- ⏳ End-to-end encryption and PGP key exchange *(planned)*  
-- ⏳ Message history and storage options *(planned)*  
-- ⏳ Pluggable storage strategies: RAM / Encrypted Files / Database *(planned)*
+- ✅ In-memory chat list and messages  
+- ✅ End-to-end encryption and PGP key exchange
 
 ---
 
