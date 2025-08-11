@@ -19,6 +19,8 @@
 #include <QClipboard>
 #include <QFontDatabase>
 #include <QButtonGroup>
+#include <QShortcut>
+#include <QKeySequence>
 
 #include "../chat/delegates/ChatMessageDelegate.cpp"
 #include "../contacts/delegates/ContactsDelegate.cpp"
@@ -232,6 +234,20 @@ void MainWindow::PastInit(){
     QSettings settings("config.ini", QSettings::IniFormat);
     QString langCode = settings.value("language", "en").toString();
     switchLanguage(langCode);
+
+    // Set CTRL+Enter handler on messaage field
+    auto shortcutReturn = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return), ui->send_message_input);
+    shortcutReturn->setContext(Qt::WidgetShortcut); // Only for this widget (QTextEdit)
+
+    auto shortcutEnter = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Enter), ui->send_message_input);
+    shortcutEnter->setContext(Qt::WidgetShortcut); // For numpad enter
+
+    connect(shortcutReturn, &QShortcut::activated, this, [this]{
+        this->on_send_message_button_clicked();
+    });
+    connect(shortcutEnter, &QShortcut::activated, this, [this]{
+        this->on_send_message_button_clicked();
+    });
 }
 
 QString MainWindow::getLocalIPv6Address()
