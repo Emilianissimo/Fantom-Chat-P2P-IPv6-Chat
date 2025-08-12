@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://emilianissimo.github.io/Fantom-Chat-P2P-IPv6-Chat/sitemap.xml

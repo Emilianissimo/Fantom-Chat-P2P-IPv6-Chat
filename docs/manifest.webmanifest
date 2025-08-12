@@ -1,0 +1,3 @@
+{ "name":"Fantom Chat", "short_name":"Fantom",
+  "start_url":"/Fantom-Chat-P2P-IPv6-Chat/", "display":"standalone",
+  "icons":[{"src":"./logo.png","sizes":"1024x1024","type":"image/png"}] }
