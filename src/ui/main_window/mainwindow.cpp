@@ -503,7 +503,6 @@ void MainWindow::onMessageSent(const QString& clientID, const QByteArray& messag
 {
     qDebug() << "Message sent: " << message << clientID;
     QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
-    // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({clientID, QString::fromUtf8(message), false});
 
     currentContactModel->onNewMessage(chatID, clientID, message);
@@ -522,15 +521,14 @@ void MainWindow::onMessageArrived(const QString& clientID, const QByteArray& mes
 {
     qDebug() << "Message arrived: " << message << clientID;
     QString chatID = makeChatID(selfHostAddress.toString(), stripPort(clientID));
-     // TODO: add optional ability to store into DB, for now only RAM
     messages[chatID].append({clientID, QString::fromUtf8(message), true});
 
     currentContactModel->onNewMessage(chatID, clientID, message);
 
-    if (currentMessageModel)
-        currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
-
     if (chatID == currentChatID){
+        if (currentMessageModel)
+            currentMessageModel->addMessage({clientID, QString::fromUtf8(message), true});
+
         ui->chat_list->scrollToBottom();
         currentContactModel->setActive(chatID);
     }
