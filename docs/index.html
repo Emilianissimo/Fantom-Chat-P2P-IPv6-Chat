@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fantom Chat — P2P IPv6 мессенджер</title>
+  <meta name="description" content="Fantom Chat — приватный P2P-мессенджер на IPv6 без серверов и логов. Шифрование libsodium, кроссплатформенность, open source." />
+  <meta property="og:title" content="Fantom Chat — P2P IPv6 мессенджер" />
+  <meta property="og:description" content="Приватный чат без серверов. IPv6. End-to-end." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://emilianissimo.github.io/Fantom-Chat-P2P-IPv6-Chat/" />
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    :root { --bg:#0b1020; --card:#11162a; --text:#e5e7eb; --muted:#9ca3af; --accent:#60a5fa; --ok:#22c55e; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(1200px 800px at 80% -10%,#1b2550 0%,transparent 60%), var(--bg);color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;padding:48px 20px}
+    .hero{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
+    .hero h1{font-size:42px;line-height:1.1;margin:0}
+    .hero p{color:var(--muted);margin:10px 0 0;max-width:620px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px}
+    .buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);text-decoration:none;color:var(--text);background:#0e1428}
+    .btn:hover{border-color:var(--accent)}
+    .btn .tag{font-size:12px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}
+    h2{font-size:22px;margin:0 0 10px}
+    ul{margin:8px 0 0 18px;color:var(--text)}
+    li{margin:6px 0}
+    .footer{margin-top:32px;color:var(--muted);font-size:14px;border-top:1px solid rgba(255,255,255,0.08);padding-top:18px}
+    code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:6px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero card">
+      <div>
+        <h1>Fantom Chat v1.0</h1>
+        <p>Приватный P2P-мессенджер на IPv6 без центральных серверов и логов. Шифрование на базе libsodium (X25519, ChaCha20-Poly1305). Кроссплатформенность. Открытый исходный код.</p>
+        <div class="buttons">
+          <!-- ЗАМЕНИ href на реальные ссылки релиза -->
+          <a class="btn" href="https://github.com/Emilianissimo/Fantom-Chat-P2P-IPv6-Chat/releases/download/v1.0/fantomchat_installer.exe">
+            <span>⬇️ Скачать для Windows</span><span class="tag">Installer (.exe)</span>
+          </a>
+          <a class="btn" href="https://github.com/Emilianissimo/Fantom-Chat-P2P-IPv6-Chat/releases/download/v1.0/FantomChat.AppImage">
+            <span>⬇️ Скачать для Linux</span><span class="tag">AppImage</span>
+          </a>
+          <a class="btn" href="https://github.com/Emilianissimo/Fantom-Chat-P2P-IPv6-Chat/releases/tag/v1.0">
+            <span>🧩 Другие сборки</span><span class="tag">ZIP, исходники</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Особенности</h2>
+        <ul>
+          <li>IPv6 P2P, без посредников и логов</li>
+          <li>End-to-end шифрование: libsodium (X25519 + ChaCha20-Poly1305)</li>
+          <li>Рукопожатие с валидацией и префиксом длины сообщений</li>
+          <li>Уникальный <span class="mono">chatID</span> для маршрутизации</li>
+          <li>Qt6 UI, мультиязычность (EN/RU/…)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Как начать</h2>
+        <ul>
+          <li>Скачайте сборку для вашей ОС</li>
+          <li>Убедитесь, что у провайдера есть IPv6</li>
+          <li>Запустите приложение и обменяйтесь адресами с пэром</li>
+          <li>Создайте чат — и пишите приватно</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Исходники и лицензия</h2>
+        <ul>
+          <li>Репозиторий: <a href="https://github.com/Emilianissimo/Fantom-Chat-P2P-IPv6-Chat">GitHub</a></li>
+          <li>Лицензия: MIT (open source)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="y"></span> Fantom Chat. Сделано для приватности.  
+      <br/>Проблемы/идеи — создавайте <a href="https://github.com/Emilianissimo/Fantom-Chat-P2P-IPv6-Chat/issues">Issue</a>.
+    </div>
+  </div>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+</body>
+</html>
