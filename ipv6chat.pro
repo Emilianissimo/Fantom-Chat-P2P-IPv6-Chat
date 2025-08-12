@@ -1,4 +1,4 @@
-QT += core widgets network linguist
+QT += core widgets network
 
 TARGET = FantomChat
 TEMPLATE = app
@@ -76,6 +76,13 @@ macx {
     ZLIB_ROOT = /opt/homebrew/opt/zlib
     CONFIG += app_bundle
     LIBS += -lcurl
+    # Connect Zlib
+    INCLUDEPATH += $$ZLIB_ROOT/include
+    LIBS += $$ZLIB_ROOT/lib/libz.a
+
+    # Connect libsodium
+    INCLUDEPATH += $$SODIUM_ROOT/include
+    LIBS += -L$$SODIUM_ROOT/lib -lsodium
 }
 
 unix:!macx {
