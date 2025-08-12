@@ -275,6 +275,19 @@ QString MainWindow::getLocalIPv6Address()
         name.contains("Virtual", Qt::CaseInsensitive) ||
         name.contains("TAP", Qt::CaseInsensitive))
         continue;
+#elif defined(Q_OS_LINUX)
+        const QString ifname = iface.name();  // "eth0", "enp3s0", "wlp2s0", "lo", "virbr0", "docker0" ...
+
+        if (ifname.startsWith("lo") ||              // loopback
+            ifname.startsWith("virbr") ||           // libvirt bridge
+            ifname.startsWith("docker") ||          // docker bridge
+            ifname.startsWith("tun") ||             // TUN/TAP
+            ifname.startsWith("tap") ||
+            ifname.startsWith("veth") ||            // virtual ethernet
+            ifname.startsWith("br-") ||             // docker compose bridge
+            ifname.startsWith("vmnet") ||           // VMware
+            ifname.contains("virtual", Qt::CaseInsensitive))
+            continue;
 #elif defined(Q_OS_MAC)
     // en0 is base active interface, en1, en2... are additional for ethernet cabel/thunderbolt connection
     if (!iface.name().startsWith("en"))
@@ -293,7 +306,11 @@ QString MainWindow::getLocalIPv6Address()
 
             QString addr = ip.toString().section('%', 0, 0);
 
+#ifdef Q_OS_LINUX
+            addr += '%' + iface.name();
+#else
             addr += '%' + QString::number(ifaceIndex);
+#endif
 
             return addr;
         }

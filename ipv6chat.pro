@@ -61,6 +61,14 @@ win32 {
     # set needed DLLs
     BAT_PATH = $$PWD/win32/copy_dlls.bat
     QMAKE_POST_LINK += cmd /c \"$$BAT_PATH\" \"$$OUT_PWD\"
+
+    # Connect Zlib
+    INCLUDEPATH += $$ZLIB_ROOT/include
+    LIBS += $$ZLIB_ROOT/lib/libz.a
+
+    # Connect libsodium
+    INCLUDEPATH += $$SODIUM_ROOT/include
+    LIBS += -L$$SODIUM_ROOT/lib -lsodium
 }
 
 macx {
@@ -70,13 +78,9 @@ macx {
     LIBS += -lcurl
 }
 
-# Connect Zlib
-INCLUDEPATH += $$ZLIB_ROOT/include
-LIBS += $$ZLIB_ROOT/lib/libz.a
-
-# Connect libsodium
-INCLUDEPATH += $$SODIUM_ROOT/include
-LIBS += -L$$SODIUM_ROOT/lib -lsodium
+unix:!macx {
+    LIBS += -lcurl -lsodium -lz
+}
 
 # Set path for installation
 target.path = $$[QT_INSTALL_BINS]
